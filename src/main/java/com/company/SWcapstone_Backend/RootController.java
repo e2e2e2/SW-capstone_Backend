@@ -1,4 +1,4 @@
-package com.company.SWcapston_Backend;
+package com.company.SWcapstone_Backend;
 
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
