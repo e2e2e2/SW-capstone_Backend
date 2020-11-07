@@ -1,4 +1,4 @@
-package com.cautionisbest.web;
+package com.company.SWcapston_Backend;
 
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
