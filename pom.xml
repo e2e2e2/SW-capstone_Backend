@@ -9,9 +9,9 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.company</groupId>
-	<artifactId>SW-capston_Backend</artifactId>
+	<artifactId>SW-capstone_Backend</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>SW-capston_Backend</name>
+	<name>SW-capstone_Backend</name>
 	<description>Demo project for Spring Boot</description>
 
 	<properties>
