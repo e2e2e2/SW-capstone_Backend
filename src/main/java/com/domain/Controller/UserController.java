@@ -1,4 +1,4 @@
-package com.user.Controller;
+package com.domain.Controller;
 
 
 
@@ -26,11 +26,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.context.request.WebRequest;
 
-
-import com.user.Entity.User;
-import com.user.Entity.tempUser;
-import com.user.Repository.UserRepository;
-import com.user.Service.UserService;
+import com.domain.Entity.User;
+import com.domain.Repository.UserRepository;
+import com.domain.Service.UserService;
+import com.domain.TempEntity.tempUser;
 
 
 	
@@ -39,11 +38,6 @@ public class UserController {
 	
 	@Autowired
 	private UserService userService;
-	
-	@RequestMapping("/")
-	public String home() {
-		return "Hello World!";
-	}
 	
 	@RequestMapping("/user")
 	@GetMapping(produces = { MediaType.APPLICATION_JSON_VALUE }) 
