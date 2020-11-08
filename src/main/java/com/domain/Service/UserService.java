@@ -1,4 +1,4 @@
-package com.user.Service;
+package com.domain.Service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -9,9 +9,9 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Objects;
 
-import com.user.Entity.User;
-import com.user.Entity.tempUser;
-import com.user.Repository.UserRepository;
+import com.domain.Entity.User;
+import com.domain.Repository.UserRepository;
+import com.domain.TempEntity.tempUser;
 	
 @Service("userService")
 public class UserService {

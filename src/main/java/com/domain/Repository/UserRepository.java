@@ -1,10 +1,10 @@
-package com.user.Repository;
+package com.domain.Repository;
 
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
-import com.user.Entity.User;
+import com.domain.Entity.User;
 public interface UserRepository extends JpaRepository<User, Integer>{
 }
