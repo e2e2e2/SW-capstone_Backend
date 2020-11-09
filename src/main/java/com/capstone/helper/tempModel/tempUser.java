@@ -1,4 +1,4 @@
-package com.SWcapstone_Backend.tempModel;
+package com.capstone.helper.tempModel;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;

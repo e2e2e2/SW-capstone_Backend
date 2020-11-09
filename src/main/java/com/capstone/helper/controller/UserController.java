@@ -1,4 +1,4 @@
-package com.SWcapstone_Backend.controller;
+package com.capstone.helper.controller;
 
 
 
@@ -26,10 +26,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.context.request.WebRequest;
 
-import com.SWcapstone_Backend.model.User;
-import com.SWcapstone_Backend.repository.UserRepository;
-import com.SWcapstone_Backend.service.UserService;
-import com.SWcapstone_Backend.tempModel.tempUser;
+import com.capstone.helper.model.User;
+import com.capstone.helper.repository.UserRepository;
+import com.capstone.helper.service.UserService;
+import com.capstone.helper.tempModel.tempUser;
 
 
 	

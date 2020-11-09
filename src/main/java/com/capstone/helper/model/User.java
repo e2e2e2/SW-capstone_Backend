@@ -1,4 +1,4 @@
-package com.SWcapstone_Backend.model;
+package com.capstone.helper.model;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
