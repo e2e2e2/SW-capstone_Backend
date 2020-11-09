@@ -1,4 +1,4 @@
-package com.domain.TempEntity;
+package com.SWcapstone_Backend.model;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -7,24 +7,50 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
-public class tempUser{
+
+
+@Entity
+@Table(name = "User")
+public class User{
+
+	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	Integer id;
+	
+	@Column(name="name")
 	String name;
+	
+	@Column(name="password")
 	String password;
+	
+	@Column(name="auth")
 	Integer auth;
+	
+	@Column(name="phone_number")
 	String phone_number;
+	
+	@Column(name="address")
 	String address;
 	
 	
-    public tempUser(String name, String password, int auth, String phone_number, String address) {
-
+    public User(int id, String name, String password, int auth, String phone_number, String address) {
+    	this.id = id;
     	this.password = password;
     	this.auth = auth;
     	this.name = name;
     	this.phone_number = phone_number;
     	this.address = address;
+    	System.err.println("make user addr : " + address);
     }
-	public tempUser() {
+	public User() {
 	
+	}
+	//id
+	public Integer getId() {
+		return id;
+	}
+	public void setId(int id) {
+		this.id =  id;
 	}
 	
 	
@@ -38,8 +64,11 @@ public class tempUser{
 
 	
 	//password
-	public String getPassword() {
-		return this.password;
+	public boolean matchPassword(String password) {
+		if(this.password == password)
+			return true;
+		else 
+			return false;
 	}
 	public void setPassword(String password) {
 		this.password = password;
@@ -66,15 +95,15 @@ public class tempUser{
 	
 	//authorization
 	public int getAuth() {
-		
-		if(this.auth == null)
-			return -1;
 		return auth;
 	}
 	public void setAuth(Integer auth) {
-
 		if(auth == null) this.auth = -1;
 		else this.auth = auth;
+	}
+	public boolean isPresent() {
+		// TODO Auto-generated method stub
+		return false;
 	}
 }
 
