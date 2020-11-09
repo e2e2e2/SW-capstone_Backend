@@ -1,11 +1,10 @@
-package com.domain.Controller;
+package com.example.SWcapstone_Backend;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
-
 @SpringBootTest
-class UserTests {
+class SwCapstoneBackendApplicationTests {
 
 	@Test
 	void contextLoads() {

@@ -1,4 +1,4 @@
-package com.company.SWCapstoneBackend;
+package com.SWcapstone_Backend;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

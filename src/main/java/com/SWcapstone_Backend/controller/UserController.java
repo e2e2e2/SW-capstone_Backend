@@ -1,4 +1,4 @@
-package com.domain.Controller;
+package com.SWcapstone_Backend.controller;
 
 
 
@@ -26,10 +26,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.context.request.WebRequest;
 
-import com.domain.Entity.User;
-import com.domain.Repository.UserRepository;
-import com.domain.Service.UserService;
-import com.domain.TempEntity.tempUser;
+import com.SWcapstone_Backend.model.User;
+import com.SWcapstone_Backend.repository.UserRepository;
+import com.SWcapstone_Backend.service.UserService;
+import com.SWcapstone_Backend.tempModel.tempUser;
 
 
 	
@@ -81,7 +81,7 @@ public class UserController {
 	
 /*    
 	
-	 // ÌöåÏõê ÏûÖÎ†• 
+	 // ?öå?õê ?ûÖ?†• 
 	@PostMapping 
 	public ResponseEntity<User> save(User member) { 
 		return new ResponseEntity<User>(userService.save(member), HttpStatus.OK); 
