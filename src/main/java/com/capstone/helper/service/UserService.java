@@ -1,4 +1,4 @@
-package com.SWcapstone_Backend.service;
+package com.capstone.helper.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -9,9 +9,9 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Objects;
 
-import com.SWcapstone_Backend.model.User;
-import com.SWcapstone_Backend.repository.UserRepository;
-import com.SWcapstone_Backend.tempModel.tempUser;
+import com.capstone.helper.model.User;
+import com.capstone.helper.repository.UserRepository;
+import com.capstone.helper.tempModel.tempUser;
 	
 @Service("userService")
 public class UserService {
