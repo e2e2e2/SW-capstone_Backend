@@ -1,5 +1,7 @@
 package com.capstone.helper.controller;
 
+import java.time.LocalDateTime;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
@@ -10,8 +12,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.capstone.helper.model.SendersAndReceivers;
-import com.capstone.helper.service.SenderReceiverService;
+import com.capstone.helper.model.Alarm;
+import com.capstone.helper.model.SenderAndReceiver;
+import com.capstone.helper.service.AlarmService;
+import com.capstone.helper.service.SendersAndReceiversService;
 import com.capstone.helper.service.UserService;
 import com.capstone.helper.vo.FallAlarmVo;
 import com.capstone.helper.vo.FallEventVo;
@@ -26,18 +30,10 @@ public class AlarmController {
 	private UserService userService;
 	
 	@Autowired
-	private SenderReceiverService senderReceiverService;
+	private SendersAndReceiversService senderReceiverService;
 	
-	@MessageMapping("/sendTo")
-	@SendTo("/topics/sendTo")
-	public String SendToMessage() throws Exception {
-		return "SendTo";
-	}
-	
-	@MessageMapping("/Template")
-	public void SendTemplateMessage() {
-		webSocket.convertAndSend("/topics/template" , "Template");
-	}
+	@Autowired
+	private AlarmService alarmService;
 	
 	@RequestMapping(value="/fall/user/{id}/alarm", method=RequestMethod.POST)
 	public void requestNonActiveAlarm(@RequestBody FallEventVo FallEventVo , @PathVariable("id") int userId) {
@@ -52,12 +48,20 @@ public class AlarmController {
 		}
 		
 		// get receiver list from DB by sender_id
-		java.util.List<SendersAndReceivers> receiverList = senderReceiverService.findBySenderId(FallEventVo.getUserId());
+		java.util.List<SenderAndReceiver> receiverList = senderReceiverService.findBySenderId(FallEventVo.getUserId());
 		FallAlarmVo nonActiveAlarmVo = new FallAlarmVo(FallEventVo.getUserId(),"fall",FallEventVo.getTimestamp(),FallEventVo.getLongitude(),FallEventVo.getLatitude());
 
-		//send Alarm
-		for(SendersAndReceivers senderReceiver : receiverList) {
+		
+		//log event at db
+		
+		
+		//send Alarm and log at db
+		for(SenderAndReceiver senderReceiver : receiverList) {
 			broadcastNonActiveAlarm(senderReceiver.getReceiverId(), nonActiveAlarmVo);
+			
+			
+			Alarm alarm = new Alarm(1, -1, FallEventVo.getUserId(), senderReceiver.getReceiverId(), FallEventVo.getTimestamp());
+			alarmService.save(alarm);
 		}
 
 		

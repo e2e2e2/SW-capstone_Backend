@@ -9,7 +9,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "SendersAndReceivers")
-public class SendersAndReceivers {
+public class SenderAndReceiver {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	Integer id;
@@ -23,13 +23,13 @@ public class SendersAndReceivers {
 	@Column(name="alarmTypeId")
 	Integer alarmTypeId;
 
-	public SendersAndReceivers(Integer id, Integer senderId, Integer receiverId, Integer alarmTypeId) {
+	public SenderAndReceiver(Integer id, Integer senderId, Integer receiverId, Integer alarmTypeId) {
 		this.id = id;
 		this.senderId = senderId;
 		this.receiverId = receiverId;
 		this.alarmTypeId = alarmTypeId;
 	}
-	public SendersAndReceivers() {
+	public SenderAndReceiver() {
 	}
 	public Integer getId() {
 		return id;

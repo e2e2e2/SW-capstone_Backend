@@ -6,21 +6,21 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.capstone.helper.model.SendersAndReceivers;
-import com.capstone.helper.repository.SenderReceiverRepository;
+import com.capstone.helper.model.SenderAndReceiver;
+import com.capstone.helper.repository.SenderAndReceiverRepository;
 
 @Service("senderReceiverService")
-public class SenderReceiverService {
+public class SendersAndReceiversService {
 	@Autowired
-	private SenderReceiverRepository senderReceiverRepository;
+	private SenderAndReceiverRepository senderReceiverRepository;
 	
-	public List<SendersAndReceivers> findBySenderId(int senderId) {
-		List<SendersAndReceivers> senderReceivers = new ArrayList<>();
+	public List<SenderAndReceiver> findBySenderId(int senderId) {
+		List<SenderAndReceiver> senderReceivers = new ArrayList<>();
 		senderReceiverRepository.findBySenderId(senderId).forEach(e -> senderReceivers.add(e));
 		return senderReceivers;
 	}
 	
-	public SendersAndReceivers save(SendersAndReceivers senderReceiver) { 
+	public SenderAndReceiver save(SenderAndReceiver senderReceiver) { 
 		senderReceiverRepository.save(senderReceiver); 
 		 return senderReceiver; 
 	 }
