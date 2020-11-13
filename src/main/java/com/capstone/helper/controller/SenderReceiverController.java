@@ -7,17 +7,17 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.capstone.helper.model.SendersAndReceivers;
-import com.capstone.helper.service.SenderReceiverService;
+import com.capstone.helper.model.SenderAndReceiver;
+import com.capstone.helper.service.SendersAndReceiversService;
 
 @RestController 
 public class SenderReceiverController {
 	
 	@Autowired
-	SenderReceiverService senderReceiverService;
+	SendersAndReceiversService senderReceiverService;
 
 	@RequestMapping(value = "/user/{id}/putConnection", method=RequestMethod.POST)
-    public SendersAndReceivers saveSenderReceiver(@PathVariable("id") int id, @RequestBody SendersAndReceivers senderReceiver ) {
+    public SenderAndReceiver saveSenderReceiver(@PathVariable("id") int id, @RequestBody SenderAndReceiver senderReceiver ) {
 		System.out.println("in saveSenderReceiver");
 		return senderReceiverService.save(senderReceiver);
 	}
