@@ -13,8 +13,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.capstone.helper.model.Alarm;
+import com.capstone.helper.model.FallEvent;
 import com.capstone.helper.model.SenderAndReceiver;
 import com.capstone.helper.service.AlarmService;
+import com.capstone.helper.service.FallEventService;
 import com.capstone.helper.service.SendersAndReceiversService;
 import com.capstone.helper.service.UserService;
 import com.capstone.helper.vo.FallAlarmVo;
@@ -33,6 +35,9 @@ public class AlarmController {
 	private SendersAndReceiversService senderReceiverService;
 	
 	@Autowired
+	private FallEventService fallEventService;
+	
+	@Autowired
 	private AlarmService alarmService;
 	
 	@RequestMapping(value="/fall/user/{id}/alarm", method=RequestMethod.POST)
@@ -47,28 +52,32 @@ public class AlarmController {
 			return ;
 		}
 		
+		
 		// get receiver list from DB by sender_id
 		java.util.List<SenderAndReceiver> receiverList = senderReceiverService.findBySenderId(FallEventVo.getUserId());
 		FallAlarmVo nonActiveAlarmVo = new FallAlarmVo(FallEventVo.getUserId(),"fall",FallEventVo.getTimestamp(),FallEventVo.getLongitude(),FallEventVo.getLatitude());
 
 		
 		//log event at db
+		FallEvent fall = new FallEvent(FallEventVo.getUserId() , FallEventVo.getLongitude(), FallEventVo.getLatitude(), FallEventVo.getTimestamp());
+		fallEventService.save(fall);
+		
+		
 		
 		
 		//send Alarm and log at db
 		for(SenderAndReceiver senderReceiver : receiverList) {
 			broadcastNonActiveAlarm(senderReceiver.getReceiverId(), nonActiveAlarmVo);
 			
-			
-			Alarm alarm = new Alarm(1, -1, FallEventVo.getUserId(), senderReceiver.getReceiverId(), FallEventVo.getTimestamp());
+			Alarm alarm = new Alarm(1, fall.getId(), FallEventVo.getUserId(), senderReceiver.getReceiverId(), FallEventVo.getTimestamp());
 			alarmService.save(alarm);
 		}
 
 		
 	}
 	
-	public void broadcastNonActiveAlarm(int receiverId, FallAlarmVo nonActiveAlarmVo) {
-		webSocket.convertAndSend("/topics/" + Integer.toString(receiverId) ,nonActiveAlarmVo);
+	public void broadcastNonActiveAlarm(int receiverId, FallAlarmVo fallAlarmVo) {
+		webSocket.convertAndSend("/topics/" + Integer.toString(receiverId) ,fallAlarmVo);
 	}
 	
 	

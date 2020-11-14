@@ -29,7 +29,7 @@ import org.springframework.web.context.request.WebRequest;
 import com.capstone.helper.model.User;
 import com.capstone.helper.repository.UserRepository;
 import com.capstone.helper.service.UserService;
-import com.capstone.helper.tempModel.tempUser;
+import com.capstone.helper.vo.UserVo;
 
 
 	
@@ -39,7 +39,8 @@ public class UserController {
 	@Autowired
 	private UserService userService;
 	
-	@RequestMapping("/user")
+	
+	@RequestMapping(value="/user", method=RequestMethod.GET)
 	@GetMapping(produces = { MediaType.APPLICATION_JSON_VALUE }) 
 	public ResponseEntity<List<User>> getAllmembers() { 
 		List<User> user = userService.findAll(); 
@@ -47,7 +48,7 @@ public class UserController {
 	}
 
 	
-	@RequestMapping("/getUser/{id}")
+	@RequestMapping(value="/getUser/{id}", method=RequestMethod.GET)
     @GetMapping(path = "/getUser/{id}")
     public User getOneUser(@PathVariable("id") int id) {
     	System.err.println("add : " + id);
@@ -55,22 +56,22 @@ public class UserController {
     	return userService.findOne(select_id);
     }
 	
-	@RequestMapping(value="/putUser")
+	@RequestMapping(value="/putUser", method=RequestMethod.POST)
 	@PostMapping()
 	public User saveUser(@RequestBody User user) {
     	System.err.println(user.getName() + user.getAddress());
 	    return userService.save(user);
 	}
 	
-	@RequestMapping(value="/updateUser/{id}")
+	@RequestMapping(value="/updateUser/{id}", method=RequestMethod.PATCH)
 	@PatchMapping(path = "/updateUser/{id}")
-	public User updateUser(@PathVariable("id") int id, @RequestBody tempUser val) {
+	public User updateUser(@PathVariable("id") int id, @RequestBody UserVo val) {
 		System.err.println("adwdqasaddsdadasdadasdasdasdadasda");
 	    return userService.update(id,val);
 	}
 	
 	
-	@RequestMapping("/delUser/{id}")
+	@RequestMapping(value="/delUser/{id}", method=RequestMethod.DELETE)
 	@DeleteMapping(path = "/delUser/{id}")
     public int deleteUser(@PathVariable("id") int id) {
     	System.err.println("delete : " + id);
@@ -81,7 +82,6 @@ public class UserController {
 	
 /*    
 	
-	 // ?öå?õê ?ûÖ?†• 
 	@PostMapping 
 	public ResponseEntity<User> save(User member) { 
 		return new ResponseEntity<User>(userService.save(member), HttpStatus.OK); 
