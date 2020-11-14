@@ -11,7 +11,7 @@ import java.util.Objects;
 
 import com.capstone.helper.model.User;
 import com.capstone.helper.repository.UserRepository;
-import com.capstone.helper.tempModel.tempUser;
+import com.capstone.helper.vo.UserVo;
 	
 @Service("userService")
 public class UserService {
@@ -42,7 +42,7 @@ public class UserService {
 		 return id;
 	 }
 	 
-	 public User update(int id, tempUser val) { 
+	 public User update(int id, UserVo val) { 
 		 User user = userRepository.getOne(id);
 		 
 		 

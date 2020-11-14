@@ -1,13 +1,8 @@
-package com.capstone.helper.tempModel;
+package com.capstone.helper.vo;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
 
-public class tempUser{
+
+public class UserVo{
 	String name;
 	String password;
 	Integer auth;
@@ -15,7 +10,7 @@ public class tempUser{
 	String address;
 	
 	
-    public tempUser(String name, String password, int auth, String phone_number, String address) {
+    public UserVo(String name, String password, int auth, String phone_number, String address) {
 
     	this.password = password;
     	this.auth = auth;
@@ -23,7 +18,7 @@ public class tempUser{
     	this.phone_number = phone_number;
     	this.address = address;
     }
-	public tempUser() {
+	public UserVo() {
 	
 	}
 	
