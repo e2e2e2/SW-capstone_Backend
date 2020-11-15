@@ -18,7 +18,6 @@ public class SenderReceiverController {
 
 	@RequestMapping(value = "/user/{id}/putConnection", method=RequestMethod.POST)
     public SenderAndReceiver saveSenderReceiver(@PathVariable("id") int id, @RequestBody SenderAndReceiver senderReceiver ) {
-		System.out.println("in saveSenderReceiver");
 		return senderReceiverService.save(senderReceiver);
 	}
 	

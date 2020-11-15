@@ -6,6 +6,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import com.capstone.helper.model.SenderAndReceiver;
 
 public interface SenderAndReceiverRepository extends JpaRepository<SenderAndReceiver, Integer>{
-	List<SenderAndReceiver> findBySenderId(int senderid);
+	List<SenderAndReceiver> findBySenderIdAndAlarmTypeId(int senderid,int alarmTypeId);
 }
 
