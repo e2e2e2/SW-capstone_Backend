@@ -1,10 +1,7 @@
 package com.capstone.helper.controller;
 
-import java.time.LocalDateTime;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.messaging.handler.annotation.MessageMapping;
-import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -14,13 +11,17 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.capstone.helper.model.Alarm;
 import com.capstone.helper.model.FallEvent;
+import com.capstone.helper.model.NonActiveEvent;
 import com.capstone.helper.model.SenderAndReceiver;
 import com.capstone.helper.service.AlarmService;
 import com.capstone.helper.service.FallEventService;
+import com.capstone.helper.service.NonActiveEventService;
 import com.capstone.helper.service.SendersAndReceiversService;
 import com.capstone.helper.service.UserService;
 import com.capstone.helper.vo.FallAlarmVo;
 import com.capstone.helper.vo.FallEventVo;
+import com.capstone.helper.vo.NonActiveAlarmVo;
+import com.capstone.helper.vo.NonActiveEventVo;
 
 
 @RestController
@@ -38,48 +39,86 @@ public class AlarmController {
 	private FallEventService fallEventService;
 	
 	@Autowired
+	private NonActiveEventService nonActiveEventService;
+	
+	@Autowired
 	private AlarmService alarmService;
 	
 	@RequestMapping(value="/fall/user/{id}/alarm", method=RequestMethod.POST)
-	public void requestNonActiveAlarm(@RequestBody FallEventVo FallEventVo , @PathVariable("id") int userId) {
+	public void requestFallAlarm(@RequestBody FallEventVo fallEventVo , @PathVariable("id") int userId) {
 		//process json input
 		
-		System.out.println(FallEventVo.getUserId());
-		System.out.println(FallEventVo.getTimestamp());
-		System.out.println(FallEventVo.getLatitude());
-		
-		if(userService.findOne(FallEventVo.getUserId()) == null) {
+		if(userService.findOne(fallEventVo.getUserId()) == null) {
 			return ;
 		}
 		
+		//get alarm id by string
+		//alarmService.findOne(1);
 		
 		// get receiver list from DB by sender_id
-		java.util.List<SenderAndReceiver> receiverList = senderReceiverService.findBySenderId(FallEventVo.getUserId());
-		FallAlarmVo nonActiveAlarmVo = new FallAlarmVo(FallEventVo.getUserId(),"fall",FallEventVo.getTimestamp(),FallEventVo.getLongitude(),FallEventVo.getLatitude());
+		java.util.List<SenderAndReceiver> receiverList = senderReceiverService.findBySenderId(fallEventVo.getUserId());
+		FallAlarmVo fallAlarmVo = new FallAlarmVo(fallEventVo.getUserId(),"fall",fallEventVo.getTimestamp(),fallEventVo.getLongitude(),fallEventVo.getLatitude());
 
 		
 		//log event at db
-		FallEvent fall = new FallEvent(FallEventVo.getUserId() , FallEventVo.getLongitude(), FallEventVo.getLatitude(), FallEventVo.getTimestamp());
-		fallEventService.save(fall);
+		FallEvent fallEvent = new FallEvent(fallEventVo.getUserId() , fallEventVo.getLongitude(), fallEventVo.getLatitude(), fallEventVo.getTimestamp());
+		fallEventService.save(fallEvent);
 		
 		
 		
 		
 		//send Alarm and log at db
 		for(SenderAndReceiver senderReceiver : receiverList) {
-			broadcastNonActiveAlarm(senderReceiver.getReceiverId(), nonActiveAlarmVo);
+			broadcastFallAlarm(senderReceiver.getReceiverId(), fallAlarmVo);
 			
-			Alarm alarm = new Alarm(1, fall.getId(), FallEventVo.getUserId(), senderReceiver.getReceiverId(), FallEventVo.getTimestamp());
+			Alarm alarm = new Alarm(1, fallEvent.getId(), fallEventVo.getUserId(), senderReceiver.getReceiverId(), fallEventVo.getTimestamp());
 			alarmService.save(alarm);
 		}
 
 		
 	}
 	
-	public void broadcastNonActiveAlarm(int receiverId, FallAlarmVo fallAlarmVo) {
+	@RequestMapping(value="/nonactive/user/{id}/alarm", method=RequestMethod.POST)
+	public void requestNonActiveAlarm(@RequestBody NonActiveEventVo nonActiveEventVo , @PathVariable("id") int userId) {
+		//process json input
+		
+		if(userService.findOne(nonActiveEventVo.getUserId()) == null) {
+			return ;
+		}
+		
+		//get alarm id by string
+		
+		
+		// get receiver list from DB by sender_id
+		java.util.List<SenderAndReceiver> receiverList = senderReceiverService.findBySenderId(nonActiveEventVo.getUserId());
+		NonActiveAlarmVo nonActiveAlarmVo = new NonActiveAlarmVo(nonActiveEventVo.getUserId(),"nonactive",nonActiveEventVo.getTimestamp(),nonActiveEventVo.getLongitude(),nonActiveEventVo.getLatitude());
+
+		
+		//log event at db
+		NonActiveEvent nonActiveEvent = new NonActiveEvent(nonActiveEventVo.getUserId() , nonActiveEventVo.getLongitude(), nonActiveEventVo.getLatitude(), nonActiveEventVo.getTimestamp());
+		nonActiveEventService.save(nonActiveEvent);
+		
+	
+		
+		
+		//send Alarm and log at db
+		for(SenderAndReceiver senderReceiver : receiverList) {
+			broadcastNonActiveAlarm(senderReceiver.getReceiverId(), nonActiveAlarmVo);
+			
+			Alarm alarm = new Alarm(1, nonActiveEvent.getId(), nonActiveEventVo.getUserId(), senderReceiver.getReceiverId(), nonActiveEventVo.getTimestamp());
+			alarmService.save(alarm);
+		}
+
+		
+	}
+	
+	public void broadcastFallAlarm(int receiverId, FallAlarmVo fallAlarmVo) {
 		webSocket.convertAndSend("/topics/" + Integer.toString(receiverId) ,fallAlarmVo);
 	}
 	
+	public void broadcastNonActiveAlarm(int receiverId, NonActiveAlarmVo nonActiveAlarmVo) {
+		webSocket.convertAndSend("/topics/" + Integer.toString(receiverId) , nonActiveAlarmVo);
+	}
 	
 	
 	
