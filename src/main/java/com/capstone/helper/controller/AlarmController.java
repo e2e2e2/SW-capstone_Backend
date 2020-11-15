@@ -10,14 +10,17 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.capstone.helper.model.Alarm;
+import com.capstone.helper.model.AlarmType;
 import com.capstone.helper.model.FallEvent;
 import com.capstone.helper.model.NonActiveEvent;
 import com.capstone.helper.model.SenderAndReceiver;
 import com.capstone.helper.service.AlarmService;
+import com.capstone.helper.service.AlarmTypeService;
 import com.capstone.helper.service.FallEventService;
 import com.capstone.helper.service.NonActiveEventService;
 import com.capstone.helper.service.SendersAndReceiversService;
 import com.capstone.helper.service.UserService;
+import com.capstone.helper.vo.AlarmTypeVo;
 import com.capstone.helper.vo.FallAlarmVo;
 import com.capstone.helper.vo.FallEventVo;
 import com.capstone.helper.vo.NonActiveAlarmVo;
@@ -44,6 +47,9 @@ public class AlarmController {
 	@Autowired
 	private AlarmService alarmService;
 	
+	@Autowired
+	private AlarmTypeService alarmTypeService;
+	
 	@RequestMapping(value="/fall/user/{id}/alarm", method=RequestMethod.POST)
 	public void requestFallAlarm(@RequestBody FallEventVo fallEventVo , @PathVariable("id") int userId) {
 		//process json input
@@ -52,11 +58,11 @@ public class AlarmController {
 			return ;
 		}
 		
-		//get alarm id by string
-		//alarmService.findOne(1);
+		//get alarmtype id by string
+		AlarmType alarmType = alarmTypeService.findByAlarmName("fall");
 		
 		// get receiver list from DB by sender_id
-		java.util.List<SenderAndReceiver> receiverList = senderReceiverService.findBySenderId(fallEventVo.getUserId());
+		java.util.List<SenderAndReceiver> receiverList = senderReceiverService.findBySenderIdAndAlarmTypeId(fallEventVo.getUserId(),alarmType.getId());
 		FallAlarmVo fallAlarmVo = new FallAlarmVo(fallEventVo.getUserId(),"fall",fallEventVo.getTimestamp(),fallEventVo.getLongitude(),fallEventVo.getLatitude());
 
 		
@@ -71,7 +77,7 @@ public class AlarmController {
 		for(SenderAndReceiver senderReceiver : receiverList) {
 			broadcastFallAlarm(senderReceiver.getReceiverId(), fallAlarmVo);
 			
-			Alarm alarm = new Alarm(1, fallEvent.getId(), fallEventVo.getUserId(), senderReceiver.getReceiverId(), fallEventVo.getTimestamp());
+			Alarm alarm = new Alarm(alarmType.getId(), fallEvent.getId(), fallEventVo.getUserId(), senderReceiver.getReceiverId(), fallEventVo.getTimestamp());
 			alarmService.save(alarm);
 		}
 
@@ -86,11 +92,12 @@ public class AlarmController {
 			return ;
 		}
 		
-		//get alarm id by string
+		//get alarmtype id by string
+		AlarmType alarmType = alarmTypeService.findByAlarmName("nonactive");
 		
 		
 		// get receiver list from DB by sender_id
-		java.util.List<SenderAndReceiver> receiverList = senderReceiverService.findBySenderId(nonActiveEventVo.getUserId());
+		java.util.List<SenderAndReceiver> receiverList = senderReceiverService.findBySenderIdAndAlarmTypeId(nonActiveEventVo.getUserId(),alarmType.getId());
 		NonActiveAlarmVo nonActiveAlarmVo = new NonActiveAlarmVo(nonActiveEventVo.getUserId(),"nonactive",nonActiveEventVo.getTimestamp(),nonActiveEventVo.getLongitude(),nonActiveEventVo.getLatitude());
 
 		
@@ -105,12 +112,19 @@ public class AlarmController {
 		for(SenderAndReceiver senderReceiver : receiverList) {
 			broadcastNonActiveAlarm(senderReceiver.getReceiverId(), nonActiveAlarmVo);
 			
-			Alarm alarm = new Alarm(1, nonActiveEvent.getId(), nonActiveEventVo.getUserId(), senderReceiver.getReceiverId(), nonActiveEventVo.getTimestamp());
+			Alarm alarm = new Alarm(alarmType.getId(), nonActiveEvent.getId(), nonActiveEventVo.getUserId(), senderReceiver.getReceiverId(), nonActiveEventVo.getTimestamp());
 			alarmService.save(alarm);
 		}
 
 		
 	}
+	
+	@RequestMapping(value="/putAlarmType", method=RequestMethod.POST)
+	public void saveAlarmType(@RequestBody AlarmTypeVo alarmTypeVo) {
+		AlarmType alarmType = new AlarmType(alarmTypeVo.getAlarmName());
+		alarmTypeService.save(alarmType); 
+	}
+	
 	
 	public void broadcastFallAlarm(int receiverId, FallAlarmVo fallAlarmVo) {
 		webSocket.convertAndSend("/topics/" + Integer.toString(receiverId) ,fallAlarmVo);

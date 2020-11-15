@@ -14,9 +14,9 @@ public class SendersAndReceiversService {
 	@Autowired
 	private SenderAndReceiverRepository senderReceiverRepository;
 	
-	public List<SenderAndReceiver> findBySenderId(int senderId) {
+	public List<SenderAndReceiver> findBySenderIdAndAlarmTypeId(int senderId,int alarmTypeId) {
 		List<SenderAndReceiver> senderReceivers = new ArrayList<>();
-		senderReceiverRepository.findBySenderId(senderId).forEach(e -> senderReceivers.add(e));
+		senderReceiverRepository.findBySenderIdAndAlarmTypeId(senderId, alarmTypeId).forEach(e -> senderReceivers.add(e));
 		return senderReceivers;
 	}
 	
