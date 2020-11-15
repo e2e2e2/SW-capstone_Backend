@@ -4,17 +4,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.capstone.helper.model.Alarm;
-import com.capstone.helper.model.User;
 import com.capstone.helper.repository.AlarmRepository;
 
 @Service("alarmService")
 public class AlarmService {
 	@Autowired
-	private AlarmRepository alarmsRepository;
-	
+	private AlarmRepository alarmRepository;
 	
 	public Alarm save(Alarm alarm) { 
-		 alarmsRepository.save(alarm); 
+		 alarmRepository.save(alarm); 
 		 return alarm; 
 	 }
 	
