@@ -16,7 +16,7 @@ public class SenderReceiverController {
 	@Autowired
 	SendersAndReceiversService senderReceiverService;
 
-	@RequestMapping(value = "/user/{id}/putConnection", method=RequestMethod.POST)
+	@RequestMapping(value = "/user/{id}/connection", method=RequestMethod.POST)
     public SenderAndReceiver saveSenderReceiver(@PathVariable("id") int id, @RequestBody SenderAndReceiver senderReceiver ) {
 		return senderReceiverService.save(senderReceiver);
 	}
