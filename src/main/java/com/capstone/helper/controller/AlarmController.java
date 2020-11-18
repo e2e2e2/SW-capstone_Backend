@@ -1,7 +1,12 @@
 package com.capstone.helper.controller;
 
 
+import java.util.Collections;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -125,6 +130,22 @@ public class AlarmController {
 		alarmTypeService.save(alarmType); 
 	}
 	
+	@RequestMapping(value="/alarm-type", method=RequestMethod.GET)
+	public ResponseEntity<List<AlarmType>> getAlarmTypes() {
+		List<AlarmType> alarmTypes = alarmTypeService.findAll();
+		return new ResponseEntity<List<AlarmType>>(alarmTypes,HttpStatus.OK);
+	}
+	
+	@RequestMapping(value="/user/{id}/alarm", method=RequestMethod.GET)
+	public ResponseEntity<List<Alarm>> getRecentAlarms(@PathVariable("id") int id) {
+		List<Alarm> alarms = alarmService.findByReceiverId(id);
+		if(alarms.size()>=10) {
+			alarms = alarms.subList(0,10);
+		}
+		Collections.reverse(alarms);
+		
+		return new ResponseEntity<List<Alarm>>(alarms,HttpStatus.OK);
+	}
 	
 	public void broadcastFallAlarm(int receiverId, FallAlarmVo fallAlarmVo) {
 		webSocket.convertAndSend("/topics/" + Integer.toString(receiverId) ,fallAlarmVo);

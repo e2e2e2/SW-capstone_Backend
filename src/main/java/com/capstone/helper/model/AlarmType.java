@@ -26,6 +26,14 @@ public class AlarmType {
 		this.id = id;
 	}
 
+	public String getAlarmName() {
+		return alarmName;
+	}
+
+	public void setAlarmName(String alarmName) {
+		this.alarmName = alarmName;
+	}
+
 	public AlarmType(String alarmName) {
 		this.alarmName = alarmName;
 	}
