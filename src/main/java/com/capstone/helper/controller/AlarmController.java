@@ -84,7 +84,7 @@ public class AlarmController {
 		
 	}
 	
-	@RequestMapping(value="/nonactive/user/{id}/alarm", method=RequestMethod.POST)
+	@RequestMapping(value="/non-active/user/{id}/alarm", method=RequestMethod.POST)
 	public void requestNonActiveAlarm(@RequestBody NonActiveEventVo nonActiveEventVo , @PathVariable("id") int userId) {
 		//process json input
 		
@@ -119,7 +119,7 @@ public class AlarmController {
 		
 	}
 	
-	@RequestMapping(value="/putAlarmType", method=RequestMethod.POST)
+	@RequestMapping(value="/alarm-type", method=RequestMethod.POST)
 	public void saveAlarmType(@RequestBody AlarmTypeVo alarmTypeVo) {
 		AlarmType alarmType = new AlarmType(alarmTypeVo.getAlarmName());
 		alarmTypeService.save(alarmType); 

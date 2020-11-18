@@ -48,31 +48,31 @@ public class UserController {
 	}
 
 	
-	@RequestMapping(value="/getUser/{id}", method=RequestMethod.GET)
-    @GetMapping(path = "/getUser/{id}")
+	@RequestMapping(value="/user/{id}", method=RequestMethod.GET)
+    @GetMapping(path = "/user/{id}")
     public User getOneUser(@PathVariable("id") int id) {
     	System.err.println("add : " + id);
     	Integer select_id = id;
     	return userService.findOne(select_id);
     }
 	
-	@RequestMapping(value="/putUser", method=RequestMethod.POST)
+	@RequestMapping(value="/user", method=RequestMethod.POST)
 	@PostMapping()
 	public User saveUser(@RequestBody User user) {
     	System.err.println(user.getName() + user.getAddress());
 	    return userService.save(user);
 	}
 	
-	@RequestMapping(value="/updateUser/{id}", method=RequestMethod.PATCH)
-	@PatchMapping(path = "/updateUser/{id}")
+	@RequestMapping(value="/user/{id}", method=RequestMethod.PATCH)
+	@PatchMapping(path = "/user/{id}")
 	public User updateUser(@PathVariable("id") int id, @RequestBody UserVo val) {
 		System.err.println("adwdqasaddsdadasdadasdasdasdadasda");
 	    return userService.update(id,val);
 	}
 	
 	
-	@RequestMapping(value="/delUser/{id}", method=RequestMethod.DELETE)
-	@DeleteMapping(path = "/delUser/{id}")
+	@RequestMapping(value="/user/{id}", method=RequestMethod.DELETE)
+	@DeleteMapping(path = "/user/{id}")
     public int deleteUser(@PathVariable("id") int id) {
     	System.err.println("delete : " + id);
     	Integer select_id = id;
