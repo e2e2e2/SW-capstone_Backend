@@ -15,4 +15,10 @@ public class ReceiverEnvironmentService {
 		ReceiverEnvironment receiverEnvironment = receiverEnvironmentRepository.findByUserId(userId);
 		return  receiverEnvironment;
 	}
+	
+	public ReceiverEnvironment save(ReceiverEnvironment receiverEnvironment) {
+		receiverEnvironmentRepository.save(receiverEnvironment);
+		return receiverEnvironment;
+	}
+	
 }

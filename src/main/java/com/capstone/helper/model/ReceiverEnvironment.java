@@ -18,10 +18,10 @@ public class ReceiverEnvironment {
 	@Column(name="userId")
 	Integer userId;
 
-	@Column(name="hasWeb")
+	@Column(name="hasWeb", columnDefinition = "TINYINT(1)")
 	Boolean hasWeb;
 	
-	@Column(name="hasApp")
+	@Column(name="hasApp", columnDefinition = "TINYINT(1)")
 	Boolean hasApp;
 
 	public ReceiverEnvironment(Integer userId, Boolean hasWeb, Boolean hasApp) {
