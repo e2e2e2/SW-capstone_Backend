@@ -40,7 +40,7 @@ public class UserController {
 	private UserService userService;
 	
 	
-	@RequestMapping(value="/user", method=RequestMethod.GET)
+	@RequestMapping(value="/user-list", method=RequestMethod.GET)
 	@GetMapping(produces = { MediaType.APPLICATION_JSON_VALUE }) 
 	public ResponseEntity<List<User>> getAllmembers() { 
 		List<User> user = userService.findAll(); 
@@ -51,8 +51,8 @@ public class UserController {
 	@RequestMapping(value="/user/{id}", method=RequestMethod.GET)
     @GetMapping(path = "/user/{id}")
     public User getOneUser(@PathVariable("id") int id) {
-    	System.err.println("add : " + id);
-    	Integer select_id = id;
+		Integer select_id = id;
+    	System.err.println("add : " + select_id);
     	return userService.findOne(select_id);
     }
 	
@@ -63,19 +63,18 @@ public class UserController {
 	    return userService.save(user);
 	}
 	
-	@RequestMapping(value="/user/{id}", method=RequestMethod.PATCH)
-	@PatchMapping(path = "/user/{id}")
-	public User updateUser(@PathVariable("id") int id, @RequestBody UserVo val) {
-		System.err.println("adwdqasaddsdadasdadasdasdasdadasda");
-	    return userService.update(id,val);
+	@RequestMapping(value="/user", method=RequestMethod.PATCH)
+	@PatchMapping(path = "/user")
+	public User updateUser(@RequestBody UserVo val) {
+	    return userService.update(val);
 	}
 	
 	
-	@RequestMapping(value="/user/{id}", method=RequestMethod.DELETE)
-	@DeleteMapping(path = "/user/{id}")
-    public int deleteUser(@PathVariable("id") int id) {
-    	System.err.println("delete : " + id);
-    	Integer select_id = id;
+	@RequestMapping(value="/user", method=RequestMethod.DELETE)
+	@DeleteMapping(path = "/user")
+    public int deleteUser(@RequestBody UserVo val) {
+    	Integer select_id = val.getId();
+    	System.err.println("delete : " + select_id);
     	return userService.delete(select_id);
     }
 	
