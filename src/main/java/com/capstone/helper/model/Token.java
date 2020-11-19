@@ -15,13 +15,15 @@ public class Token {
 	Integer id;
 	
 	@Column(name="userId")
-	String userId;
+	Integer userId;
 	
 	@Column(name="token")
 	String token;
 
-	public Token(Integer id, String token) {
-		this.id = id;
+
+
+	public Token(Integer userId, String token) {
+		this.userId = userId;
 		this.token = token;
 	}
 
@@ -36,6 +38,14 @@ public class Token {
 		this.id = id;
 	}
 
+	public Integer getUserId() {
+		return userId;
+	}
+
+	public void setUserId(Integer userId) {
+		this.userId = userId;
+	}
+
 	public String getToken() {
 		return token;
 	}
@@ -43,5 +53,6 @@ public class Token {
 	public void setToken(String token) {
 		this.token = token;
 	}
-	
+
+
 }
