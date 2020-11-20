@@ -1,5 +1,7 @@
 package com.capstone.helper.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -12,7 +14,7 @@ public class TokenService {
 	@Autowired
 	TokenRepository tokenRepository;
 	
-	public Token findByUserId(int userId) {
+	public List<Token> findByUserId(int userId) {
 		return tokenRepository.findByUserId(userId);
 	}
 	
