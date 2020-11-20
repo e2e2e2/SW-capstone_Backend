@@ -194,7 +194,7 @@ public class AlarmController {
 	}
 	
 	public void sendFallPush(int receiverId, FallAlarmVo fallAlarmVo) throws FirebaseMessagingException {
-		Token token = tokenService.findByUserId(receiverId);
+		List<Token> tokenList = tokenService.findByUserId(receiverId);
 		User user = userService.findOne(fallAlarmVo.getSenderId());
 		Map<String, String> map= new HashMap<>();
 		
@@ -204,11 +204,13 @@ public class AlarmController {
 		map.put("timestamp", fallAlarmVo.getTimestamp().toString());
 		map.put("longitude", Float.toString(fallAlarmVo.getLongitude()));
 		map.put("latitude", Float.toHexString(fallAlarmVo.getLatitude()));
-		fCMService.send(token.getToken(), map);
+		for(Token token: tokenList) {
+			fCMService.send(token.getToken(), map);
+		}
 	}
 	
 	public void sendNonActivePush(int receiverId, NonActiveAlarmVo nonActiveAlarmVo) throws FirebaseMessagingException {
-		Token token = tokenService.findByUserId(receiverId);
+		List<Token> tokenList = tokenService.findByUserId(receiverId);
 		User user = userService.findOne(nonActiveAlarmVo.getSenderId());
 		Map<String, String> map= new HashMap<>();
 		
@@ -218,7 +220,9 @@ public class AlarmController {
 		map.put("timestamp", nonActiveAlarmVo.getTimestamp().toString());
 		map.put("longitude", Float.toString(nonActiveAlarmVo.getLongitude()));
 		map.put("latitude", Float.toString(nonActiveAlarmVo.getLatitude()));
-		fCMService.send(token.getToken(), map);
+		for(Token token: tokenList) {
+			fCMService.send(token.getToken(), map);
+		}
 	}
 	
 	public List<SenderAndReceiver> getReceiverListByHasAppHasWeb(List<SenderAndReceiver> receiverList, boolean hasWeb, boolean hasApp ){
