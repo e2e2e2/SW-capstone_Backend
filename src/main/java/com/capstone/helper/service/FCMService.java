@@ -23,6 +23,6 @@ public class FCMService {
 		// registration token.
 		String response = FirebaseMessaging.getInstance().send(message);
 		// Response is a message ID string.
-		System.out.println("Successfully sent message: " + response);		
+		//System.out.println("Successfully sent message: " + response);		
 	}
 }

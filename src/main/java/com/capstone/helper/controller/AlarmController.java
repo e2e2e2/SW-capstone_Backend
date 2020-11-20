@@ -24,6 +24,7 @@ import com.capstone.helper.model.NonActiveEvent;
 import com.capstone.helper.model.ReceiverEnvironment;
 import com.capstone.helper.model.SenderAndReceiver;
 import com.capstone.helper.model.Token;
+import com.capstone.helper.model.User;
 import com.capstone.helper.service.AlarmService;
 import com.capstone.helper.service.AlarmTypeService;
 import com.capstone.helper.service.FCMService;
@@ -194,9 +195,11 @@ public class AlarmController {
 	
 	public void sendFallPush(int receiverId, FallAlarmVo fallAlarmVo) throws FirebaseMessagingException {
 		Token token = tokenService.findByUserId(receiverId);
+		User user = userService.findOne(fallAlarmVo.getSenderId());
 		Map<String, String> map= new HashMap<>();
 		
 		map.put("senderId", Integer.toString(fallAlarmVo.getSenderId()));
+		map.put("senderName",user.getName());
 		map.put("alarmType",fallAlarmVo.getAlarmType());
 		map.put("timestamp", fallAlarmVo.getTimestamp().toString());
 		map.put("longitude", Float.toString(fallAlarmVo.getLongitude()));
@@ -206,9 +209,11 @@ public class AlarmController {
 	
 	public void sendNonActivePush(int receiverId, NonActiveAlarmVo nonActiveAlarmVo) throws FirebaseMessagingException {
 		Token token = tokenService.findByUserId(receiverId);
+		User user = userService.findOne(nonActiveAlarmVo.getSenderId());
 		Map<String, String> map= new HashMap<>();
 		
 		map.put("senderId", Integer.toString(nonActiveAlarmVo.getSenderId()));
+		map.put("senderName",user.getName());
 		map.put("alarmType",nonActiveAlarmVo.getAlarmType());
 		map.put("timestamp", nonActiveAlarmVo.getTimestamp().toString());
 		map.put("longitude", Float.toString(nonActiveAlarmVo.getLongitude()));
