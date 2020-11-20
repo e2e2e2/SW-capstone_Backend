@@ -4,6 +4,7 @@ package com.capstone.helper.controller;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import javax.servlet.http.HttpServletRequest;
@@ -96,7 +97,7 @@ public class UserController {
     }
 	
 	@RequestMapping(value="/user/{id}/has-app/{is-true}", method=RequestMethod.POST)
-    public Token registerAppWithToken(@PathVariable("id") int id, @PathVariable("is-true") boolean isTrue, @RequestBody String token) {
+    public Token registerAppWithToken(@PathVariable("id") int id, @PathVariable("is-true") boolean isTrue, @RequestBody TokenVo tokenVo) {
 		
 		ReceiverEnvironment receiverEnvironment = receiverEnvironmentService.findByUserId(id);
 		if(receiverEnvironment == null) {
@@ -107,7 +108,7 @@ public class UserController {
 		receiverEnvironmentService.save(receiverEnvironment);
 		
 		
-		Token newToken = new Token(id, token);
+		Token newToken = new Token(id, tokenVo.getToken());
 		
     	return tokenService.save(newToken);
     }
