@@ -205,7 +205,11 @@ public class AlarmController {
 		map.put("longitude", Float.toString(fallAlarmVo.getLongitude()));
 		map.put("latitude", Float.toHexString(fallAlarmVo.getLatitude()));
 		for(Token token: tokenList) {
-			fCMService.send(token.getToken(), map);
+			try {
+				fCMService.send(token.getToken(), map);
+			}
+			catch(Exception e) {
+			}
 		}
 	}
 	
@@ -221,7 +225,11 @@ public class AlarmController {
 		map.put("longitude", Float.toString(nonActiveAlarmVo.getLongitude()));
 		map.put("latitude", Float.toString(nonActiveAlarmVo.getLatitude()));
 		for(Token token: tokenList) {
-			fCMService.send(token.getToken(), map);
+			try {
+				fCMService.send(token.getToken(), map);
+			}
+			catch(Exception e) {
+			}
 		}
 	}
 	
