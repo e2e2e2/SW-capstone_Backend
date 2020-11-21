@@ -11,6 +11,9 @@ public class NonActiveEventService {
 	@Autowired
 	private NonActiveEventRepository nonActiveEventRepository;
 	
+	public NonActiveEvent findOne(Integer id) {
+		return nonActiveEventRepository.getOne(id);
+	}
 	
 	public NonActiveEvent save(NonActiveEvent nonActiveEvent) { 
 		nonActiveEventRepository.save(nonActiveEvent); 
