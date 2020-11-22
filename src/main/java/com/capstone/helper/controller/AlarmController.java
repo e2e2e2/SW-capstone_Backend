@@ -178,7 +178,7 @@ public class AlarmController {
 	public ResponseEntity<List<Alarm>> getRecentAlarms(@PathVariable("id") int id) {
 		List<Alarm> alarms = alarmService.findByReceiverId(id);
 		if(alarms.size()>=10) {
-			alarms = alarms.subList(0,10);
+			alarms = alarms.subList(alarms.size()-10,alarms.size());
 		}
 		Collections.reverse(alarms);
 		
