@@ -12,9 +12,8 @@ import javax.persistence.Table;
 import org.springframework.format.annotation.DateTimeFormat;
 
 @Entity
-@Table(name = "FallEvents")
-public class FallEvent {
-	
+@Table(name = "NonActiveEvents")
+public class NonActiveEvent {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	Integer id;
@@ -31,19 +30,20 @@ public class FallEvent {
 	@DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
 	@Column(name="timestamp")
 	LocalDateTime timestamp;
+	
+	
 
-	public FallEvent(Integer userId, Float latitude, Float longitude, LocalDateTime timestamp) {
+	public NonActiveEvent(Integer userId, Float latitude, Float longitude, LocalDateTime timestamp) {
 		this.userId = userId;
 		this.latitude = latitude;
 		this.longitude = longitude;
 		this.timestamp = timestamp;
 	}
-
-	public FallEvent() {
+	
+	public NonActiveEvent() {
 	}
 
-	
-	
+
 	public Integer getId() {
 		return id;
 	}
@@ -83,7 +83,6 @@ public class FallEvent {
 	public void setTimestamp(LocalDateTime timestamp) {
 		this.timestamp = timestamp;
 	}
-
-
 	
+
 }
