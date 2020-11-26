@@ -17,6 +17,9 @@ public class User{
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	Integer id;
 	
+	@Column(name="userID")
+	String userID;
+	
 	@Column(name="name")
 	String name;
 	
@@ -33,8 +36,8 @@ public class User{
 	String address;
 	
 	
-    public User(int id, String name, String password, int auth, String phone_number, String address) {
-    	this.id = id;
+    public User(String userID, String name, String password, int auth, String phone_number, String address) {
+    	this.userID = userID;
     	this.password = password;
     	this.auth = auth;
     	this.name = name;
@@ -53,6 +56,13 @@ public class User{
 		this.id =  id;
 	}
 	
+	//userID
+	public String getUserID() {
+		return userID;
+	}
+	public void setUserID(String userID) {
+		this.userID =  userID;
+	}
 	
 	//name
 	public String getName() {

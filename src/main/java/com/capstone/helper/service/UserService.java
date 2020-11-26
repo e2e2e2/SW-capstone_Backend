@@ -31,6 +31,12 @@ public class UserService {
 		return user;
 	}
 	
+	public Integer findByUserID(String userID) {
+		List<User> user = new ArrayList<>();
+		userRepository.findByUserID(userID).forEach(e -> user.add(e));
+		return user.size();
+	}
+	
 	 public User save(User user) { 
 		 return userRepository.save(user); 
 	 }
@@ -38,6 +44,7 @@ public class UserService {
 	 public User register(UserVo tempuser) { 
 		 User user = new User();
 		 
+		 user.setUserID(tempuser.getUserID());
 		 user.setAddress(tempuser.getAddress());
 		 user.setAuth(tempuser.getAuth());
 		 user.setName(tempuser.getName());
