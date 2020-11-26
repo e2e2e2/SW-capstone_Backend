@@ -95,7 +95,7 @@ public class UserController {
     	return 0;
     }
 	
-	@RequestMapping(value="/user/{id}/has-app/{is-true}", method=RequestMethod.POST)
+	@RequestMapping(value="/user/has-app/{is-true}", method=RequestMethod.POST)
     public Token registerAppWithToken(@PathVariable("id") int id, @PathVariable("is-true") boolean isTrue, @RequestBody TokenVo tokenVo) {
 		
 		ReceiverEnvironment receiverEnvironment = receiverEnvironmentService.findByUserId(id);
@@ -113,7 +113,7 @@ public class UserController {
     }
 	
 	
-	@RequestMapping(value="/user/{id}/has-web/{is-true}", method=RequestMethod.POST)
+	@RequestMapping(value="/user/has-web/{is-true}", method=RequestMethod.POST)
     public ReceiverEnvironment registerWeb(@PathVariable("id") int id, @PathVariable("is-true") boolean isTrue) {
 		ReceiverEnvironment receiverEnvironment = receiverEnvironmentService.findByUserId(id);
 		if(receiverEnvironment == null) {

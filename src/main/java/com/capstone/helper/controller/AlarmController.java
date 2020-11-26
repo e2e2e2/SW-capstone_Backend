@@ -74,7 +74,7 @@ public class AlarmController {
 	@Autowired
 	private TokenService tokenService;
 	
-	@RequestMapping(value="/fall/user/{id}/alarm", method=RequestMethod.POST)
+	@RequestMapping(value="/fall/user/alarm", method=RequestMethod.POST)
 	public void requestFallAlarm(@RequestBody FallEventVo fallEventVo , @PathVariable("id") int userId) throws FirebaseMessagingException {
 		//process json input
 		
@@ -116,7 +116,7 @@ public class AlarmController {
 		}		
 	}
 	
-	@RequestMapping(value="/non-active/user/{id}/alarm", method=RequestMethod.POST)
+	@RequestMapping(value="/non-active/user/alarm", method=RequestMethod.POST)
 	public void requestNonActiveAlarm(@RequestBody NonActiveEventVo nonActiveEventVo , @PathVariable("id") int userId) throws FirebaseMessagingException {
 		//process json input
 		
