@@ -1,10 +1,16 @@
 package com.capstone.helper.vo;
 
 
+import javax.persistence.Column;
+
 import com.capstone.helper.model.User;
 
 public class UserVo{
+	
+	
 	Integer id;
+	
+	String userID;
 	String name;
 	String password;
 	Integer auth;
@@ -20,6 +26,7 @@ public class UserVo{
     	this.phone_number = phone_number;
     	this.address = address;
     }
+    
 	public UserVo() {
 	
 	}
@@ -31,6 +38,16 @@ public class UserVo{
 	public void setId(int id) {
 		this.id =  id;
 	}
+	
+
+	//userID
+	public String getUserID() {
+		return userID;
+	}
+	public void setUserID(String userID) {
+		this.userID =  userID;
+	}
+	
 	
 	//name
 	public String getName() {
