@@ -52,8 +52,8 @@ public class UserService {
 		 return id;
 	 }
 	 
-	 public User update(int id, UserVo val) { 
-		 User user = userRepository.getOne(id);
+	 public User update(UserVo val) { 
+		 User user = userRepository.getOne(val.getId());
 		 
 		 
 		 if(val.getAddress() != null)

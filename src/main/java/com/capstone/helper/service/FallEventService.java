@@ -11,6 +11,9 @@ public class FallEventService {
 	@Autowired
 	private FallEventRepository fallEventRepository;
 	
+	public FallEvent findOne(Integer id) {
+		return fallEventRepository.getOne(id);
+	}
 	
 	public FallEvent save(FallEvent fall) { 
 		fallEventRepository.save(fall); 

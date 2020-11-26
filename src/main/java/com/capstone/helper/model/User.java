@@ -105,6 +105,25 @@ public class User{
 		// TODO Auto-generated method stub
 		return false;
 	}
+	
+	public int hashCode() { return (id).hashCode(); }
+	
+	public boolean equals(Object obj) {
+
+        if(obj instanceof User) {
+
+            User temp = (User)obj;
+
+            return this.id.equals(temp.getId());
+
+        } else {
+
+            return false;
+
+        }
+
+    }
+	
 }
 
 
