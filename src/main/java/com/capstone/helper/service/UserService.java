@@ -34,6 +34,18 @@ public class UserService {
 	 public User save(User user) { 
 		 return userRepository.save(user); 
 	 }
+	 
+	 public User register(UserVo tempuser) { 
+		 User user = new User();
+		 
+		 user.setAddress(tempuser.getAddress());
+		 user.setAuth(tempuser.getAuth());
+		 user.setName(tempuser.getName());
+		 user.setPassword(tempuser.getPassword());
+		 user.setPhone_number(tempuser.getPhone_number());
+		 
+		 return userRepository.save(user); 
+	 }
 	
 	 public int delete(int id) { 
 		 userRepository.deleteById(id); 
