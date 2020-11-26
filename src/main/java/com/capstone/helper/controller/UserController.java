@@ -96,24 +96,25 @@ public class UserController {
     }
 	
 	@RequestMapping(value="/user/has-app/{is-true}", method=RequestMethod.POST)
-    public Token registerAppWithToken(@PathVariable("id") int id, @PathVariable("is-true") boolean isTrue, @RequestBody TokenVo tokenVo) {
+    public Token registerAppWithToken(@PathVariable("is-true") boolean isTrue, @RequestBody TokenVo tokenVo) {
+		Integer userId = tokenVo.getUserId();
 		
-		ReceiverEnvironment receiverEnvironment = receiverEnvironmentService.findByUserId(id);
+		ReceiverEnvironment receiverEnvironment = receiverEnvironmentService.findByUserId(userId);
 		if(receiverEnvironment == null) {
-			receiverEnvironment = createDefaultReceiverEnvironment(id);
+			receiverEnvironment = createDefaultReceiverEnvironment(userId);
 		}
 		receiverEnvironment.setHasApp(true);
 		
 		receiverEnvironmentService.save(receiverEnvironment);
 		
 		
-		Token newToken = new Token(id, tokenVo.getToken());
+		Token newToken = new Token(userId, tokenVo.getToken());
 		
     	return tokenService.save(newToken);
     }
 	
 	
-	@RequestMapping(value="/user/has-web/{is-true}", method=RequestMethod.POST)
+	@RequestMapping(value="/user/{id}/has-web/{is-true}", method=RequestMethod.POST)
     public ReceiverEnvironment registerWeb(@PathVariable("id") int id, @PathVariable("is-true") boolean isTrue) {
 		ReceiverEnvironment receiverEnvironment = receiverEnvironmentService.findByUserId(id);
 		if(receiverEnvironment == null) {
