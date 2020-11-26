@@ -40,10 +40,41 @@ public class UserVo{
 		this.name = name;
 	}
 
+
+	
+	//phone_number
+	public String getPhone_number() {
+		return phone_number;
+	}
+	public void setPhone_number(String phone_number) {
+		this.phone_number = phone_number;
+	}
+		
+	
+	//address
+	public String getAddress() {
+		return address;
+	}
+	public void setAddress(String address) {
+		this.address = address;
+	}
+	
+	
+	//authorization
+	public int getAuth() {
+		return auth;
+	}
+	public void setAuth(Integer auth) {
+		if(auth == null) this.auth = -1;
+		else this.auth = auth;
+	}
 	
 	//password
 	public String getPassword() {
 		return this.password;
+	}
+	public void setPassword(String password) {
+		this.password = password;
 	}
 }
 
