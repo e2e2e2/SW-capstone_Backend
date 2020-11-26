@@ -51,15 +51,13 @@ public class UserController {
 	@RequestMapping(value="/getUser/{id}", method=RequestMethod.GET)
     @GetMapping(path = "/getUser/{id}")
     public User getOneUser(@PathVariable("id") int id) {
-    	System.err.println("add : " + id);
-    	Integer select_id = id;
-    	return userService.findOne(select_id);
+    	System.err.println("read : " + id);
+    	return userService.findOne(id);
     }
 	
 	@RequestMapping(value="/putUser", method=RequestMethod.POST)
 	@PostMapping()
 	public User saveUser(@RequestBody User user) {
-    	System.err.println(user.getName() + user.getAddress());
 	    return userService.save(user);
 	}
 	

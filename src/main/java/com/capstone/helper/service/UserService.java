@@ -28,13 +28,11 @@ public class UserService {
 	
 	public User findOne(Integer id) {
 		User user = userRepository.getOne(id);
-		System.out.println(user);
 		return user;
 	}
 	
 	 public User save(User user) { 
-		 userRepository.save(user); 
-		 return user; 
+		 return userRepository.save(user); 
 	 }
 	
 	 public int delete(int id) { 

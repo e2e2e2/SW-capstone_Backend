@@ -3,11 +3,13 @@ package com.capstone.helper;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
+
 @SpringBootTest
-class SwCapstoneBackendApplicationTests {
+public class SwCapstoneBackendApplicationTests {
 
 	@Test
 	void contextLoads() {
+		
 	}
 
 }
