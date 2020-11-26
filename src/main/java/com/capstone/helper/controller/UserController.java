@@ -55,11 +55,13 @@ public class UserController {
     	return userService.findOne(id);
     }
 	
+	
 	@RequestMapping(value="/putUser", method=RequestMethod.POST)
 	@PostMapping()
 	public User saveUser(@RequestBody User user) {
 	    return userService.save(user);
 	}
+	
 	
 	@RequestMapping(value="/updateUser/{id}", method=RequestMethod.PATCH)
 	@PatchMapping(path = "/updateUser/{id}")

@@ -3,6 +3,7 @@ package com.capstone.helper.vo;
 
 
 public class UserVo{
+	Integer id;
 	String name;
 	String password;
 	Integer auth;
@@ -10,8 +11,8 @@ public class UserVo{
 	String address;
 	
 	
-    public UserVo(String name, String password, int auth, String phone_number, String address) {
-
+    public UserVo(int id, String name, String password, int auth, String phone_number, String address) {
+    	this.id = id;
     	this.password = password;
     	this.auth = auth;
     	this.name = name;
@@ -22,6 +23,13 @@ public class UserVo{
 	
 	}
 	
+	
+	public Integer getId() {
+		return id;
+	}
+	public void setId(int id) {
+		this.id =  id;
+	}
 	
 	//name
 	public String getName() {
