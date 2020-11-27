@@ -31,27 +31,34 @@ public class UserService {
 		return user;
 	}
 	
-	 public User save(User user) { 
-		 return userRepository.save(user); 
-	 }
-	 
-	 public User register(UserVo tempuser) { 
-		 User user = new User();
-		 
-		 user.setAddress(tempuser.getAddress());
-		 user.setAuth(tempuser.getAuth());
-		 user.setName(tempuser.getName());
-		 user.setPassword(tempuser.getPassword());
-		 user.setPhone_number(tempuser.getPhone_number());
-		 
-		 return userRepository.save(user); 
-	 }
+	public Integer findByUserID(String userID) {
+		List<User> user = new ArrayList<>();
+		userRepository.findByUserID(userID).forEach(e -> user.add(e));
+		return user.size();
+	}
+
 	
-	 public int delete(int id) { 
-		 userRepository.deleteById(id); 
-		 return id;
-	 }
-	 
+	public User save(User user) { 
+		return userRepository.save(user); 
+		}
+	
+	public User register(UserVo tempuser) {
+		User user = new User();
+		
+		user.setUserID(tempuser.getUserID());
+		user.setAddress(tempuser.getAddress());
+		user.setAuth(tempuser.getAuth());
+		user.setName(tempuser.getName());
+		user.setPassword(tempuser.getPassword());
+		user.setPhone_number(tempuser.getPhone_number());
+		 
+		return userRepository.save(user); 
+	}
+	
+	public int delete(int id) { 
+		userRepository.deleteById(id); 
+		return id;
+	}
 	 public User update(UserVo val) { 
 		 User user = userRepository.getOne(val.getId());
 		 
@@ -67,7 +74,6 @@ public class UserService {
 		 if(val.getPassword() != null)
 			 user.setPassword(val.getPassword());
 		 
-		 System.err.println("name : " + user.getName());
 		 userRepository.save(user);
 		 return user; 
 	 }

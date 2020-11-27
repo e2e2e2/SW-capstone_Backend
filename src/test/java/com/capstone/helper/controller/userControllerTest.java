@@ -25,25 +25,28 @@ public class userControllerTest extends SwCapstoneBackendApplicationTests{
         user.setPassword("password!@#");
  
         User newUser = controller.saveUser(user);
+        testUserID = newUser.getId();
         
     }
-
+/*
     @Test
     public void read(){
         User readUser = controller.getOneUser(testUserID);
         
     }
 
-
+    @Test
     public void update(){
         UserVo user = new UserVo();
         user.setId(testUserID);
-        user.setName("테스트용 유저 업데이트됨");
+        user.setName("업데이트유저");
         user.setAuth(-5);
-        user.setAddress("주소 업데이트됨");
-        user.setPhone_number("010-1234-1523 업데이트됨");
-        user.setPassword("password 업데이트됨");
- 
+        user.setAddress("주소업데이트됨");
+        user.setPhone_number("010-1234-1523업데이트됨");
+        user.setPassword("password업데이트됨");
+        
+        controller.updateUser(user);
+
     }
     
     
@@ -51,6 +54,8 @@ public class userControllerTest extends SwCapstoneBackendApplicationTests{
     public void delete(){
     	UserVo user = new UserVo();
         user.setId(testUserID);
- 
+        
+        controller.deleteUser(user);
     }
+    */
 }

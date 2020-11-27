@@ -5,6 +5,7 @@ import com.capstone.helper.model.User;
 
 public class UserVo{
 	Integer id;
+	String userID;
 	String name;
 	String password;
 	Integer auth;
@@ -12,8 +13,8 @@ public class UserVo{
 	String address;
 	
 	
-    public UserVo(int id, String name, String password, int auth, String phone_number, String address) {
-    	this.id = id;
+    public UserVo(String userID, String name, String password, int auth, String phone_number, String address) {
+    	this.userID = userID;
     	this.password = password;
     	this.auth = auth;
     	this.name = name;
@@ -25,11 +26,21 @@ public class UserVo{
 	}
 	
 	
+
+	//id
 	public Integer getId() {
 		return id;
 	}
 	public void setId(int id) {
 		this.id =  id;
+	}
+	
+	
+	public String getUserID() {
+		return userID;
+	}
+	public void setUserID(String userID) {
+		this.userID =  userID;
 	}
 	
 	//name
