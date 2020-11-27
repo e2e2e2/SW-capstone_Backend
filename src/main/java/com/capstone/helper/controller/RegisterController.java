@@ -2,8 +2,6 @@ package com.capstone.helper.controller;
 
 
 
-import java.util.ArrayList;
-import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -19,7 +17,7 @@ import com.capstone.helper.vo.UserVo;
 
 
 @RestController 
-public class LoginController{
+public class RegisterController{
 	
 	@Autowired
 	private UserService userService;
