@@ -1,9 +1,13 @@
 package com.capstone.helper.vo;
 
 
+import javax.persistence.Column;
+
 import com.capstone.helper.model.User;
 
 public class UserVo{
+	
+	
 	Integer id;
 	String userID;
 	String name;
@@ -21,6 +25,7 @@ public class UserVo{
     	this.phone_number = phone_number;
     	this.address = address;
     }
+    
 	public UserVo() {
 	
 	}
@@ -34,7 +39,6 @@ public class UserVo{
 	public void setId(int id) {
 		this.id =  id;
 	}
-	
 	
 	public String getUserID() {
 		return userID;

@@ -57,14 +57,13 @@ public class User{
 		this.id =  id;
 	}
 	
-
+	//userID
 	public String getUserID() {
 		return userID;
 	}
 	public void setUserID(String userID) {
 		this.userID =  userID;
 	}
-	
 	
 	//name
 	public String getName() {

@@ -4,8 +4,8 @@ import java.time.LocalDateTime;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
-public class NonActiveAlarmVo {
-	
+public class AlarmVo {
+
 	private int senderId;
 	private String alarmType;
 	@DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
@@ -43,8 +43,7 @@ public class NonActiveAlarmVo {
 	public void setLatitude(float latitude) {
 		this.latitude = latitude;
 	}
-	
-	public NonActiveAlarmVo(int senderId, String alarmType, LocalDateTime timestamp, float longitude, float latitude) {
+	public AlarmVo(int senderId, String alarmType, LocalDateTime timestamp, float longitude, float latitude) {
 		super();
 		this.senderId = senderId;
 		this.alarmType = alarmType;
@@ -52,5 +51,5 @@ public class NonActiveAlarmVo {
 		this.longitude = longitude;
 		this.latitude = latitude;
 	}
-
+	
 }

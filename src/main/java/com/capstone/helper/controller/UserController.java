@@ -93,19 +93,20 @@ public class UserController {
     	return 0;
     }
 	
-	@RequestMapping(value="/user/{id}/has-app/{is-true}", method=RequestMethod.POST)
-    public Token registerAppWithToken(@PathVariable("id") int id, @PathVariable("is-true") boolean isTrue, @RequestBody TokenVo tokenVo) {
+	@RequestMapping(value="/user/has-app/{is-true}", method=RequestMethod.POST)
+    public Token registerAppWithToken(@PathVariable("is-true") boolean isTrue, @RequestBody TokenVo tokenVo) {
+		Integer userId = tokenVo.getUserId();
 		
-		ReceiverEnvironment receiverEnvironment = receiverEnvironmentService.findByUserId(id);
+		ReceiverEnvironment receiverEnvironment = receiverEnvironmentService.findByUserId(userId);
 		if(receiverEnvironment == null) {
-			receiverEnvironment = createDefaultReceiverEnvironment(id);
+			receiverEnvironment = createDefaultReceiverEnvironment(userId);
 		}
 		receiverEnvironment.setHasApp(true);
 		
 		receiverEnvironmentService.save(receiverEnvironment);
 		
 		
-		Token newToken = new Token(id, tokenVo.getToken());
+		Token newToken = new Token(userId, tokenVo.getToken());
 		
     	return tokenService.save(newToken);
     }

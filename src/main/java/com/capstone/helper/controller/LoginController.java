@@ -2,6 +2,9 @@ package com.capstone.helper.controller;
 
 
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -30,6 +33,15 @@ public class LoginController{
 
 	}
 	
+	@RequestMapping(value="/api/checkUserID/{id}", method=RequestMethod.POST)
+	public boolean checkUserID(@PathVariable("id") String userID, @RequestBody UserVo tempuser) {
+		
+		if(userService.findByUserID(userID) == 0)
+			return true;
+		else
+			return false;
+
+	}
 	
 	@RequestMapping(value="/api/login/local", method=RequestMethod.POST)
 	public User userLogin(@RequestBody UserVo tempuser) {
