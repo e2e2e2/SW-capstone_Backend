@@ -76,7 +76,7 @@ public class User{
 	
 	//password
 	public boolean matchPassword(String password) {
-		if(this.password == password)
+		if( password.equals(this.password))
 			return true;
 		else 
 			return false;

@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.capstone.helper.model.User;
+import com.capstone.helper.service.RegisterServiece;
 import com.capstone.helper.service.UserService;
 import com.capstone.helper.vo.UserVo;
 
@@ -22,31 +23,26 @@ public class RegisterController{
 	@Autowired
 	private UserService userService;
 	
+	@Autowired
+	private RegisterServiece registerService;
+	
 	@RequestMapping(value="/api/register/local", method=RequestMethod.POST)
 	public User userRegister(@RequestBody UserVo tempuser) {
 		
 		tempuser.setPassword(EncryptionUtils.encryptMD5(tempuser.getPassword()));
 		
-		return userService.register(tempuser);
+		return registerService.register(tempuser);
 
 	}
 	
 	@RequestMapping(value="/api/checkUserID/{id}", method=RequestMethod.POST)
 	public boolean checkUserID(@PathVariable("id") String userID, @RequestBody UserVo tempuser) {
 		
-		if(userService.findByUserID(userID) == 0)
+		if(userService.countUserID(userID) == 0)
 			return true;
 		else
 			return false;
 
 	}
 	
-	@RequestMapping(value="/api/login/local", method=RequestMethod.POST)
-	public User userLogin(@RequestBody UserVo tempuser) {
-		
-		tempuser.setPassword(EncryptionUtils.encryptMD5(tempuser.getPassword()));
-		
-		return userService.register(tempuser);
-
-	}
 }

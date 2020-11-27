@@ -31,7 +31,7 @@ public class UserService {
 		return user;
 	}
 	
-	public Integer findByUserID(String userID) {
+	public Integer countUserID(String userID) {
 		List<User> user = new ArrayList<>();
 		userRepository.findByUserID(userID).forEach(e -> user.add(e));
 		return user.size();
@@ -42,18 +42,6 @@ public class UserService {
 		return userRepository.save(user); 
 		}
 	
-	public User register(UserVo tempuser) {
-		User user = new User();
-		
-		user.setUserID(tempuser.getUserID());
-		user.setAddress(tempuser.getAddress());
-		user.setAuth(tempuser.getAuth());
-		user.setName(tempuser.getName());
-		user.setPassword(tempuser.getPassword());
-		user.setPhone_number(tempuser.getPhone_number());
-		 
-		return userRepository.save(user); 
-	}
 	
 	public int delete(int id) { 
 		userRepository.deleteById(id); 
