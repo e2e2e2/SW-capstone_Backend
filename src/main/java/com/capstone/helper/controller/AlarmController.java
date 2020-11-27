@@ -41,13 +41,10 @@ import com.capstone.helper.service.SendersAndReceiversService;
 import com.capstone.helper.service.TokenService;
 import com.capstone.helper.service.UserService;
 import com.capstone.helper.vo.AlarmTypeVo;
-import com.capstone.helper.vo.FallAlarmVo;
+import com.capstone.helper.vo.AlarmVo;
 import com.capstone.helper.vo.FallEventVo;
-import com.capstone.helper.vo.HomeInAlarmVo;
 import com.capstone.helper.vo.HomeInEventVo;
-import com.capstone.helper.vo.HomeOutAlarmVo;
 import com.capstone.helper.vo.HomeOutEventVo;
-import com.capstone.helper.vo.NonActiveAlarmVo;
 import com.capstone.helper.vo.NonActiveEventVo;
 import com.google.firebase.messaging.FirebaseMessagingException;
 
@@ -56,40 +53,28 @@ import com.google.firebase.messaging.FirebaseMessagingException;
 public class AlarmController {
 	@Autowired
 	private SimpMessagingTemplate webSocket;
-	
 	@Autowired
 	private UserService userService;
-	
 	@Autowired
 	private SendersAndReceiversService senderReceiverService;
-	
 	@Autowired
 	private FallEventService fallEventService;
-	
 	@Autowired
 	private NonActiveEventService nonActiveEventService;
-	
 	@Autowired
 	private AlarmService alarmService;
-	
 	@Autowired
 	private AlarmTypeService alarmTypeService;
-	
 	@Autowired
 	private FCMService fCMService;
-	
 	@Autowired
 	private ReceiverEnvironmentService receiverEnvironmentService;
-	
 	@Autowired
 	private TokenService tokenService;
-	
 	@Autowired
 	private HomeService homeService;
-	
 	@Autowired
 	private HomeInEventService homeInEventService;
-	
 	@Autowired
 	private HomeOutEventService homeOutEventService;
 	
@@ -106,7 +91,7 @@ public class AlarmController {
 		
 		// get receiver list from DB by sender_id
 		java.util.List<SenderAndReceiver> receiverList = senderReceiverService.findBySenderIdAndAlarmTypeId(fallEventVo.getUserId(),alarmType.getId());
-		FallAlarmVo fallAlarmVo = new FallAlarmVo(fallEventVo.getUserId(),"fall",fallEventVo.getTimestamp(),fallEventVo.getLongitude(),fallEventVo.getLatitude());
+		AlarmVo alarmVo = new AlarmVo(fallEventVo.getUserId(),"fall",fallEventVo.getTimestamp(),fallEventVo.getLongitude(),fallEventVo.getLatitude());
 
 		java.util.List<SenderAndReceiver> receiverWebList = getReceiverListByHasAppHasWeb(receiverList, true,false);
 		java.util.List<SenderAndReceiver> receiverAppList = getReceiverListByHasAppHasWeb(receiverList, false,true);
@@ -119,7 +104,7 @@ public class AlarmController {
 		
 		//send Alarm and to web and log at db
 		for(SenderAndReceiver senderReceiver : receiverList) {
-			sendFallAlarm(senderReceiver.getReceiverId(), fallAlarmVo);
+			sendAlarm(senderReceiver.getReceiverId(), alarmVo);
 			
 			Alarm alarm = new Alarm(alarmType.getId(), fallEvent.getId(), fallEventVo.getUserId(), senderReceiver.getReceiverId(), fallEventVo.getTimestamp());
 			alarmService.save(alarm);
@@ -128,7 +113,7 @@ public class AlarmController {
 		//send push to app and log at db
 		for(SenderAndReceiver senderReceiver : receiverAppList) {
 			//send push alarm
-			sendFallPush(senderReceiver.getReceiverId(), fallAlarmVo);
+			sendPush(senderReceiver.getReceiverId(), alarmVo);
 					
 			Alarm alarm = new Alarm(alarmType.getId(), fallEvent.getId(), fallEventVo.getUserId(), senderReceiver.getReceiverId(), fallEventVo.getTimestamp());
 			alarmService.save(alarm);
@@ -149,7 +134,7 @@ public class AlarmController {
 		
 		// get receiver list from DB by sender_id
 		java.util.List<SenderAndReceiver> receiverList = senderReceiverService.findBySenderIdAndAlarmTypeId(nonActiveEventVo.getUserId(),alarmType.getId());
-		NonActiveAlarmVo nonActiveAlarmVo = new NonActiveAlarmVo(nonActiveEventVo.getUserId(),"nonactive",nonActiveEventVo.getTimestamp(),nonActiveEventVo.getLongitude(),nonActiveEventVo.getLatitude());
+		AlarmVo alarmVo = new AlarmVo(nonActiveEventVo.getUserId(),"nonactive",nonActiveEventVo.getTimestamp(),nonActiveEventVo.getLongitude(),nonActiveEventVo.getLatitude());
 		
 		java.util.List<SenderAndReceiver> receiverWebList = getReceiverListByHasAppHasWeb(receiverList, true,false);
 		java.util.List<SenderAndReceiver> receiverAppList = getReceiverListByHasAppHasWeb(receiverList, false,true);
@@ -163,7 +148,7 @@ public class AlarmController {
 		
 		//send Alarm to web and log at db
 		for(SenderAndReceiver senderReceiver : receiverWebList) {
-			sendNonActiveAlarm(senderReceiver.getReceiverId(), nonActiveAlarmVo);
+			sendAlarm(senderReceiver.getReceiverId(), alarmVo);
 			
 			Alarm alarm = new Alarm(alarmType.getId(), nonActiveEvent.getId(), nonActiveEventVo.getUserId(), senderReceiver.getReceiverId(), nonActiveEventVo.getTimestamp());
 			alarmService.save(alarm);
@@ -172,7 +157,7 @@ public class AlarmController {
 		//send push to app and log at db
 		for(SenderAndReceiver senderReceiver : receiverAppList) {
 			//send push alarm
-			sendNonActivePush(senderReceiver.getReceiverId(), nonActiveAlarmVo);
+			sendPush(senderReceiver.getReceiverId(), alarmVo);
 			
 			Alarm alarm = new Alarm(alarmType.getId(), nonActiveEvent.getId(), nonActiveEventVo.getUserId(), senderReceiver.getReceiverId(), nonActiveEventVo.getTimestamp());
 			alarmService.save(alarm);
@@ -197,7 +182,7 @@ public class AlarmController {
 		
 		// get receiver list from DB by sender_id
 		java.util.List<SenderAndReceiver> receiverList = senderReceiverService.findBySenderIdAndAlarmTypeId(homeInEventVo.getUserId(),alarmType.getId());
-		HomeInAlarmVo homeInAlarmVo = new HomeInAlarmVo(homeInEventVo.getUserId(),"homein",homeInEventVo.getTimestamp(), home.getLongitude(), home.getLatitude());
+		AlarmVo alarmVo = new AlarmVo(homeInEventVo.getUserId(),"homein",homeInEventVo.getTimestamp(), home.getLongitude(), home.getLatitude());
 		
 		java.util.List<SenderAndReceiver> receiverWebList = getReceiverListByHasAppHasWeb(receiverList, true,false);
 		java.util.List<SenderAndReceiver> receiverAppList = getReceiverListByHasAppHasWeb(receiverList, false,true);
@@ -212,7 +197,7 @@ public class AlarmController {
 		
 		//send Alarm to web and log at db
 		for(SenderAndReceiver senderReceiver : receiverWebList) {
-			sendHomeInAlarm(senderReceiver.getReceiverId(), homeInAlarmVo);
+			sendAlarm(senderReceiver.getReceiverId(), alarmVo);
 			
 			Alarm alarm = new Alarm(alarmType.getId(), homeInEvent.getId(), homeInEvent.getUserId(), senderReceiver.getReceiverId(), homeInEvent.getTimestamp());
 			alarmService.save(alarm);
@@ -221,7 +206,7 @@ public class AlarmController {
 		//send push to app and log at db
 		for(SenderAndReceiver senderReceiver : receiverAppList) {
 			//send push alarm
-			sendHomeInPush(senderReceiver.getReceiverId(), homeInAlarmVo);
+			sendPush(senderReceiver.getReceiverId(), alarmVo);
 			
 			Alarm alarm = new Alarm(alarmType.getId(), homeInEvent.getId(), homeInEvent.getUserId(), senderReceiver.getReceiverId(), homeInEvent.getTimestamp());
 			alarmService.save(alarm);
@@ -245,7 +230,7 @@ public class AlarmController {
 		
 		// get receiver list from DB by sender_id
 		java.util.List<SenderAndReceiver> receiverList = senderReceiverService.findBySenderIdAndAlarmTypeId(homeOutEventVo.getUserId(),alarmType.getId());
-		HomeOutAlarmVo homeOutAlarmVo = new HomeOutAlarmVo(homeOutEventVo.getUserId(),"homeout",homeOutEventVo.getTimestamp(),home.getLongitude(),home.getLatitude());
+		AlarmVo alarmVo = new AlarmVo(homeOutEventVo.getUserId(),"homeout",homeOutEventVo.getTimestamp(),home.getLongitude(),home.getLatitude());
 		
 		java.util.List<SenderAndReceiver> receiverWebList = getReceiverListByHasAppHasWeb(receiverList, true,false);
 		java.util.List<SenderAndReceiver> receiverAppList = getReceiverListByHasAppHasWeb(receiverList, false,true);
@@ -259,7 +244,7 @@ public class AlarmController {
 		
 		//send Alarm to web and log at db
 		for(SenderAndReceiver senderReceiver : receiverWebList) {
-			sendHomeOutAlarm(senderReceiver.getReceiverId(), homeOutAlarmVo);
+			sendAlarm(senderReceiver.getReceiverId(), alarmVo);
 			
 			Alarm alarm = new Alarm(alarmType.getId(), homeOutEvent.getId(), homeOutEventVo.getUserId(), senderReceiver.getReceiverId(), homeOutEventVo.getTimestamp());
 			alarmService.save(alarm);
@@ -268,7 +253,7 @@ public class AlarmController {
 		//send push to app and log at db
 		for(SenderAndReceiver senderReceiver : receiverAppList) {
 			//send push alarm
-			sendHomeOutPush(senderReceiver.getReceiverId(), homeOutAlarmVo);
+			sendPush(senderReceiver.getReceiverId(), alarmVo);
 			
 			Alarm alarm = new Alarm(alarmType.getId(), homeOutEvent.getId(), homeOutEventVo.getUserId(), senderReceiver.getReceiverId(), homeOutEventVo.getTimestamp());
 			alarmService.save(alarm);
@@ -300,89 +285,21 @@ public class AlarmController {
 		return new ResponseEntity<List<Alarm>>(alarms,HttpStatus.OK);
 	}
 	
-	public void sendFallAlarm(int receiverId, FallAlarmVo fallAlarmVo) {
-		webSocket.convertAndSend("/topics/" + Integer.toString(receiverId) ,fallAlarmVo);
+	public void sendAlarm(int receiverId, AlarmVo alarmVo) {
+		webSocket.convertAndSend("/topics/" + Integer.toString(receiverId) , alarmVo);
 	}
 	
-	public void sendNonActiveAlarm(int receiverId, NonActiveAlarmVo nonActiveAlarmVo) {
-		webSocket.convertAndSend("/topics/" + Integer.toString(receiverId) , nonActiveAlarmVo);
-	}
-	public void sendHomeInAlarm(int receiverId, HomeInAlarmVo homeInAlarmVo) {
-		webSocket.convertAndSend("/topics/" + Integer.toString(receiverId) , homeInAlarmVo);
-	}
-	public void sendHomeOutAlarm(int receiverId, HomeOutAlarmVo homeOutAlarmVo) {
-		webSocket.convertAndSend("/topics/" + Integer.toString(receiverId) , homeOutAlarmVo);
-	}
-	
-	public void sendFallPush(int receiverId, FallAlarmVo fallAlarmVo) throws FirebaseMessagingException {
+	public void sendPush(int receiverId, AlarmVo alarmVo) throws FirebaseMessagingException {
 		List<Token> tokenList = tokenService.findByUserId(receiverId);
-		User user = userService.findOne(fallAlarmVo.getSenderId());
+		User user = userService.findOne(alarmVo.getSenderId());
 		Map<String, String> map= new HashMap<>();
 		
-		map.put("senderId", Integer.toString(fallAlarmVo.getSenderId()));
+		map.put("senderId", Integer.toString(alarmVo.getSenderId()));
 		map.put("senderName",user.getName());
-		map.put("alarmType",fallAlarmVo.getAlarmType());
-		map.put("timestamp", fallAlarmVo.getTimestamp().toString());
-		map.put("longitude", Float.toString(fallAlarmVo.getLongitude()));
-		map.put("latitude", Float.toHexString(fallAlarmVo.getLatitude()));
-		for(Token token: tokenList) {
-			try {
-				fCMService.send(token.getToken(), map);
-			}
-			catch(Exception e) {
-			}
-		}
-	}
-	
-	public void sendNonActivePush(int receiverId, NonActiveAlarmVo nonActiveAlarmVo) throws FirebaseMessagingException {
-		List<Token> tokenList = tokenService.findByUserId(receiverId);
-		User user = userService.findOne(nonActiveAlarmVo.getSenderId());
-		Map<String, String> map= new HashMap<>();
-		
-		map.put("senderId", Integer.toString(nonActiveAlarmVo.getSenderId()));
-		map.put("senderName",user.getName());
-		map.put("alarmType",nonActiveAlarmVo.getAlarmType());
-		map.put("timestamp", nonActiveAlarmVo.getTimestamp().toString());
-		map.put("longitude", Float.toString(nonActiveAlarmVo.getLongitude()));
-		map.put("latitude", Float.toString(nonActiveAlarmVo.getLatitude()));
-		for(Token token: tokenList) {
-			try {
-				fCMService.send(token.getToken(), map);
-			}
-			catch(Exception e) {
-			}
-		}
-	}
-	public void sendHomeInPush(int receiverId, HomeInAlarmVo homeInAlarmVo) throws FirebaseMessagingException {
-		List<Token> tokenList = tokenService.findByUserId(receiverId);
-		User user = userService.findOne(homeInAlarmVo.getSenderId());
-		Map<String, String> map= new HashMap<>();
-		
-		map.put("senderId", Integer.toString(homeInAlarmVo.getSenderId()));
-		map.put("senderName",user.getName());
-		map.put("alarmType",homeInAlarmVo.getAlarmType());
-		map.put("timestamp", homeInAlarmVo.getTimestamp().toString());
-		map.put("longitude", Float.toString(homeInAlarmVo.getLongitude()));
-		map.put("latitude", Float.toString(homeInAlarmVo.getLatitude()));
-		for(Token token: tokenList) {
-			try {
-				fCMService.send(token.getToken(), map);
-			}
-			catch(Exception e) {
-			}
-		}
-	}
-	public void sendHomeOutPush(int receiverId, HomeOutAlarmVo homeOutAlarmVo) throws FirebaseMessagingException {
-		List<Token> tokenList = tokenService.findByUserId(receiverId);
-		User user = userService.findOne(homeOutAlarmVo.getSenderId());
-		Map<String, String> map= new HashMap<>();
-		
-		map.put("senderId", Integer.toString(homeOutAlarmVo.getSenderId()));
-		map.put("senderName",user.getName());
-		map.put("alarmType",homeOutAlarmVo.getAlarmType());
-		map.put("timestamp", homeOutAlarmVo.getTimestamp().toString());
-		map.put("longitude", Float.toString(homeOutAlarmVo.getLongitude()));
-		map.put("latitude", Float.toString(homeOutAlarmVo.getLatitude()));
+		map.put("alarmType",alarmVo.getAlarmType());
+		map.put("timestamp", alarmVo.getTimestamp().toString());
+		map.put("longitude", Float.toString(alarmVo.getLongitude()));
+		map.put("latitude", Float.toString(alarmVo.getLatitude()));
 		for(Token token: tokenList) {
 			try {
 				fCMService.send(token.getToken(), map);
