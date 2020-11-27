@@ -46,8 +46,9 @@ public class User{
     	System.err.println("make user addr : " + address);
     }
 	public User() {
-	
 	}
+	
+	
 	//id
 	public Integer getId() {
 		return id;
@@ -75,7 +76,7 @@ public class User{
 	
 	//password
 	public boolean matchPassword(String password) {
-		if(this.password == password)
+		if( password.equals(this.password))
 			return true;
 		else 
 			return false;

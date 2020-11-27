@@ -63,7 +63,6 @@ public class UserController {
 	@RequestMapping(value="/user/{id}", method=RequestMethod.GET)
     @GetMapping(path = "/user/{id}")
     public User getOneUser(@PathVariable("id") int id) {
-    	System.err.println("read : " + id);
     	return userService.findOne(id);
     }
 	
@@ -85,7 +84,6 @@ public class UserController {
 	@DeleteMapping(path = "/user")
     public int deleteUser(@RequestBody UserVo val) {
     	Integer select_id = val.getId();
-    	System.err.println("delete : " + select_id);
     	return userService.delete(select_id);
     }
 	
