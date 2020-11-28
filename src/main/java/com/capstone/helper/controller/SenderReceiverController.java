@@ -4,6 +4,9 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -27,14 +30,22 @@ public class SenderReceiverController {
 	@Autowired
 	UserService userService;
 
-	@RequestMapping(value = "/user/{id}/connection", method=RequestMethod.POST)
-    public SenderAndReceiver saveSenderReceiver(@PathVariable("id") int id, @RequestBody SenderAndReceiver senderReceiver ) {
+	@RequestMapping(value = "/user/makeConnection", method=RequestMethod.POST)
+    public SenderAndReceiver saveSenderReceiver(HttpServletRequest request, @RequestBody SenderAndReceiver senderReceiver ) {
+		HttpSession session = request.getSession();
+		String userID = (String)session.getAttribute("userID");
+		int numID = userService.findIdByuserID(userID);
+		
 		return senderReceiverService.save(senderReceiver);
 	}
 	
-	@RequestMapping(value = "/user/{id}/sender", method=RequestMethod.GET)
-	public ResponseEntity<HashSet<User>> getSenderList(@PathVariable("id") int id){
-		List<SenderAndReceiver> senderAndReceiverList = senderReceiverService.findByReceiverId(id);
+	@RequestMapping(value = "/user/sender", method=RequestMethod.GET)
+	public ResponseEntity<HashSet<User>> getSenderList(HttpServletRequest request){
+		HttpSession session = request.getSession();
+		String userID = (String)session.getAttribute("userID");
+		int numID = userService.findIdByuserID(userID);
+		
+		List<SenderAndReceiver> senderAndReceiverList = senderReceiverService.findByReceiverId(numID);
 		List<User> userList = new ArrayList<User>();
 		
 		

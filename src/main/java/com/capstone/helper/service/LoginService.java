@@ -6,9 +6,9 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.capstone.helper.controller.EncryptionUtils;
 import com.capstone.helper.model.User;
 import com.capstone.helper.repository.UserRepository;
+import com.capstone.helper.security.EncryptionUtils;
 
 
 @Service("loginService")

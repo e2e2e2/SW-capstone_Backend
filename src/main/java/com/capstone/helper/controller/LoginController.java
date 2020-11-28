@@ -33,50 +33,58 @@ public class LoginController {
     LoginService loginService;
 
     @RequestMapping(value="/login", method=RequestMethod.POST)
-    public String loginProcess(HttpServletRequest request, @RequestBody UserVo tempuser) {
+    public String loginProcess(HttpServletRequest request, HttpServletResponse response, @RequestBody UserVo tempuser) {
 		String userID = tempuser.getUserID();
 		String password = tempuser.getPassword();
 		HttpSession session = request.getSession();
 		
         
 		if(loginService.loginCheck(userID, password)){
-			System.err.println("pass");
-            session.setAttribute("loginCheck",true);
             session.setAttribute("userID",userID);
-//          return ResponseEntity.status(HttpStatus.OK);
+            response.setStatus( HttpServletResponse.SC_OK);
+            
             return "pass";
         }
         
         else{
-        	System.err.println("fail");
-//        	return ResponseEntity.status(HttpStatus.BAD_REQUEST);
+
+        	response.setStatus( HttpServletResponse.SC_BAD_REQUEST);
         	return "fail";
         }
     }
+    
+    //테스트용 로그인
+    /*
+    @RequestMapping(value="/loginM", method=RequestMethod.POST)
+    public String loginTEST(HttpServletRequest request, HttpServletResponse response, @RequestBody UserVo tempuser) {
+		String userID = "aaaa";
+		String password = "1q2w3e4r";
+		HttpSession session = request.getSession();
+		
+        
+		if(loginService.loginCheck(userID, password)){
+            session.setAttribute("userID",userID);
+            response.setStatus( HttpServletResponse.SC_OK);
+            
+            return "pass";
+        }
+        
+        else{
+
+        	response.setStatus( HttpServletResponse.SC_BAD_REQUEST);
+        	return "fail";
+        }
+    }
+    */
     
     @RequestMapping(value="/logout", method=RequestMethod.POST)
     public String logoutProcess(HttpServletRequest request, HttpServletResponse response) {
     	HttpSession session = request.getSession();
                             
         session.invalidate();
-        
         response.setStatus( HttpServletResponse.SC_OK);
         
         return "logout";
-    }
-    
-    @RequestMapping(value="/needLogin", method=RequestMethod.POST)
-    public String needLoginPage(HttpServletRequest request, HttpServletResponse response) {
-    	HttpSession session = request.getSession();
-    	
-        if(session.getAttribute("loginCheck")!=null){
-        	response.setStatus( HttpServletResponse.SC_BAD_REQUEST);
-        	return "already login";
-        }
-        else{
-        	response.setStatus( HttpServletResponse.SC_OK);
-        	return "need login";
-        }
     }
     
 }

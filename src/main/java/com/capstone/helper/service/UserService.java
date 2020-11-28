@@ -38,6 +38,14 @@ public class UserService {
 	}
 
 	
+	public int findIdByuserID(String userID) {
+		List<User> user = new ArrayList<>();
+		userRepository.findByUserID(userID).forEach(e -> user.add(e));
+		
+		return user.get(0).getId();
+	}
+	
+	
 	public User save(User user) { 
 		return userRepository.save(user); 
 		}
@@ -47,10 +55,11 @@ public class UserService {
 		userRepository.deleteById(id); 
 		return id;
 	}
-	 public User update(UserVo val) { 
-		 User user = userRepository.getOne(val.getId());
+	 public User update(UserVo val, int numID) { 
+		 User user = userRepository.getOne(numID);
 		 
-		 
+		 if(val.getUserID() != null)
+			 user.setUserID(val.getUserID());
 		 if(val.getAddress() != null)
 			 user.setAddress(val.getAddress());
 		 if(val.getAuth() != -1)
@@ -74,6 +83,11 @@ public class UserService {
 	 
 
 	*/
+
+
+
+
+
 		 
 		 
 }

@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.capstone.helper.model.User;
+import com.capstone.helper.security.EncryptionUtils;
 import com.capstone.helper.service.RegisterServiece;
 import com.capstone.helper.service.UserService;
 import com.capstone.helper.vo.UserVo;
@@ -26,7 +27,7 @@ public class RegisterController{
 	@Autowired
 	private RegisterServiece registerService;
 	
-	@RequestMapping(value="/api/register/local", method=RequestMethod.POST)
+	@RequestMapping(value="/register/local", method=RequestMethod.POST)
 	public User userRegister(@RequestBody UserVo tempuser) {
 		
 		tempuser.setPassword(EncryptionUtils.encryptMD5(tempuser.getPassword()));
@@ -35,7 +36,9 @@ public class RegisterController{
 
 	}
 	
-	@RequestMapping(value="/api/checkUserID/{id}", method=RequestMethod.POST)
+	
+	//회원 정보 조회가 아니라 ID중복 체크라서 url param로 처리해도 이상없음
+	@RequestMapping(value="/register/checkUserID/{id}", method=RequestMethod.POST)
 	public boolean checkUserID(@PathVariable("id") String userID, @RequestBody UserVo tempuser) {
 		
 		if(userService.countUserID(userID) == 0)

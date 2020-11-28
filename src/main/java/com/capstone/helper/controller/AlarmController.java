@@ -7,6 +7,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -78,11 +81,18 @@ public class AlarmController {
 	@Autowired
 	private HomeOutEventService homeOutEventService;
 	
+	
 	@RequestMapping(value="/fall/user/alarm", method=RequestMethod.POST)
-	public void requestFallAlarm(@RequestBody FallEventVo fallEventVo) throws FirebaseMessagingException {
+	public void requestFallAlarm(HttpServletRequest request, @RequestBody FallEventVo fallEventVo) throws FirebaseMessagingException {
 		//process json input
+
 		
-		if(userService.findOne(fallEventVo.getUserId()) == null) {
+		HttpSession session = request.getSession();
+		String userID = (String)session.getAttribute("userID");
+		int numID = userService.findIdByuserID(userID);
+		
+		
+		if(userService.findOne(numID) == null) {
 			return ;
 		}
 		
@@ -90,14 +100,14 @@ public class AlarmController {
 		AlarmType alarmType = alarmTypeService.findByAlarmName("fall");
 		
 		// get receiver list from DB by sender_id
-		java.util.List<SenderAndReceiver> receiverList = senderReceiverService.findBySenderIdAndAlarmTypeId(fallEventVo.getUserId(),alarmType.getId());
-		AlarmVo alarmVo = new AlarmVo(fallEventVo.getUserId(),"fall",fallEventVo.getTimestamp(),fallEventVo.getLongitude(),fallEventVo.getLatitude());
+		java.util.List<SenderAndReceiver> receiverList = senderReceiverService.findBySenderIdAndAlarmTypeId(numID,alarmType.getId());
+		AlarmVo alarmVo = new AlarmVo(numID,"fall",fallEventVo.getTimestamp(),fallEventVo.getLongitude(),fallEventVo.getLatitude());
 
 		java.util.List<SenderAndReceiver> receiverWebList = getReceiverListByHasAppHasWeb(receiverList, true,false);
 		java.util.List<SenderAndReceiver> receiverAppList = getReceiverListByHasAppHasWeb(receiverList, false,true);
 		
 		//log event at db
-		FallEvent fallEvent = new FallEvent(fallEventVo.getUserId() , fallEventVo.getLongitude(), fallEventVo.getLatitude(), fallEventVo.getTimestamp());
+		FallEvent fallEvent = new FallEvent(numID , fallEventVo.getLongitude(), fallEventVo.getLatitude(), fallEventVo.getTimestamp());
 		fallEventService.save(fallEvent);
 		
 		
@@ -106,7 +116,7 @@ public class AlarmController {
 		for(SenderAndReceiver senderReceiver : receiverList) {
 			sendAlarm(senderReceiver.getReceiverId(), alarmVo);
 			
-			Alarm alarm = new Alarm(alarmType.getId(), fallEvent.getId(), fallEventVo.getUserId(), senderReceiver.getReceiverId(), fallEventVo.getTimestamp());
+			Alarm alarm = new Alarm(alarmType.getId(), fallEvent.getId(), numID, senderReceiver.getReceiverId(), fallEventVo.getTimestamp());
 			alarmService.save(alarm);
 		}
 
@@ -115,16 +125,20 @@ public class AlarmController {
 			//send push alarm
 			sendPush(senderReceiver.getReceiverId(), alarmVo);
 					
-			Alarm alarm = new Alarm(alarmType.getId(), fallEvent.getId(), fallEventVo.getUserId(), senderReceiver.getReceiverId(), fallEventVo.getTimestamp());
+			Alarm alarm = new Alarm(alarmType.getId(), fallEvent.getId(), numID, senderReceiver.getReceiverId(), fallEventVo.getTimestamp());
 			alarmService.save(alarm);
 		}		
 	}
 	
 	@RequestMapping(value="/non-active/user/alarm", method=RequestMethod.POST)
-	public void requestNonActiveAlarm(@RequestBody NonActiveEventVo nonActiveEventVo) throws FirebaseMessagingException {
+	public void requestNonActiveAlarm(HttpServletRequest request, @RequestBody NonActiveEventVo nonActiveEventVo) throws FirebaseMessagingException {
 		//process json input
 		
-		if(userService.findOne(nonActiveEventVo.getUserId()) == null) {
+		HttpSession session = request.getSession();
+		String userID = (String)session.getAttribute("userID");
+		int numID = userService.findIdByuserID(userID);
+		
+		if(userService.findOne(numID) == null) {
 			return ;
 		}
 		
@@ -133,14 +147,14 @@ public class AlarmController {
 		
 		
 		// get receiver list from DB by sender_id
-		java.util.List<SenderAndReceiver> receiverList = senderReceiverService.findBySenderIdAndAlarmTypeId(nonActiveEventVo.getUserId(),alarmType.getId());
-		AlarmVo alarmVo = new AlarmVo(nonActiveEventVo.getUserId(),"nonactive",nonActiveEventVo.getTimestamp(),nonActiveEventVo.getLongitude(),nonActiveEventVo.getLatitude());
+		java.util.List<SenderAndReceiver> receiverList = senderReceiverService.findBySenderIdAndAlarmTypeId(numID,alarmType.getId());
+		AlarmVo alarmVo = new AlarmVo(numID,"nonactive",nonActiveEventVo.getTimestamp(),nonActiveEventVo.getLongitude(),nonActiveEventVo.getLatitude());
 		
 		java.util.List<SenderAndReceiver> receiverWebList = getReceiverListByHasAppHasWeb(receiverList, true,false);
 		java.util.List<SenderAndReceiver> receiverAppList = getReceiverListByHasAppHasWeb(receiverList, false,true);
 		
 		//log event at db
-		NonActiveEvent nonActiveEvent = new NonActiveEvent(nonActiveEventVo.getUserId() , nonActiveEventVo.getLongitude(), nonActiveEventVo.getLatitude(), nonActiveEventVo.getTimestamp());
+		NonActiveEvent nonActiveEvent = new NonActiveEvent(numID , nonActiveEventVo.getLongitude(), nonActiveEventVo.getLatitude(), nonActiveEventVo.getTimestamp());
 		nonActiveEventService.save(nonActiveEvent);
 		
 	
@@ -150,7 +164,7 @@ public class AlarmController {
 		for(SenderAndReceiver senderReceiver : receiverWebList) {
 			sendAlarm(senderReceiver.getReceiverId(), alarmVo);
 			
-			Alarm alarm = new Alarm(alarmType.getId(), nonActiveEvent.getId(), nonActiveEventVo.getUserId(), senderReceiver.getReceiverId(), nonActiveEventVo.getTimestamp());
+			Alarm alarm = new Alarm(alarmType.getId(), nonActiveEvent.getId(), numID, senderReceiver.getReceiverId(), nonActiveEventVo.getTimestamp());
 			alarmService.save(alarm);
 		}
 		
@@ -159,17 +173,21 @@ public class AlarmController {
 			//send push alarm
 			sendPush(senderReceiver.getReceiverId(), alarmVo);
 			
-			Alarm alarm = new Alarm(alarmType.getId(), nonActiveEvent.getId(), nonActiveEventVo.getUserId(), senderReceiver.getReceiverId(), nonActiveEventVo.getTimestamp());
+			Alarm alarm = new Alarm(alarmType.getId(), nonActiveEvent.getId(), numID, senderReceiver.getReceiverId(), nonActiveEventVo.getTimestamp());
 			alarmService.save(alarm);
 		}
 
 		
 	}
 	@RequestMapping(value="/home-in/user/alarm", method=RequestMethod.POST)
-	public void requestHomeInAlarm(@RequestBody HomeInEventVo homeInEventVo) throws FirebaseMessagingException {
+	public void requestHomeInAlarm(HttpServletRequest request, @RequestBody HomeInEventVo homeInEventVo) throws FirebaseMessagingException {
 		//process json input
 		
-		if(userService.findOne(homeInEventVo.getUserId()) == null) {
+		HttpSession session = request.getSession();
+		String userID = (String)session.getAttribute("userID");
+		int numID = userService.findIdByuserID(userID);
+		
+		if(userService.findOne(numID) == null) {
 			return ;
 		}
 		
@@ -177,19 +195,19 @@ public class AlarmController {
 		AlarmType alarmType = alarmTypeService.findByAlarmName("homein");
 		
 		//find Home info.
-		Home home = homeService.findByUserId(homeInEventVo.getUserId());
+		Home home = homeService.findByUserId(numID);
 		
 		
 		// get receiver list from DB by sender_id
-		java.util.List<SenderAndReceiver> receiverList = senderReceiverService.findBySenderIdAndAlarmTypeId(homeInEventVo.getUserId(),alarmType.getId());
-		AlarmVo alarmVo = new AlarmVo(homeInEventVo.getUserId(),"homein",homeInEventVo.getTimestamp(), home.getLongitude(), home.getLatitude());
+		java.util.List<SenderAndReceiver> receiverList = senderReceiverService.findBySenderIdAndAlarmTypeId(numID,alarmType.getId());
+		AlarmVo alarmVo = new AlarmVo(numID,"homein",homeInEventVo.getTimestamp(), home.getLongitude(), home.getLatitude());
 		
 		java.util.List<SenderAndReceiver> receiverWebList = getReceiverListByHasAppHasWeb(receiverList, true,false);
 		java.util.List<SenderAndReceiver> receiverAppList = getReceiverListByHasAppHasWeb(receiverList, false,true);
 		
 		
 		//log event at db
-		HomeInEvent homeInEvent = new HomeInEvent(homeInEventVo.getUserId() , home.getId(), homeInEventVo.getTimestamp());
+		HomeInEvent homeInEvent = new HomeInEvent(numID , home.getId(), homeInEventVo.getTimestamp());
 		homeInEventService.save(homeInEvent);
 		
 	
@@ -215,10 +233,14 @@ public class AlarmController {
 		
 	}
 	@RequestMapping(value="/home-out/user/alarm", method=RequestMethod.POST)
-	public void requestHomeOutAlarm(@RequestBody HomeOutEventVo homeOutEventVo) throws FirebaseMessagingException {
+	public void requestHomeOutAlarm(HttpServletRequest request, @RequestBody HomeOutEventVo homeOutEventVo) throws FirebaseMessagingException {
 		//process json input
 		
-		if(userService.findOne(homeOutEventVo.getUserId()) == null) {
+		HttpSession session = request.getSession();
+		String userID = (String)session.getAttribute("userID");
+		int numID = userService.findIdByuserID(userID);
+		
+		if(userService.findOne(numID) == null) {
 			return ;
 		}
 		
@@ -226,17 +248,17 @@ public class AlarmController {
 		AlarmType alarmType = alarmTypeService.findByAlarmName("homeout");
 		
 		//find Home info.
-		Home home = homeService.findByUserId(homeOutEventVo.getUserId());
+		Home home = homeService.findByUserId(numID);
 		
 		// get receiver list from DB by sender_id
-		java.util.List<SenderAndReceiver> receiverList = senderReceiverService.findBySenderIdAndAlarmTypeId(homeOutEventVo.getUserId(),alarmType.getId());
-		AlarmVo alarmVo = new AlarmVo(homeOutEventVo.getUserId(),"homeout",homeOutEventVo.getTimestamp(),home.getLongitude(),home.getLatitude());
+		java.util.List<SenderAndReceiver> receiverList = senderReceiverService.findBySenderIdAndAlarmTypeId(numID,alarmType.getId());
+		AlarmVo alarmVo = new AlarmVo(numID,"homeout",homeOutEventVo.getTimestamp(),home.getLongitude(),home.getLatitude());
 		
 		java.util.List<SenderAndReceiver> receiverWebList = getReceiverListByHasAppHasWeb(receiverList, true,false);
 		java.util.List<SenderAndReceiver> receiverAppList = getReceiverListByHasAppHasWeb(receiverList, false,true);
 		
 		//log event at db
-		HomeOutEvent homeOutEvent = new HomeOutEvent(homeOutEventVo.getUserId() , home.getId(), homeOutEventVo.getTimestamp());
+		HomeOutEvent homeOutEvent = new HomeOutEvent(numID , home.getId(), homeOutEventVo.getTimestamp());
 		homeOutEventService.save(homeOutEvent);
 		
 	
@@ -246,7 +268,7 @@ public class AlarmController {
 		for(SenderAndReceiver senderReceiver : receiverWebList) {
 			sendAlarm(senderReceiver.getReceiverId(), alarmVo);
 			
-			Alarm alarm = new Alarm(alarmType.getId(), homeOutEvent.getId(), homeOutEventVo.getUserId(), senderReceiver.getReceiverId(), homeOutEventVo.getTimestamp());
+			Alarm alarm = new Alarm(alarmType.getId(), homeOutEvent.getId(), numID, senderReceiver.getReceiverId(), homeOutEventVo.getTimestamp());
 			alarmService.save(alarm);
 		}
 		
@@ -255,12 +277,13 @@ public class AlarmController {
 			//send push alarm
 			sendPush(senderReceiver.getReceiverId(), alarmVo);
 			
-			Alarm alarm = new Alarm(alarmType.getId(), homeOutEvent.getId(), homeOutEventVo.getUserId(), senderReceiver.getReceiverId(), homeOutEventVo.getTimestamp());
+			Alarm alarm = new Alarm(alarmType.getId(), homeOutEvent.getId(), numID, senderReceiver.getReceiverId(), homeOutEventVo.getTimestamp());
 			alarmService.save(alarm);
 		}
 
 		
 	}
+	
 	
 	@RequestMapping(value="/alarm-type", method=RequestMethod.POST)
 	public void saveAlarmType(@RequestBody AlarmTypeVo alarmTypeVo) {
@@ -268,15 +291,21 @@ public class AlarmController {
 		alarmTypeService.save(alarmType); 
 	}
 	
+	
 	@RequestMapping(value="/alarm-type", method=RequestMethod.GET)
 	public ResponseEntity<List<AlarmType>> getAlarmTypes() {
 		List<AlarmType> alarmTypes = alarmTypeService.findAll();
 		return new ResponseEntity<List<AlarmType>>(alarmTypes,HttpStatus.OK);
 	}
 	
-	@RequestMapping(value="/user/{id}/alarm", method=RequestMethod.GET)
-	public ResponseEntity<List<Alarm>> getRecentAlarms(@PathVariable("id") int id) {
-		List<Alarm> alarms = alarmService.findByReceiverId(id);
+	//ID를 빼고 세션 연결에 의존
+	@RequestMapping(value="/user/alarm", method=RequestMethod.GET)
+	public ResponseEntity<List<Alarm>> getRecentAlarms(HttpServletRequest request) {
+		HttpSession session = request.getSession();
+		String userID = (String)session.getAttribute("userID");
+		int numID = userService.findIdByuserID(userID);
+		
+		List<Alarm> alarms = alarmService.findByReceiverId(numID);
 		if(alarms.size()>=10) {
 			alarms = alarms.subList(alarms.size()-10,alarms.size());
 		}

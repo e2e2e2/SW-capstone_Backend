@@ -8,6 +8,7 @@ import java.util.Map;
 import java.util.Optional;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -51,72 +52,90 @@ public class UserController {
 	@Autowired
 	private TokenService tokenService;
 	
-	
+	//기능 넣지 말것---for master
 	@RequestMapping(value="/user-list", method=RequestMethod.GET)
-	@GetMapping(produces = { MediaType.APPLICATION_JSON_VALUE }) 
 	public ResponseEntity<List<User>> getAllmembers() { 
 		List<User> user = userService.findAll(); 
 		return new ResponseEntity<List<User>>(user, HttpStatus.OK); 
 	}
 
 	
-	@RequestMapping(value="/user/{id}", method=RequestMethod.GET)
-    @GetMapping(path = "/user/{id}")
-    public User getOneUser(@PathVariable("id") int id) {
-    	return userService.findOne(id);
+	@RequestMapping(value="/user", method=RequestMethod.GET)
+    public User getOneUser(HttpServletRequest request) {
+		HttpSession session = request.getSession();
+		String userID = (String)session.getAttribute("userID");
+		int numID = userService.findIdByuserID(userID);
+		
+    	return userService.findOne(numID);
     }
 	
 	
+	//RegisterController의 userRegister를 이용할 것---for master
 	@RequestMapping(value="/user", method=RequestMethod.POST)
-	@PostMapping()
 	public User saveUser(@RequestBody User user) {
 	    return userService.save(user);
 	}
 	
+	
+	//json에는 number ID를 제외한 정보만 담을 것
 	@RequestMapping(value="/user", method=RequestMethod.PATCH)
-	@PatchMapping(path = "/user")
-	public User updateUser(@RequestBody UserVo val) {
-	    return userService.update(val);
+	public User updateUser(HttpServletRequest request, @RequestBody UserVo val) {
+		HttpSession session = request.getSession();
+		String userID = (String)session.getAttribute("userID");
+		int numID = userService.findIdByuserID(userID);
+		
+	    return userService.update(val, numID);
 	}
 	
 	
 	@RequestMapping(value="/user", method=RequestMethod.DELETE)
-	@DeleteMapping(path = "/user")
-    public int deleteUser(@RequestBody UserVo val) {
-    	Integer select_id = val.getId();
+    public int deleteUser(HttpServletRequest request) {
+		HttpSession session = request.getSession();
+		String userID = (String)session.getAttribute("userID");
+		Integer select_id = userService.findIdByuserID(userID);
     	return userService.delete(select_id);
     }
 	
 	
-	@RequestMapping(value="/user/{id}/token", method=RequestMethod.PATCH)
-    public int updateToken(@RequestBody TokenVo tokenVo) {
+	@RequestMapping(value="/user/token", method=RequestMethod.PATCH)
+    public int updateToken(HttpServletRequest request, @RequestBody TokenVo tokenVo) {
+		HttpSession session = request.getSession();
+		String userID = (String)session.getAttribute("userID");
+		int numID = userService.findIdByuserID(userID);
+		
     	return 0;
     }
 	
 	@RequestMapping(value="/user/has-app/{is-true}", method=RequestMethod.POST)
-    public Token registerAppWithToken(@PathVariable("is-true") boolean isTrue, @RequestBody TokenVo tokenVo) {
-		Integer userId = tokenVo.getUserId();
+    public Token registerAppWithToken(HttpServletRequest request, @PathVariable("is-true") boolean isTrue, @RequestBody TokenVo tokenVo) {
+		HttpSession session = request.getSession();
+		String userID = (String)session.getAttribute("userID");
+		Integer numID = userService.findIdByuserID(userID);
 		
-		ReceiverEnvironment receiverEnvironment = receiverEnvironmentService.findByUserId(userId);
+		ReceiverEnvironment receiverEnvironment = receiverEnvironmentService.findByUserId(numID);
 		if(receiverEnvironment == null) {
-			receiverEnvironment = createDefaultReceiverEnvironment(userId);
+			receiverEnvironment = createDefaultReceiverEnvironment(numID);
 		}
 		receiverEnvironment.setHasApp(true);
 		
 		receiverEnvironmentService.save(receiverEnvironment);
 		
 		
-		Token newToken = new Token(userId, tokenVo.getToken());
+		Token newToken = new Token(numID, tokenVo.getToken());
 		
     	return tokenService.save(newToken);
     }
 	
 	
-	@RequestMapping(value="/user/{id}/has-web/{is-true}", method=RequestMethod.POST)
-    public ReceiverEnvironment registerWeb(@PathVariable("id") int id, @PathVariable("is-true") boolean isTrue) {
-		ReceiverEnvironment receiverEnvironment = receiverEnvironmentService.findByUserId(id);
+	@RequestMapping(value="/user/has-web/{is-true}", method=RequestMethod.POST)
+    public ReceiverEnvironment registerWeb(HttpServletRequest request, @PathVariable("is-true") boolean isTrue) {
+		HttpSession session = request.getSession();
+		String userID = (String)session.getAttribute("userID");
+		Integer numID = userService.findIdByuserID(userID);
+		
+		ReceiverEnvironment receiverEnvironment = receiverEnvironmentService.findByUserId(numID);
 		if(receiverEnvironment == null) {
-			receiverEnvironment = createDefaultReceiverEnvironment(id);
+			receiverEnvironment = createDefaultReceiverEnvironment(numID);
 		}
 		receiverEnvironment.setHasWeb(true);
 		return receiverEnvironmentService.save(receiverEnvironment);

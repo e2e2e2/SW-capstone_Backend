@@ -1,4 +1,4 @@
-package com.capstone.helper.controller;
+package com.capstone.helper.security;
 
 import java.security.MessageDigest;
 
