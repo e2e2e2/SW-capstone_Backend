@@ -25,24 +25,14 @@ public class EventController {
 	@Autowired
 	private UserService userService;
 	
-	//피보호자는 항상 세션연결이 유지되어야함
-	@RequestMapping(value="/fall/event", method=RequestMethod.GET)
-	public FallEvent getFallEventByEventId(HttpServletRequest request) {
-		HttpSession session = request.getSession();
-		String userID = (String)session.getAttribute("userID");
-		int numID = userService.findIdByuserID(userID);
-		
-		return fallEventService.findOne(numID);
+	@RequestMapping(value="/fall/event/{event_id}", method=RequestMethod.GET)
+	public FallEvent getFallEventByEventId(@PathVariable("event_id") int eventId) {
+		return fallEventService.findOne(eventId);
 	}
-
-	//피보호자는 항상 세션연결이 유지되어야함
-	@RequestMapping(value="/non-active/event", method=RequestMethod.GET)
-	public NonActiveEvent getNonActiveEventByEventId(HttpServletRequest request) {
-		HttpSession session = request.getSession();
-		String userID = (String)session.getAttribute("userID");
-		int numID = userService.findIdByuserID(userID);
-		
-		return nonActiveEventService.findOne(numID);
+	
+	@RequestMapping(value="/non-active/event/{event_id}", method=RequestMethod.GET)
+	public NonActiveEvent getNonActiveEventByEventId(@PathVariable("event_id") int eventId) {
+		return nonActiveEventService.findOne(eventId);
 	}
 
 	

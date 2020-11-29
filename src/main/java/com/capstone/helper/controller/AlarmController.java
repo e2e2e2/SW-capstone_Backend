@@ -83,7 +83,7 @@ public class AlarmController {
 	
 	
 	@RequestMapping(value="/fall/user/alarm", method=RequestMethod.POST)
-	public void requestFallAlarm(HttpServletRequest request, @RequestBody FallEventVo fallEventVo) throws FirebaseMessagingException {
+	public int requestFallAlarm(HttpServletRequest request, @RequestBody FallEventVo fallEventVo) throws FirebaseMessagingException {
 		//process json input
 
 		
@@ -93,7 +93,7 @@ public class AlarmController {
 		
 		
 		if(userService.findOne(numID) == null) {
-			return ;
+			return -1;
 		}
 		
 		//get alarmtype id by string
@@ -127,11 +127,13 @@ public class AlarmController {
 					
 			Alarm alarm = new Alarm(alarmType.getId(), fallEvent.getId(), numID, senderReceiver.getReceiverId(), fallEventVo.getTimestamp());
 			alarmService.save(alarm);
-		}		
+		}	
+		
+		return fallEvent.getId();
 	}
 	
 	@RequestMapping(value="/non-active/user/alarm", method=RequestMethod.POST)
-	public void requestNonActiveAlarm(HttpServletRequest request, @RequestBody NonActiveEventVo nonActiveEventVo) throws FirebaseMessagingException {
+	public Integer requestNonActiveAlarm(HttpServletRequest request, @RequestBody NonActiveEventVo nonActiveEventVo) throws FirebaseMessagingException {
 		//process json input
 		
 		HttpSession session = request.getSession();
@@ -139,7 +141,7 @@ public class AlarmController {
 		int numID = userService.findIdByuserID(userID);
 		
 		if(userService.findOne(numID) == null) {
-			return ;
+			return -1;
 		}
 		
 		//get alarmtype id by string
@@ -177,7 +179,7 @@ public class AlarmController {
 			alarmService.save(alarm);
 		}
 
-		
+		return nonActiveEvent.getId();
 	}
 	@RequestMapping(value="/home-in/user/alarm", method=RequestMethod.POST)
 	public void requestHomeInAlarm(HttpServletRequest request, @RequestBody HomeInEventVo homeInEventVo) throws FirebaseMessagingException {

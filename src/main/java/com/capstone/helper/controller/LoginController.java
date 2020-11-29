@@ -78,13 +78,13 @@ public class LoginController {
     */
     
     @RequestMapping(value="/logout", method=RequestMethod.POST)
-    public String logoutProcess(HttpServletRequest request, HttpServletResponse response) {
+    public int logoutProcess(HttpServletRequest request, HttpServletResponse response) {
     	HttpSession session = request.getSession();
                             
         session.invalidate();
         response.setStatus( HttpServletResponse.SC_OK);
         
-        return "logout";
+        return 123;
     }
     
 }
