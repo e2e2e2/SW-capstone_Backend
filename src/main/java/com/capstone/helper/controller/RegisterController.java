@@ -3,6 +3,8 @@ package com.capstone.helper.controller;
 
 
 
+import javax.servlet.http.HttpServletResponse;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -39,12 +41,18 @@ public class RegisterController{
 	
 	//회원 정보 조회가 아니라 ID중복 체크라서 url param로 처리해도 이상없음
 	@RequestMapping(value="/register/checkUserID/{id}", method=RequestMethod.POST)
-	public boolean checkUserID(@PathVariable("id") String userID, @RequestBody UserVo tempuser) {
+	public boolean checkUserID(HttpServletResponse response, @PathVariable("id") String userID, @RequestBody UserVo tempuser) {
 		
-		if(userService.countUserID(userID) == 0)
+		if(userService.countUserID(userID) == 0) {
+			response.setStatus( HttpServletResponse.SC_OK);
 			return true;
-		else
+		}
+			
+		else {
+			response.setStatus( HttpServletResponse.SC_BAD_REQUEST);
 			return false;
+		}
+			
 
 	}
 	
