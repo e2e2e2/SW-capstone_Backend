@@ -16,6 +16,8 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import javax.servlet.http.HttpSession;
+
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,14 +43,18 @@ public class UserControllerTest{
     private HttpSession session;
     @MockBean
     AuthInterceptor authInterceptor;
+    
+    @BeforeEach
+    public void setUp() throws Exception {
+    	Mockito.doReturn(true).when(authInterceptor).preHandle(Mockito.any(), Mockito.any(), Mockito.any());
+    }
 	
     @Test
     public void getOneUserTest() throws Exception {
     	
     	User user = new User("userID", "Hong", "password1234",0, "010-1111-2222", "address");
     	user.setId(1);
-    	
-    	Mockito.doReturn(true).when(authInterceptor).preHandle(Mockito.any(), Mockito.any(), Mockito.any());
+
     	given(userService.findIdByuserID("userID")).willReturn(1);
     	given(userService.findOne(1)).willReturn(user);
     	
@@ -60,9 +66,11 @@ public class UserControllerTest{
     public void saveUserTest() throws Exception {
     	
     	User newUserInfo = new User("userID111","John","password5678",0,"010-2222-3333","address");
+    	newUserInfo.setId(2);
     	String requestBody = objectMapper.writeValueAsString(newUserInfo);
     	
     	given(userService.save(newUserInfo)).willReturn(newUserInfo);
+    	System.out.println(requestBody);
     	
     	mockMvc.perform(post("/user").contentType(MediaType.APPLICATION_JSON).content(requestBody))
     			.andExpect(status().isOk());
