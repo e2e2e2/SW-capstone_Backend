@@ -58,7 +58,7 @@ public class PictureController {
 
     	}
         
-        files.transferTo(new File(FILE_URL + destinationFileName + "." + srcFileNameExtension));
+        files.transferTo(new File(FILE_URL + srcFileName));
         
         pic.setPicURL(destFile + "." + srcFileNameExtension);
         pic.setEventId(Integer.valueOf(destinationFileName));
