@@ -75,8 +75,9 @@ public class PictureController {
 	public ResponseEntity<byte[]> getPictures(HttpServletRequest request, @PathVariable("event-id") String eventID) throws Exception{
 		
 		
+		String picURL = pictureService.findByEventID(Integer.valueOf(eventID));
 		
-		File imgPath = new File(FILE_URL + eventID + ".jpg");
+		File imgPath = new File(picURL);
 
 	    byte[] image = Files.readAllBytes(imgPath.toPath());
 	    HttpHeaders headers = new HttpHeaders();

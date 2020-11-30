@@ -19,4 +19,11 @@ public class PictureService {
 		pictureRepository.save(p);
 	}
 	
+	public String findByEventID(int enevtID) {
+		
+		Picture p = pictureRepository.findByEventId(enevtID);
+		
+		return p.getPicURL();
+	}
+	
 }
