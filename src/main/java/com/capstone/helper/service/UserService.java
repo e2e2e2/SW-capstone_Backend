@@ -45,6 +45,12 @@ public class UserService {
 		return user.get(0).getId();
 	}
 	
+	public int findAuthByuserID(String userID) {
+		List<User> user = new ArrayList<>();
+		userRepository.findByUserID(userID).forEach(e -> user.add(e));
+		
+		return user.get(0).getAuth();
+	}
 	
 	public User save(User user) { 
 		return userRepository.save(user); 

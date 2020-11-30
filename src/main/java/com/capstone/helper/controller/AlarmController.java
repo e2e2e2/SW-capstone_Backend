@@ -52,6 +52,7 @@ import com.capstone.helper.vo.NonActiveEventVo;
 import com.google.firebase.messaging.FirebaseMessagingException;
 
 
+
 @RestController
 public class AlarmController {
 	@Autowired
@@ -127,18 +128,22 @@ public class AlarmController {
 					
 			Alarm alarm = new Alarm(alarmType.getId(), fallEvent.getId(), numID, senderReceiver.getReceiverId(), fallEventVo.getTimestamp());
 			alarmService.save(alarm);
-		}	
+		}
 		
 		return fallEvent.getId();
 	}
 	
 	@RequestMapping(value="/non-active/user/alarm", method=RequestMethod.POST)
 	public Integer requestNonActiveAlarm(HttpServletRequest request, @RequestBody NonActiveEventVo nonActiveEventVo) throws FirebaseMessagingException {
+
+		
 		//process json input
 		
 		HttpSession session = request.getSession();
 		String userID = (String)session.getAttribute("userID");
 		int numID = userService.findIdByuserID(userID);
+		
+		
 		
 		if(userService.findOne(numID) == null) {
 			return -1;

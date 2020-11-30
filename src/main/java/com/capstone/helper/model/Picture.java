@@ -1,31 +1,31 @@
 package com.capstone.helper.model;
 
-import java.time.LocalDateTime;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.IdClass;
 import javax.persistence.Table;
-import javax.sql.rowset.serial.SerialBlob;
-
-import org.springframework.format.annotation.DateTimeFormat;
 
 @Entity
 @Table(name = "Pictures")
-public class Picture {
+@IdClass(PictureId.class)
+public class Picture{
 	
 	
 	@Id
 	Integer eventId;
 
+	@Id
+	String tag;
+	
 	@Column(name="pic_url")
 	String pic_url;
 	
 
-	public Picture(Integer eventId, String picURL) {
+	public Picture(Integer eventId, String tag, String picURL) {
 		this.eventId = eventId;
+		this.tag = tag;
 		this.pic_url = picURL;
 	}
 
@@ -41,6 +41,15 @@ public class Picture {
 	public void setEventId(Integer eventId) {
 		this.eventId = eventId;
 	}
+
+	
+	public String getTag() {
+		return tag;
+	}
+	public void setTag(String tag) {
+		this.tag = tag;
+	}
+	
 	
 	public String getPicURL() {
 		return pic_url;
@@ -50,3 +59,6 @@ public class Picture {
 	}
 	
 }
+
+
+

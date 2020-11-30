@@ -32,11 +32,15 @@ public class FallEvent {
 	@Column(name="timestamp")
 	LocalDateTime timestamp;
 
+	@Column(name="is_true")
+	boolean isTrue;
+	
 	public FallEvent(Integer userId, Float latitude, Float longitude, LocalDateTime timestamp) {
 		this.userId = userId;
 		this.latitude = latitude;
 		this.longitude = longitude;
 		this.timestamp = timestamp;
+		this.isTrue = true;
 	}
 
 	public FallEvent() {
@@ -85,5 +89,9 @@ public class FallEvent {
 	}
 
 
+	
+	public void toFalse() {
+		this.isTrue = false;
+	}
 	
 }

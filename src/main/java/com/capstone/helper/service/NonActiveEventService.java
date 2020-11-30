@@ -19,4 +19,12 @@ public class NonActiveEventService {
 		nonActiveEventRepository.save(nonActiveEvent); 
 		 return nonActiveEvent;
 	}
+
+	public Integer toFalse(Integer id) { 
+		NonActiveEvent nonActiveEvent = nonActiveEventRepository.findById(id).get();
+		nonActiveEvent.toFalse();
+		nonActiveEventRepository.save(nonActiveEvent);
+		
+		return id;
+	}
 }

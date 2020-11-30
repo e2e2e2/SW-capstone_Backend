@@ -31,13 +31,15 @@ public class NonActiveEvent {
 	@Column(name="timestamp")
 	LocalDateTime timestamp;
 	
-	
+	@Column(name="is_true")
+	boolean isTrue;
 
 	public NonActiveEvent(Integer userId, Float latitude, Float longitude, LocalDateTime timestamp) {
 		this.userId = userId;
 		this.latitude = latitude;
 		this.longitude = longitude;
 		this.timestamp = timestamp;
+		this.isTrue = true;
 	}
 	
 	public NonActiveEvent() {
@@ -84,5 +86,9 @@ public class NonActiveEvent {
 		this.timestamp = timestamp;
 	}
 	
+	
+	public void toFalse() {
+		this.isTrue = false;
+	}
 
 }

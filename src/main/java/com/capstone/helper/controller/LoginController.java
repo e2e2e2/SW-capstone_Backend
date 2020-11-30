@@ -24,6 +24,7 @@ import com.capstone.helper.model.User;
 import com.capstone.helper.service.LoginService;
 import com.capstone.helper.service.UserService;
 import com.capstone.helper.vo.UserVo;
+import com.google.gson.JsonObject;
 
 
 @RestController 
@@ -32,24 +33,34 @@ public class LoginController {
 	@Autowired
     LoginService loginService;
 
+	@Autowired
+	private UserService userService;
+	
+	
     @RequestMapping(value="/login", method=RequestMethod.POST)
     public String loginProcess(HttpServletRequest request, HttpServletResponse response, @RequestBody UserVo tempuser) {
 		String userID = tempuser.getUserID();
 		String password = tempuser.getPassword();
 		HttpSession session = request.getSession();
 		
+		JsonObject jsonObject = new JsonObject();
         
 		if(loginService.loginCheck(userID, password)){
             session.setAttribute("userID",userID);
             response.setStatus( HttpServletResponse.SC_OK);
             
-            return "pass";
+            jsonObject.addProperty("value", "pass");
+			jsonObject.addProperty("auth", userService.findAuthByuserID(userID));
+			
+            return jsonObject.toString();
         }
         
         else{
 
         	response.setStatus( HttpServletResponse.SC_BAD_REQUEST);
-        	return "fail";
+        	jsonObject.addProperty("value", "fail");
+        	jsonObject.addProperty("auth", -1);
+        	return jsonObject.toString();
         }
     }
     

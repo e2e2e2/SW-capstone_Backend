@@ -20,4 +20,12 @@ public class FallEventService {
 		 return fall;
 	}
 	
+	public Integer toFalse(Integer id) { 
+		FallEvent fallEvent = fallEventRepository.findById(id).get();
+		fallEvent.toFalse();
+		fallEventRepository.save(fallEvent);
+		
+		return id;
+	}
+	
 }

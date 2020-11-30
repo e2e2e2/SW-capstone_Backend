@@ -14,14 +14,15 @@ public class PictureService {
 	public void save(Picture pic) {
 		Picture p = new Picture();
 		p.setEventId(pic.getEventId());
+		p.setTag(pic.getTag());
 		p.setPicURL(pic.getPicURL());
 		
 		pictureRepository.save(p);
 	}
 	
-	public String findByEventID(int enevtID) {
+	public String findByEventID(int enevtID,String tag) {
 		
-		Picture p = pictureRepository.findByEventId(enevtID);
+		Picture p = pictureRepository.findByEventIdAndTag(enevtID, tag);
 		
 		return p.getPicURL();
 	}
