@@ -22,6 +22,7 @@ public class Picture {
 
 	@Column(name="pic_url")
 	String pic_url;
+	
 
 	public Picture(Integer eventId, String picURL) {
 		this.eventId = eventId;
