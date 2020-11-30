@@ -29,7 +29,7 @@ public class AuthInterceptor extends HandlerInterceptorAdapter {
 		//있으면 세션 유무 체크
 		HttpSession session = request.getSession();
 		if( session == null ) {
-			response.setStatus( HttpServletResponse.SC_BAD_REQUEST);
+			response.setStatus( HttpServletResponse.SC_UNAUTHORIZED);
 			return false;
 		}
 		
@@ -39,12 +39,12 @@ public class AuthInterceptor extends HandlerInterceptorAdapter {
 		System.out.println(userID);
 		
 		if(userID == null) {
-			response.setStatus( HttpServletResponse.SC_BAD_REQUEST);
+			response.setStatus( HttpServletResponse.SC_UNAUTHORIZED);
 			return false;
 		}
 		
 		if(userService.countUserID(userID).equals(0)) {
-			response.setStatus( HttpServletResponse.SC_BAD_REQUEST);
+			response.setStatus( HttpServletResponse.SC_UNAUTHORIZED);
 			return false;
 		}
 		
