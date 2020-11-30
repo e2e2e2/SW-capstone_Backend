@@ -52,7 +52,7 @@ public class LoginController {
         }
         
         else{
-        	
+        	response.setStatus( HttpServletResponse.SC_BAD_REQUEST);
         	return errerCode;
         }
     }
