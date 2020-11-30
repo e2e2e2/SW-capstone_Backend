@@ -88,6 +88,8 @@ public class PictureController {
         return pic.getEventId();
 	}
 	
+	
+	//for
 	@RequestMapping(value="/test/fall/pictures/{event-id}", method=RequestMethod.GET)
 	public ResponseEntity<byte[]> getFallPictures(HttpServletRequest request, @PathVariable("event-id") String eventID) throws Exception{
 		

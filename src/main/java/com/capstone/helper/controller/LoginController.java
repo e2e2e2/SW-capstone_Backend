@@ -38,29 +38,22 @@ public class LoginController {
 	
 	
     @RequestMapping(value="/login", method=RequestMethod.POST)
-    public String loginProcess(HttpServletRequest request, HttpServletResponse response, @RequestBody UserVo tempuser) {
+    public Integer loginProcess(HttpServletRequest request, HttpServletResponse response, @RequestBody UserVo tempuser) {
 		String userID = tempuser.getUserID();
 		String password = tempuser.getPassword();
 		HttpSession session = request.getSession();
-		
-		JsonObject jsonObject = new JsonObject();
+		Integer errerCode = loginService.loginCheck(userID, password);
         
-		if(loginService.loginCheck(userID, password)){
+		if(errerCode == 1){
             session.setAttribute("userID",userID);
             response.setStatus( HttpServletResponse.SC_OK);
-            
-            jsonObject.addProperty("value", "pass");
-			jsonObject.addProperty("auth", userService.findAuthByuserID(userID));
 			
-            return jsonObject.toString();
+            return userService.findAuthByuserID(userID);
         }
         
         else{
-
-        	response.setStatus( HttpServletResponse.SC_BAD_REQUEST);
-        	jsonObject.addProperty("value", "fail");
-        	jsonObject.addProperty("auth", -1);
-        	return jsonObject.toString();
+        	
+        	return errerCode;
         }
     }
     
