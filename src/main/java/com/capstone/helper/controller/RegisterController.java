@@ -7,7 +7,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -18,6 +17,7 @@ import com.capstone.helper.security.EncryptionUtils;
 import com.capstone.helper.service.RegisterServiece;
 import com.capstone.helper.service.UserService;
 import com.capstone.helper.vo.UserVo;
+import com.google.gson.JsonObject;
 
 
 @RestController 
@@ -41,19 +41,22 @@ public class RegisterController{
 	
 	//회원 정보 조회가 아니라 ID중복 체크라서 url param로 처리해도 이상없음
 	@RequestMapping(value="/register/checkUserID/{id}", method=RequestMethod.POST)
-	public boolean checkUserID(HttpServletResponse response, @PathVariable("id") String userID, @RequestBody UserVo tempuser) {
+	public String checkUserID(HttpServletResponse response, @PathVariable("id") String userID, @RequestBody UserVo tempuser) {
+		
+		JsonObject jsonObject = new JsonObject();
 		
 		if(userService.countUserID(userID) == 0) {
 			response.setStatus( HttpServletResponse.SC_OK);
-			return true;
+			jsonObject.addProperty("isIdDuplicate", false);
 		}
 			
 		else {
-			response.setStatus( HttpServletResponse.SC_BAD_REQUEST);
-			return false;
+			response.setStatus( HttpServletResponse.SC_OK);
+			jsonObject.addProperty("isIdDuplicate", true);
 		}
+		
 			
-
+		return jsonObject.toString();
 	}
 	
 }
