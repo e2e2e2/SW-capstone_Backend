@@ -40,17 +40,19 @@ public class PictureController {
 	public Integer postPictures(HttpServletRequest request, @RequestPart MultipartFile files) throws Exception{
 		Picture pic = new Picture();
 		
-		String srcFileName = files.getOriginalFilename(); 
-        String srcFileNameExtension = FilenameUtils.getExtension(srcFileName).toLowerCase(); 
+		String srcFileFullName = files.getOriginalFilename(); 
+		String srcFileName = FilenameUtils.getBaseName(srcFileFullName);
+        String srcFileNameExtension = FilenameUtils.getExtension(srcFileFullName).toLowerCase(); 
+        
         File destFile; 
-        String destinationFileName = FilenameUtils.getBaseName(srcFileName);
+        String destFileLoc = FILE_URL + srcFileName +  "." + srcFileNameExtension;
 
         destFile = new File(FILE_URL);         
         
         System.out.println("destinationFile = "+ destFile.getAbsolutePath());
         System.out.println("destinationFile = "+ destFile.getAbsolutePath());
         System.out.println("destinationFile.getParentFile() = " + destFile.getParentFile());
-        System.out.println("destFile.isDirectory() = " + destFile.isDirectory());
+        System.out.println("destFileLoc = " + destFileLoc);
         
         if (!destFile.isDirectory()) {
 
@@ -58,10 +60,10 @@ public class PictureController {
 
     	}
         
-        files.transferTo(new File(FILE_URL + srcFileName));
+        files.transferTo(new File(destFileLoc));
         
-        pic.setPicURL(destFile + "." + srcFileNameExtension);
-        pic.setEventId(Integer.valueOf(destinationFileName));
+        pic.setPicURL(destFileLoc);
+        pic.setEventId(Integer.valueOf(srcFileName));
         
         pictureService.save(pic);
         
