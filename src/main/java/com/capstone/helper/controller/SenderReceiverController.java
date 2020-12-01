@@ -43,8 +43,8 @@ public class SenderReceiverController {
 	
 	
 	//sender는 세션, receiver의 전화번호와 연결할 서비스들은 body에 보낸다.
-	@RequestMapping(value = "/user/set-recever", method=RequestMethod.POST)
-    public SenderAndReceiver saveSenderReceiver(HttpServletRequest request, @RequestBody ReceiverInfoVo Receiver ) {
+	@RequestMapping(value = "/user/set-receiver", method=RequestMethod.POST)
+    public SenderAndReceiver setReceiverByPhoneNumber(HttpServletRequest request, @RequestBody ReceiverInfoVo Receiver ) {
 		HttpSession session = request.getSession();
 		String userID = (String)session.getAttribute("userID");
 		int senderID = userService.findIdByuserID(userID);
