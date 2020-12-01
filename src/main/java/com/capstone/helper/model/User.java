@@ -30,7 +30,7 @@ public class User{
 	Integer auth;
 	
 	@Column(name="phone_number")
-	String phone_number;
+	String phoneNumber;
 	
 	@Column(name="address")
 	String address;
@@ -41,7 +41,7 @@ public class User{
     	this.password = password;
     	this.auth = auth;
     	this.name = name;
-    	this.phone_number = phone_number;
+    	this.phoneNumber = phone_number;
     	this.address = address;
     	System.err.println("make user addr : " + address);
     }
@@ -88,10 +88,10 @@ public class User{
 	
 	//phone_number
 	public String getPhone_number() {
-		return phone_number;
+		return phoneNumber;
 	}
 	public void setPhone_number(String phone_number) {
-		this.phone_number = phone_number;
+		this.phoneNumber = phone_number;
 	}
 		
 	

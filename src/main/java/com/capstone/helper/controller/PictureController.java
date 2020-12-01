@@ -83,8 +83,10 @@ public class PictureController {
         
         pictureService.save(pic);
 	    
-        if(tag.equals("F"))	fallEventService.toFalse(numId);
-        else 				nonActiveEventService.toFalse(numId);
+        if(tag.equals("F"))	
+        	fallEventService.toFalse(numId);
+        else 				
+        	nonActiveEventService.toFalse(numId);
         return pic.getEventId();
 	}
 	

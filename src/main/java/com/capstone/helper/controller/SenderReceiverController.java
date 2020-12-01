@@ -50,7 +50,8 @@ public class SenderReceiverController {
 		int senderID = userService.findIdByuserID(userID);
 		SenderAndReceiver sr = new SenderAndReceiver();
 		
-		int receiverID = userService.findIdByPhoneNum(Receiver.getPhone_number());
+		System.out.println("id is " + userID);
+		int receiverID = userService.findIdByPhoneNumber(Receiver.getPhone_number());
 		if(Receiver.isFall_down()) 
 			sr = senderReceiverService.save(new SenderAndReceiver(0,senderID,receiverID,434));
 		
