@@ -20,6 +20,7 @@ import com.capstone.helper.model.SenderAndReceiver;
 import com.capstone.helper.model.User;
 import com.capstone.helper.service.SendersAndReceiversService;
 import com.capstone.helper.service.UserService;
+import com.capstone.helper.vo.ReceiverInfoVo;
 
 @RestController 
 public class SenderReceiverController {
@@ -30,6 +31,7 @@ public class SenderReceiverController {
 	@Autowired
 	UserService userService;
 
+	//*****************************URL 소문자와 - 로 바꾸어야 할 것 같다
 	@RequestMapping(value = "/user/makeConnection", method=RequestMethod.POST)
     public SenderAndReceiver saveSenderReceiver(HttpServletRequest request, @RequestBody SenderAndReceiver senderReceiver ) {
 		HttpSession session = request.getSession();
@@ -38,6 +40,30 @@ public class SenderReceiverController {
 		
 		return senderReceiverService.save(senderReceiver);
 	}
+	
+	
+	//sender는 세션, receiver의 전화번호와 연결할 서비스들은 body에 보낸다.
+	@RequestMapping(value = "/user/set-recever", method=RequestMethod.POST)
+    public SenderAndReceiver saveSenderReceiver(HttpServletRequest request, @RequestBody ReceiverInfoVo Receiver ) {
+		HttpSession session = request.getSession();
+		String userID = (String)session.getAttribute("userID");
+		int senderID = userService.findIdByuserID(userID);
+		SenderAndReceiver sr = new SenderAndReceiver();
+		
+		int receiverID = userService.findIdByPhoneNum(Receiver.getPhone_number());
+		if(Receiver.isFall_down()) 
+			sr = senderReceiverService.save(new SenderAndReceiver(0,senderID,receiverID,434));
+		
+		if(Receiver.isNon_active()) 
+			sr = senderReceiverService.save(new SenderAndReceiver(0,senderID,receiverID,435));
+		
+		if(Receiver.isGps()) {
+			sr = senderReceiverService.save(new SenderAndReceiver(0,senderID,receiverID,436));
+			sr = senderReceiverService.save(new SenderAndReceiver(0,senderID,receiverID,437));
+		}
+		return sr;
+	}
+	
 	
 	@RequestMapping(value = "/user/sender", method=RequestMethod.GET)
 	public ResponseEntity<HashSet<User>> getSenderList(HttpServletRequest request){

@@ -9,4 +9,6 @@ import com.capstone.helper.model.User;
 
 public interface UserRepository extends JpaRepository<User, Integer>{
 	List<User> findByUserID(String userID);
+
+	List<User> findByPhoneNum(String phone_number);
 }

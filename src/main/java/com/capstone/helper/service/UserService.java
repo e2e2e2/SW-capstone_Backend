@@ -91,6 +91,14 @@ public class UserService {
 	*/
 
 
+	public int findIdByPhoneNum(String phone_number) {
+		List<User> user = new ArrayList<>();
+		userRepository.findByPhoneNum(phone_number).forEach(e -> user.add(e));
+		
+		return user.get(0).getId();
+	}
+
+
 
 
 
