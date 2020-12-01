@@ -9,6 +9,7 @@ import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.ResponseEntity.BodyBuilder;
 import org.springframework.web.bind.annotation.CookieValue;
@@ -47,6 +48,14 @@ public class LoginController {
 		if(errerCode == 1){
             session.setAttribute("userID",userID);
             response.setStatus( HttpServletResponse.SC_OK);
+            
+			ResponseCookie cookie = ResponseCookie.from("JSESSIONID", session.getId())
+													.secure(true)
+													.sameSite("None")
+													.path("/")
+													.httpOnly(true)
+													.build();
+			response.setHeader("Set-Cookie",cookie.toString());
 			
             return userService.findAuthByuserID(userID);
         }
