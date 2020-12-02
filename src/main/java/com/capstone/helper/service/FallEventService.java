@@ -27,5 +27,10 @@ public class FallEventService {
 		
 		return id;
 	}
+
+	public boolean findTrueById(Integer eventId) {
+		FallEvent fallEvent = fallEventRepository.findById(eventId).get();
+		return fallEvent.getIsTrue();
+	}
 	
 }

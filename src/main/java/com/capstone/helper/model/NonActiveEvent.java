@@ -85,6 +85,10 @@ public class NonActiveEvent {
 	public void setTimestamp(LocalDateTime timestamp) {
 		this.timestamp = timestamp;
 	}
+
+	public boolean getIsTrue() {
+		return isTrue;
+	}
 	
 	
 	public void toFalse() {

@@ -16,7 +16,7 @@ public class RecentAlarmsAndInfosVo {
 	private LocalDateTime timestamp;
 	private String senderName;
 	private String phoneNumber;
-	private String isValid;
+	private boolean isValid;
 	public int getAlarmTypeId() {
 		return alarmTypeId;
 	}
@@ -65,14 +65,14 @@ public class RecentAlarmsAndInfosVo {
 	public void setPhoneNumber(String phoneNumber) {
 		this.phoneNumber = phoneNumber;
 	}
-	public String getIsValid() {
+	public boolean getIsValid() {
 		return isValid;
 	}
-	public void setIsValid(String isValid) {
+	public void setIsValid(boolean isValid) {
 		this.isValid = isValid;
 	}
 	public RecentAlarmsAndInfosVo(int alarmTypeId, int eventId, int id, int receiverId, int senderId,
-			LocalDateTime timestamp, String senderName, String phoneNumber, String isValid) {
+			LocalDateTime timestamp, String senderName, String phoneNumber, boolean isValid) {
 		super();
 		this.alarmTypeId = alarmTypeId;
 		this.eventId = eventId;

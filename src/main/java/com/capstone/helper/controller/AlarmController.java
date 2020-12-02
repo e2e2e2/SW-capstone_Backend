@@ -309,6 +309,7 @@ public class AlarmController {
 	//ID를 빼고 세션 연결에 의존
 	@RequestMapping(value="/user/alarm", method=RequestMethod.GET)
 	public ResponseEntity<List<RecentAlarmsAndInfosVo>> getRecentAlarms(HttpServletRequest request) {
+		
 		HttpSession session = request.getSession();
 		String userID = (String)session.getAttribute("userID");
 		int numID = userService.findIdByuserID(userID);
@@ -316,31 +317,38 @@ public class AlarmController {
 		List<RecentAlarmsAndInfosVo> recentAlarmsAndInfosVos = new ArrayList<>();;
 		RecentAlarmsAndInfosVo recentAlarmsAndInfosVo;
 		
-		String senderName ;
+		String senderName;
 		String phoneNumber;
-		
+		boolean isValid;
 		List<Alarm> alarms = alarmService.findByReceiverId(numID);
+		
 		if(alarms.size()>=10) {
 			alarms = alarms.subList(alarms.size()-10,alarms.size());
 		}
+		
 		Collections.reverse(alarms);
-		for(int i = 0;i<alarms.size();i++) {
-			FallEvent fallEvent = fallEventService.findOne(alarms.get(i).getEventId());
-			NonActiveEvent nonActiveEvent = nonActiveEventService.findOne(alarms.get(i).getEventId());
+		
+		for(int i = 0; i<alarms.size();i++) {
+
+			isValid = true;
+
+			if(alarms.get(i).getAlarmTypeId() == 434) {
+				isValid = fallEventService.findTrueById(alarms.get(i).getEventId());
+			}
+			else if(alarms.get(i).getAlarmTypeId() == 435) {
+				isValid = nonActiveEventService.findTrueById(alarms.get(i).getEventId());
+			}
+			
 			senderName = userService.findOne(alarms.get(i).getSenderId()).getName();
 			phoneNumber = userService.findOne(alarms.get(i).getSenderId()).getPhone_number();
-			String isValid = "true";
-			if(fallEvent!=null) {
-				isValid = "false";
-			}
-			if(nonActiveEvent!=null) {
-				isValid = "false";
-			}
+			
+			
 			
 			
 			recentAlarmsAndInfosVo = new RecentAlarmsAndInfosVo(alarms.get(i).getAlarmTypeId(),alarms.get(i).getEventId()
 					,alarms.get(i).getId(),alarms.get(i).getReceiverId(),alarms.get(i).getSenderId(),alarms.get(i).getTimestamp()
 					,senderName,phoneNumber,isValid); 
+			
 			recentAlarmsAndInfosVos.add(recentAlarmsAndInfosVo);
 		}
 		

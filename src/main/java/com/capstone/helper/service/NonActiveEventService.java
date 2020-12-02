@@ -27,4 +27,10 @@ public class NonActiveEventService {
 		
 		return id;
 	}
+
+	public boolean findTrueById(Integer eventId) {
+		NonActiveEvent nonActiveEvent = nonActiveEventRepository.findById(eventId).get();
+		
+		return nonActiveEvent.getIsTrue();
+	}
 }
