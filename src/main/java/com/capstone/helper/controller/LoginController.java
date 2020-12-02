@@ -78,6 +78,7 @@ public class LoginController {
     	//세션 체크시 리턴하고자 하는 정보들을 json에 추가.
 		JsonObject jsonObject = new JsonObject();
     	jsonObject.addProperty("name",userService.findNameByuserID(userID));
+    	jsonObject.addProperty("code",userService.findAuthByuserID(userID));
     	
     	return jsonObject.toString();
     	
