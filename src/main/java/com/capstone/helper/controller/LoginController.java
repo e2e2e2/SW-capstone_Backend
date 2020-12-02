@@ -39,30 +39,26 @@ public class LoginController {
 	
 	
     @RequestMapping(value="/login", method=RequestMethod.POST)
-    public Integer loginProcess(HttpServletRequest request, HttpServletResponse response, @RequestBody UserVo tempuser) {
+    public String loginProcess(HttpServletRequest request, HttpServletResponse response, @RequestBody UserVo tempuser) {
 		String userID = tempuser.getUserID();
 		String password = tempuser.getPassword();
 		HttpSession session = request.getSession();
 		Integer errerCode = loginService.loginCheck(userID, password);
+		
+		JsonObject jsonObject = new JsonObject();
         
 		if(errerCode == 1){
-            session.setAttribute("userID",userID);
+			session.setAttribute("userID",userID);
             response.setStatus( HttpServletResponse.SC_OK);
-            
-			ResponseCookie cookie = ResponseCookie.from("JSESSIONID", session.getId())
-													.secure(true)
-													.sameSite("None")
-													.path("/")
-													.httpOnly(true)
-													.build();
-			response.setHeader("Set-Cookie",cookie.toString());
-			
-            return userService.findAuthByuserID(userID);
+            jsonObject.addProperty("result","success");
+            jsonObject.addProperty("JSESSIONID",session.getId());
+            return jsonObject.toString();
         }
         
         else{
         	response.setStatus( HttpServletResponse.SC_BAD_REQUEST);
-        	return errerCode;
+        	jsonObject.addProperty("result","fail");
+        	return jsonObject.toString();
         }
     }
     
