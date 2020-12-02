@@ -103,7 +103,7 @@ public class AlarmController {
 		
 		// get receiver list from DB by sender_id
 		java.util.List<SenderAndReceiver> receiverList = senderReceiverService.findBySenderIdAndAlarmTypeId(numID,alarmType.getId());
-		AlarmVo alarmVo = new AlarmVo(numID,"fall",fallEventVo.getTimestamp(),fallEventVo.getLongitude(),fallEventVo.getLatitude());
+		AlarmVo alarmVo = new AlarmVo(numID,"fall",fallEventVo.getTimestamp(),fallEventVo.getLongitude(),fallEventVo.getLatitude(),userService.findOne(numID).getName(),userService.findOne(numID).getPhone_number());
 
 		java.util.List<SenderAndReceiver> receiverWebList = getReceiverListByHasAppHasWeb(receiverList, true,false);
 		java.util.List<SenderAndReceiver> receiverAppList = getReceiverListByHasAppHasWeb(receiverList, false,true);
@@ -156,7 +156,7 @@ public class AlarmController {
 		
 		// get receiver list from DB by sender_id
 		java.util.List<SenderAndReceiver> receiverList = senderReceiverService.findBySenderIdAndAlarmTypeId(numID,alarmType.getId());
-		AlarmVo alarmVo = new AlarmVo(numID,"nonactive",nonActiveEventVo.getTimestamp(),nonActiveEventVo.getLongitude(),nonActiveEventVo.getLatitude());
+		AlarmVo alarmVo = new AlarmVo(numID,"nonactive",nonActiveEventVo.getTimestamp(),nonActiveEventVo.getLongitude(),nonActiveEventVo.getLatitude(),userService.findOne(numID).getName(),userService.findOne(numID).getPhone_number());
 		
 		java.util.List<SenderAndReceiver> receiverWebList = getReceiverListByHasAppHasWeb(receiverList, true,false);
 		java.util.List<SenderAndReceiver> receiverAppList = getReceiverListByHasAppHasWeb(receiverList, false,true);
@@ -208,7 +208,7 @@ public class AlarmController {
 		
 		// get receiver list from DB by sender_id
 		java.util.List<SenderAndReceiver> receiverList = senderReceiverService.findBySenderIdAndAlarmTypeId(numID,alarmType.getId());
-		AlarmVo alarmVo = new AlarmVo(numID,"homein",homeInEventVo.getTimestamp(), home.getLongitude(), home.getLatitude());
+		AlarmVo alarmVo = new AlarmVo(numID,"homein",homeInEventVo.getTimestamp(), home.getLongitude(), home.getLatitude(),userService.findOne(numID).getName(),userService.findOne(numID).getPhone_number());
 		
 		java.util.List<SenderAndReceiver> receiverWebList = getReceiverListByHasAppHasWeb(receiverList, true,false);
 		java.util.List<SenderAndReceiver> receiverAppList = getReceiverListByHasAppHasWeb(receiverList, false,true);
@@ -260,7 +260,7 @@ public class AlarmController {
 		
 		// get receiver list from DB by sender_id
 		java.util.List<SenderAndReceiver> receiverList = senderReceiverService.findBySenderIdAndAlarmTypeId(numID,alarmType.getId());
-		AlarmVo alarmVo = new AlarmVo(numID,"homeout",homeOutEventVo.getTimestamp(),home.getLongitude(),home.getLatitude());
+		AlarmVo alarmVo = new AlarmVo(numID,"homeout",homeOutEventVo.getTimestamp(),home.getLongitude(),home.getLatitude(),userService.findOne(numID).getName(),userService.findOne(numID).getPhone_number());
 		
 		java.util.List<SenderAndReceiver> receiverWebList = getReceiverListByHasAppHasWeb(receiverList, true,false);
 		java.util.List<SenderAndReceiver> receiverAppList = getReceiverListByHasAppHasWeb(receiverList, false,true);

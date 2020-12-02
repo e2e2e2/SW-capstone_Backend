@@ -12,6 +12,8 @@ public class AlarmVo {
 	private LocalDateTime timestamp;
 	private float longitude;
 	private float latitude;
+	private String senderName;
+	private String phoneNumber;
 	
 	public int getSenderId() {
 		return senderId;
@@ -43,13 +45,30 @@ public class AlarmVo {
 	public void setLatitude(float latitude) {
 		this.latitude = latitude;
 	}
-	public AlarmVo(int senderId, String alarmType, LocalDateTime timestamp, float longitude, float latitude) {
+	
+	public String getSenderName() {
+		return senderName;
+	}
+	public void setSenderName(String senderName) {
+		this.senderName = senderName;
+	}
+	public String getPhoneNumber() {
+		return phoneNumber;
+	}
+	public void setPhoneNumber(String phoneNumber) {
+		this.phoneNumber = phoneNumber;
+	}
+	public AlarmVo(int senderId, String alarmType, LocalDateTime timestamp, float longitude, float latitude,
+			String senderName, String phoneNumber) {
 		super();
 		this.senderId = senderId;
 		this.alarmType = alarmType;
 		this.timestamp = timestamp;
 		this.longitude = longitude;
 		this.latitude = latitude;
+		this.senderName = senderName;
+		this.phoneNumber = phoneNumber;
 	}
+	
 	
 }
