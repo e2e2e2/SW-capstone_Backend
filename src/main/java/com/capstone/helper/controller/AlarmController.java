@@ -49,6 +49,7 @@ import com.capstone.helper.vo.FallEventVo;
 import com.capstone.helper.vo.HomeInEventVo;
 import com.capstone.helper.vo.HomeOutEventVo;
 import com.capstone.helper.vo.NonActiveEventVo;
+import com.capstone.helper.vo.RecentAlarmsAndInfosVo;
 import com.google.firebase.messaging.FirebaseMessagingException;
 
 
@@ -307,18 +308,43 @@ public class AlarmController {
 	
 	//ID를 빼고 세션 연결에 의존
 	@RequestMapping(value="/user/alarm", method=RequestMethod.GET)
-	public ResponseEntity<List<Alarm>> getRecentAlarms(HttpServletRequest request) {
+	public ResponseEntity<List<RecentAlarmsAndInfosVo>> getRecentAlarms(HttpServletRequest request) {
 		HttpSession session = request.getSession();
 		String userID = (String)session.getAttribute("userID");
 		int numID = userService.findIdByuserID(userID);
+		
+		List<RecentAlarmsAndInfosVo> recentAlarmsAndInfosVos = new ArrayList<>();;
+		RecentAlarmsAndInfosVo recentAlarmsAndInfosVo;
+		
+		String senderName ;
+		String phoneNumber;
 		
 		List<Alarm> alarms = alarmService.findByReceiverId(numID);
 		if(alarms.size()>=10) {
 			alarms = alarms.subList(alarms.size()-10,alarms.size());
 		}
 		Collections.reverse(alarms);
+		for(int i = 0;i<alarms.size();i++) {
+			FallEvent fallEvent = fallEventService.findOne(alarms.get(i).getEventId());
+			NonActiveEvent nonActiveEvent = nonActiveEventService.findOne(alarms.get(i).getEventId());
+			senderName = userService.findOne(alarms.get(i).getSenderId()).getName();
+			phoneNumber = userService.findOne(alarms.get(i).getSenderId()).getPhone_number();
+			String isValid = "true";
+			if(fallEvent!=null) {
+				isValid = "false";
+			}
+			if(nonActiveEvent!=null) {
+				isValid = "false";
+			}
+			
+			
+			recentAlarmsAndInfosVo = new RecentAlarmsAndInfosVo(alarms.get(i).getAlarmTypeId(),alarms.get(i).getEventId()
+					,alarms.get(i).getId(),alarms.get(i).getReceiverId(),alarms.get(i).getSenderId(),alarms.get(i).getTimestamp()
+					,senderName,phoneNumber,isValid); 
+			recentAlarmsAndInfosVos.add(recentAlarmsAndInfosVo);
+		}
 		
-		return new ResponseEntity<List<Alarm>>(alarms,HttpStatus.OK);
+		return new ResponseEntity<List<RecentAlarmsAndInfosVo>>(recentAlarmsAndInfosVos,HttpStatus.OK);
 	}
 	
 	public void sendAlarm(int receiverId, AlarmVo alarmVo) {
