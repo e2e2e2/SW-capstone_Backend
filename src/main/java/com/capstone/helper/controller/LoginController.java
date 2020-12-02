@@ -52,12 +52,14 @@ public class LoginController {
             response.setStatus( HttpServletResponse.SC_OK);
             jsonObject.addProperty("result","success");
             jsonObject.addProperty("JSESSIONID",session.getId());
+        	jsonObject.addProperty("code",userService.findAuthByuserID(userID));
             return jsonObject.toString();
         }
         
         else{
         	response.setStatus( HttpServletResponse.SC_BAD_REQUEST);
         	jsonObject.addProperty("result","fail");
+        	jsonObject.addProperty("code",errerCode);
         	return jsonObject.toString();
         }
     }
