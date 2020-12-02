@@ -88,8 +88,10 @@ public class FallEvent {
 		this.timestamp = timestamp;
 	}
 
+	public boolean getIsTrue() {
+		return isTrue;
+	}
 
-	
 	public void toFalse() {
 		this.isTrue = false;
 	}

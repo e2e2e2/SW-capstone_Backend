@@ -114,7 +114,7 @@ public class AlarmController {
 		
 		
 		//send Alarm and to web and log at db
-		for(SenderAndReceiver senderReceiver : receiverList) {
+		for(SenderAndReceiver senderReceiver : receiverWebList) {
 			sendAlarm(senderReceiver.getReceiverId(), alarmVo);
 			
 			Alarm alarm = new Alarm(alarmType.getId(), fallEvent.getId(), numID, senderReceiver.getReceiverId(), fallEventVo.getTimestamp());
