@@ -40,9 +40,10 @@ public class LoginController {
 	
     @RequestMapping(value="/login", method=RequestMethod.POST)
     public String loginProcess(HttpServletRequest request, HttpServletResponse response, @RequestBody UserVo tempuser) {
+		HttpSession session = request.getSession();
+				
 		String userID = tempuser.getUserID();
 		String password = tempuser.getPassword();
-		HttpSession session = request.getSession();
 		Integer errerCode = loginService.loginCheck(userID, password);
 		
 		JsonObject jsonObject = new JsonObject();
@@ -64,6 +65,23 @@ public class LoginController {
         }
     }
     
+    
+    
+    //
+    @RequestMapping(value="/check-session", method=RequestMethod.GET)
+    public String isSessionValid(HttpServletRequest request, HttpServletResponse response) {
+
+    	HttpSession session = request.getSession();
+    	String userID = (String)session.getAttribute("userID");
+
+
+    	//세션 체크시 리턴하고자 하는 정보들을 json에 추가.
+		JsonObject jsonObject = new JsonObject();
+    	jsonObject.addProperty("name",userService.findNameByuserID(userID));
+    	
+    	return jsonObject.toString();
+    	
+    }
     //테스트용 로그인
     /*
     @RequestMapping(value="/loginM", method=RequestMethod.POST)

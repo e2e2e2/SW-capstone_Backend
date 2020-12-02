@@ -52,6 +52,15 @@ public class UserService {
 		return user.get(0).getAuth();
 	}
 	
+	
+
+	public String findNameByuserID(String userID) {
+		List<User> user = new ArrayList<>();
+		userRepository.findByUserID(userID).forEach(e -> user.add(e));
+		
+		return user.get(0).getName();
+	}
+	
 	public User save(User user) { 
 		return userRepository.save(user); 
 		}

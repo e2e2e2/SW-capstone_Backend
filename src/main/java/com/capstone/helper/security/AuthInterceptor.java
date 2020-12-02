@@ -20,7 +20,6 @@ public class AuthInterceptor extends HandlerInterceptorAdapter {
 	@Override
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response,
 								Object handler) throws Exception {
-		System.out.println("================ Before Method");
 		//handler method인가 체크
 		if( handler instanceof HandlerMethod == false ) {
 			return true;
