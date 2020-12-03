@@ -89,9 +89,10 @@ public class SenderReceiverQueueController {
 	}
 	
 	
+	
 	//연결수락
-	@RequestMapping(value = "/user/care/acceptSR", method=RequestMethod.POST)
-    public SenderAndReceiver careAcceptSR(HttpServletRequest request, @RequestBody SRQueueVo SRQueue ) {
+	@RequestMapping(value = "/user/receiver/acceptSR", method=RequestMethod.POST)
+    public SenderAndReceiver receiverAcceptSR(HttpServletRequest request, @RequestBody SRQueueVo SRQueue ) {
 		HttpSession session = request.getSession();
 		String userID = (String)session.getAttribute("userID");
 		int targetID = userService.findIdByuserID(userID);
@@ -115,8 +116,8 @@ public class SenderReceiverQueueController {
 
 	
 	//연결수락
-	@RequestMapping(value = "/user/cared/acceptSR", method=RequestMethod.POST)
-    public SenderAndReceiver caredAcceptSR(HttpServletRequest request, @RequestBody SRQueueVo SRQueue ) {
+	@RequestMapping(value = "/user/sender/acceptSR", method=RequestMethod.POST)
+    public SenderAndReceiver senderAcceptSR(HttpServletRequest request, @RequestBody SRQueueVo SRQueue ) {
 		HttpSession session = request.getSession();
 		String userID = (String)session.getAttribute("userID");
 		int targetID = userService.findIdByuserID(userID);
