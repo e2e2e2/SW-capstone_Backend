@@ -21,6 +21,7 @@ import com.capstone.helper.model.User;
 import com.capstone.helper.service.SendersAndReceiversService;
 import com.capstone.helper.service.UserService;
 import com.capstone.helper.vo.SenderReceiverInfoVo;
+import com.google.gson.JsonObject;
 
 @RestController 
 public class SenderReceiverController {
@@ -44,7 +45,7 @@ public class SenderReceiverController {
 	
 	//sender는 세션, receiver의 전화번호와 연결할 서비스들은 body에 보낸다.
 	@RequestMapping(value = "/user/set-receiver", method=RequestMethod.POST)
-    public SenderAndReceiver setReceiverByPhoneNumber(HttpServletRequest request, @RequestBody SenderReceiverInfoVo Receiver ) {
+    public String setReceiverByPhoneNumber(HttpServletRequest request, @RequestBody SenderReceiverInfoVo Receiver ) {
 		HttpSession session = request.getSession();
 		String userID = (String)session.getAttribute("userID");
 		int senderID = userService.findIdByuserID(userID);
@@ -62,7 +63,12 @@ public class SenderReceiverController {
 			sr = senderReceiverService.save(new SenderAndReceiver(0,senderID,receiverID,436));
 			sr = senderReceiverService.save(new SenderAndReceiver(0,senderID,receiverID,437));
 		}
-		return sr;
+		
+
+		JsonObject jsonObject = new JsonObject();
+
+    	jsonObject.addProperty("name",userService.findNameByID(receiverID));
+        return jsonObject.toString();
 	}
 	
 	

@@ -61,6 +61,18 @@ public class UserService {
 		return user.get(0).getName();
 	}
 	
+	
+
+
+	public String findNameByID(int id) {
+		User user = userRepository.getOne(id);
+		
+		
+		return user.getName();
+	}
+	
+	
+	
 	public User save(User user) { 
 		return userRepository.save(user); 
 		}
