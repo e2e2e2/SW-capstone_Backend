@@ -2,7 +2,7 @@ package com.capstone.helper.vo;
 
 
 
-public class ReceiverInfoVo {
+public class SenderReceiverInfoVo {
 
 	private String phone_number;
 	private boolean non_active;

@@ -20,7 +20,7 @@ import com.capstone.helper.model.SenderAndReceiver;
 import com.capstone.helper.model.User;
 import com.capstone.helper.service.SendersAndReceiversService;
 import com.capstone.helper.service.UserService;
-import com.capstone.helper.vo.ReceiverInfoVo;
+import com.capstone.helper.vo.SenderReceiverInfoVo;
 
 @RestController 
 public class SenderReceiverController {
@@ -44,7 +44,7 @@ public class SenderReceiverController {
 	
 	//sender는 세션, receiver의 전화번호와 연결할 서비스들은 body에 보낸다.
 	@RequestMapping(value = "/user/set-receiver", method=RequestMethod.POST)
-    public SenderAndReceiver setReceiverByPhoneNumber(HttpServletRequest request, @RequestBody ReceiverInfoVo Receiver ) {
+    public SenderAndReceiver setReceiverByPhoneNumber(HttpServletRequest request, @RequestBody SenderReceiverInfoVo Receiver ) {
 		HttpSession session = request.getSession();
 		String userID = (String)session.getAttribute("userID");
 		int senderID = userService.findIdByuserID(userID);
@@ -65,6 +65,29 @@ public class SenderReceiverController {
 		return sr;
 	}
 	
+	
+	//sender는 세션, receiver의 전화번호와 연결할 서비스들은 body에 보낸다.
+	@RequestMapping(value = "/user/set-sender", method=RequestMethod.POST)
+    public SenderAndReceiver setSenderByPhoneNumber(HttpServletRequest request, @RequestBody SenderReceiverInfoVo Sender ) {
+		HttpSession session = request.getSession();
+		String userID = (String)session.getAttribute("userID");
+		int receiverID = userService.findIdByuserID(userID);
+		SenderAndReceiver sr = new SenderAndReceiver();
+		
+		System.out.println("id is " + userID);
+		int senderID = userService.findIdByPhoneNumber(Sender.getPhone_number());
+		if(Sender.isFall_down()) 
+			sr = senderReceiverService.save(new SenderAndReceiver(0,senderID,receiverID,434));
+		
+		if(Sender.isNon_active()) 
+			sr = senderReceiverService.save(new SenderAndReceiver(0,senderID,receiverID,435));
+		
+		if(Sender.isGps()) {
+			sr = senderReceiverService.save(new SenderAndReceiver(0,senderID,receiverID,436));
+			sr = senderReceiverService.save(new SenderAndReceiver(0,senderID,receiverID,437));
+		}
+		return sr;
+	}
 	
 	@RequestMapping(value = "/user/sender", method=RequestMethod.GET)
 	public ResponseEntity<HashSet<User>> getSenderList(HttpServletRequest request){

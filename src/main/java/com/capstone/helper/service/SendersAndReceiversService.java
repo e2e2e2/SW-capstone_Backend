@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.capstone.helper.model.SenderAndReceiver;
+import com.capstone.helper.repository.SenderAndReceiverQueueRepository;
 import com.capstone.helper.repository.SenderAndReceiverRepository;
 
 @Service("senderReceiverService")
