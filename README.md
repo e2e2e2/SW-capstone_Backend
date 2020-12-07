@@ -8,9 +8,13 @@
 Spring boot, Gradle, MySQL, Naver Cloud Platform, Jenkins, Nginx, Java11,
 # 실행방법
 test and build
+```
 ./gradlew test
 ./gradlew build
+```
 
 start api-server
+```
 cd ./build/libs 
 java -jar helper-0.0.1-SNAPSHOT.jar --server.port=9000
+```
