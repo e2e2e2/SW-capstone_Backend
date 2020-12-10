@@ -55,7 +55,7 @@ public class SenderReceiverQueueController {
 
 		try {
 			if(Receiver.isFall_down()){
-				SenderAndReceiverQueue SRQueue1 = new SenderAndReceiverQueue(0,reqID, targetID,434);
+				SenderAndReceiverQueue SRQueue1 = new SenderAndReceiverQueue(reqID, targetID,434);
 				senderReceiverQueueService.save(SRQueue1);
 			
 			}
@@ -66,7 +66,7 @@ public class SenderReceiverQueueController {
 			try {
 
 				if(Receiver.isNon_active())	{
-					SenderAndReceiverQueue SRQueue2 = new SenderAndReceiverQueue(0,reqID, targetID,435);
+					SenderAndReceiverQueue SRQueue2 = new SenderAndReceiverQueue(reqID, targetID,435);
 					senderReceiverQueueService.save(SRQueue2);
 					}
 
@@ -79,14 +79,14 @@ public class SenderReceiverQueueController {
 
 
 					try {
-						SenderAndReceiverQueue SRQueue3 = new SenderAndReceiverQueue(0,reqID, targetID,436);
+						SenderAndReceiverQueue SRQueue3 = new SenderAndReceiverQueue(reqID, targetID,436);
 						senderReceiverQueueService.save(SRQueue3);
 					}catch(DataAccessException e) {}
 
 					finally {
 
 						try {
-						SenderAndReceiverQueue SRQueue4 = new SenderAndReceiverQueue(0,reqID, targetID,437);
+						SenderAndReceiverQueue SRQueue4 = new SenderAndReceiverQueue(reqID, targetID,437);
 						senderReceiverQueueService.save(SRQueue4);
 						}catch(DataAccessException e) {}
 					}
@@ -161,7 +161,7 @@ public class SenderReceiverQueueController {
 		Integer alarmTypeId = srQ.getAlarmTypeId();
 		
 		
-		SenderAndReceiver sr = new SenderAndReceiver(0 , senderId, receiverId, alarmTypeId);
+		SenderAndReceiver sr = new SenderAndReceiver(senderId, receiverId, alarmTypeId);
 
 		senderReceiverService.save(sr);
 		senderReceiverQueueService.delete(SRQueue.getQueueId());
@@ -186,7 +186,7 @@ public class SenderReceiverQueueController {
 		Integer alarmTypeId = srQ.getAlarmTypeId();
 		
 		
-		SenderAndReceiver sr = new SenderAndReceiver(0 , senderId, receiverId, alarmTypeId);
+		SenderAndReceiver sr = new SenderAndReceiver(senderId, receiverId, alarmTypeId);
 		
 		senderReceiverQueueService.delete(SRQueue.getQueueId());
 		senderReceiverService.save(sr);

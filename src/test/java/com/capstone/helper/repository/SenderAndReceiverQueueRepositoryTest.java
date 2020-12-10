@@ -52,7 +52,7 @@ public class SenderAndReceiverQueueRepositoryTest {
 		alarmTypeRepository.save(expectedAlarmType);
 		Assertions.assertNotEquals(null,alarmTypeRepository.getOne(expectedAlarmType.getId()));
 		
-		expectedSenderAndReceiverQueue = new SenderAndReceiverQueue(0, expectedSender.getId(),
+		expectedSenderAndReceiverQueue = new SenderAndReceiverQueue(expectedSender.getId(),
 				expectedReceiver.getId(),expectedAlarmType.getId());
 		senderAndReceiverQueueRepository.save(expectedSenderAndReceiverQueue);
 		Assertions.assertNotEquals(null,senderAndReceiverQueueRepository.getOne(expectedSenderAndReceiverQueue.getId()));

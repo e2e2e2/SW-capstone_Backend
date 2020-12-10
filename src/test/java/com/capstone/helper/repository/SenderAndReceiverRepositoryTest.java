@@ -42,7 +42,7 @@ public class SenderAndReceiverRepositoryTest {
 		alarmTypeRepository.save(expectedAlarmType);
 		Assertions.assertNotEquals(null,alarmTypeRepository.getOne(expectedAlarmType.getId()));
 		
-		SenderAndReceiver expectedSenderAndReceiver = new SenderAndReceiver(0, expectedSender.getId(),
+		SenderAndReceiver expectedSenderAndReceiver = new SenderAndReceiver(expectedSender.getId(),
 				expectedReceiver.getId(),expectedAlarmType.getId());
 		senderAndReceiverRepository.save(expectedSenderAndReceiver);
 		Assertions.assertNotEquals(null,senderAndReceiverRepository.getOne(expectedSenderAndReceiver.getId()));
@@ -71,7 +71,7 @@ public class SenderAndReceiverRepositoryTest {
 		alarmTypeRepository.save(expectedAlarmType);
 		Assertions.assertNotEquals(null,alarmTypeRepository.getOne(expectedAlarmType.getId()));
 		
-		SenderAndReceiver expectedSenderAndReceiver = new SenderAndReceiver(0, expectedSender.getId(),
+		SenderAndReceiver expectedSenderAndReceiver = new SenderAndReceiver( expectedSender.getId(),
 				expectedReceiver.getId(),expectedAlarmType.getId());
 		senderAndReceiverRepository.save(expectedSenderAndReceiver);
 		Assertions.assertNotEquals(null,senderAndReceiverRepository.getOne(expectedSenderAndReceiver.getId()));
