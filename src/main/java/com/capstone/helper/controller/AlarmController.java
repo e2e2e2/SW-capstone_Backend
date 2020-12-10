@@ -104,30 +104,17 @@ public class AlarmController {
 		// get receiver list from DB by sender_id
 		java.util.List<SenderAndReceiver> receiverList = senderReceiverService.findBySenderIdAndAlarmTypeId(numID,alarmType.getId());
 		AlarmVo alarmVo = new AlarmVo(numID,"fall",fallEventVo.getTimestamp(),fallEventVo.getLongitude(),fallEventVo.getLatitude(),userService.findOne(numID).getName(),userService.findOne(numID).getPhone_number());
-
-		java.util.List<SenderAndReceiver> receiverWebList = getReceiverListByHasAppHasWeb(receiverList, true,false);
-		java.util.List<SenderAndReceiver> receiverAppList = getReceiverListByHasAppHasWeb(receiverList, false,true);
 		
 		//log event at db
 		FallEvent fallEvent = new FallEvent(numID , fallEventVo.getLongitude(), fallEventVo.getLatitude(), fallEventVo.getTimestamp());
 		fallEventService.save(fallEvent);
 		
 		
-		
-		//send Alarm and to web and log at db
-		for(SenderAndReceiver senderReceiver : receiverWebList) {
+		for(SenderAndReceiver senderReceiver : receiverList) {
 			sendAlarm(senderReceiver.getReceiverId(), alarmVo);
-			
-			Alarm alarm = new Alarm(alarmType.getId(), fallEvent.getId(), numID, senderReceiver.getReceiverId(), fallEventVo.getTimestamp());
-			alarmService.save(alarm);
-		}
-
-		//send push to app and log at db
-		for(SenderAndReceiver senderReceiver : receiverAppList) {
-			//send push alarm
 			sendPush(senderReceiver.getReceiverId(), alarmVo);
-					
-			Alarm alarm = new Alarm(alarmType.getId(), fallEvent.getId(), numID, senderReceiver.getReceiverId(), fallEventVo.getTimestamp());
+			
+			Alarm alarm = new Alarm(alarmType.getId(), fallEvent.getId(), numID, senderReceiver.getReceiverId(), fallEvent.getTimestamp());
 			alarmService.save(alarm);
 		}
 		
@@ -158,30 +145,17 @@ public class AlarmController {
 		java.util.List<SenderAndReceiver> receiverList = senderReceiverService.findBySenderIdAndAlarmTypeId(numID,alarmType.getId());
 		AlarmVo alarmVo = new AlarmVo(numID,"nonactive",nonActiveEventVo.getTimestamp(),nonActiveEventVo.getLongitude(),nonActiveEventVo.getLatitude(),userService.findOne(numID).getName(),userService.findOne(numID).getPhone_number());
 		
-		java.util.List<SenderAndReceiver> receiverWebList = getReceiverListByHasAppHasWeb(receiverList, true,false);
-		java.util.List<SenderAndReceiver> receiverAppList = getReceiverListByHasAppHasWeb(receiverList, false,true);
 		
 		//log event at db
 		NonActiveEvent nonActiveEvent = new NonActiveEvent(numID , nonActiveEventVo.getLongitude(), nonActiveEventVo.getLatitude(), nonActiveEventVo.getTimestamp());
 		nonActiveEventService.save(nonActiveEvent);
 		
 	
-		
-		
-		//send Alarm to web and log at db
-		for(SenderAndReceiver senderReceiver : receiverWebList) {
+		for(SenderAndReceiver senderReceiver : receiverList) {
 			sendAlarm(senderReceiver.getReceiverId(), alarmVo);
-			
-			Alarm alarm = new Alarm(alarmType.getId(), nonActiveEvent.getId(), numID, senderReceiver.getReceiverId(), nonActiveEventVo.getTimestamp());
-			alarmService.save(alarm);
-		}
-		
-		//send push to app and log at db
-		for(SenderAndReceiver senderReceiver : receiverAppList) {
-			//send push alarm
 			sendPush(senderReceiver.getReceiverId(), alarmVo);
 			
-			Alarm alarm = new Alarm(alarmType.getId(), nonActiveEvent.getId(), numID, senderReceiver.getReceiverId(), nonActiveEventVo.getTimestamp());
+			Alarm alarm = new Alarm(alarmType.getId(), nonActiveEvent.getId(), numID, senderReceiver.getReceiverId(), nonActiveEvent.getTimestamp());
 			alarmService.save(alarm);
 		}
 
@@ -210,31 +184,17 @@ public class AlarmController {
 		java.util.List<SenderAndReceiver> receiverList = senderReceiverService.findBySenderIdAndAlarmTypeId(numID,alarmType.getId());
 		AlarmVo alarmVo = new AlarmVo(numID,"homein",homeInEventVo.getTimestamp(), home.getLongitude(), home.getLatitude(),userService.findOne(numID).getName(),userService.findOne(numID).getPhone_number());
 		
-		java.util.List<SenderAndReceiver> receiverWebList = getReceiverListByHasAppHasWeb(receiverList, true,false);
-		java.util.List<SenderAndReceiver> receiverAppList = getReceiverListByHasAppHasWeb(receiverList, false,true);
-		
 		
 		//log event at db
 		HomeInEvent homeInEvent = new HomeInEvent(numID , home.getId(), homeInEventVo.getTimestamp());
 		homeInEventService.save(homeInEvent);
 		
 	
-		
-		
-		//send Alarm to web and log at db
-		for(SenderAndReceiver senderReceiver : receiverWebList) {
+		for(SenderAndReceiver senderReceiver : receiverList) {
 			sendAlarm(senderReceiver.getReceiverId(), alarmVo);
-			
-			Alarm alarm = new Alarm(alarmType.getId(), homeInEvent.getId(), homeInEvent.getUserId(), senderReceiver.getReceiverId(), homeInEvent.getTimestamp());
-			alarmService.save(alarm);
-		}
-		
-		//send push to app and log at db
-		for(SenderAndReceiver senderReceiver : receiverAppList) {
-			//send push alarm
 			sendPush(senderReceiver.getReceiverId(), alarmVo);
 			
-			Alarm alarm = new Alarm(alarmType.getId(), homeInEvent.getId(), homeInEvent.getUserId(), senderReceiver.getReceiverId(), homeInEvent.getTimestamp());
+			Alarm alarm = new Alarm(alarmType.getId(), homeInEvent.getId(), numID, senderReceiver.getReceiverId(), homeInEventVo.getTimestamp());
 			alarmService.save(alarm);
 		}
 
@@ -262,27 +222,13 @@ public class AlarmController {
 		java.util.List<SenderAndReceiver> receiverList = senderReceiverService.findBySenderIdAndAlarmTypeId(numID,alarmType.getId());
 		AlarmVo alarmVo = new AlarmVo(numID,"homeout",homeOutEventVo.getTimestamp(),home.getLongitude(),home.getLatitude(),userService.findOne(numID).getName(),userService.findOne(numID).getPhone_number());
 		
-		java.util.List<SenderAndReceiver> receiverWebList = getReceiverListByHasAppHasWeb(receiverList, true,false);
-		java.util.List<SenderAndReceiver> receiverAppList = getReceiverListByHasAppHasWeb(receiverList, false,true);
-		
 		//log event at db
 		HomeOutEvent homeOutEvent = new HomeOutEvent(numID , home.getId(), homeOutEventVo.getTimestamp());
 		homeOutEventService.save(homeOutEvent);
 		
 	
-		
-		
-		//send Alarm to web and log at db
-		for(SenderAndReceiver senderReceiver : receiverWebList) {
+		for(SenderAndReceiver senderReceiver : receiverList) {
 			sendAlarm(senderReceiver.getReceiverId(), alarmVo);
-			
-			Alarm alarm = new Alarm(alarmType.getId(), homeOutEvent.getId(), numID, senderReceiver.getReceiverId(), homeOutEventVo.getTimestamp());
-			alarmService.save(alarm);
-		}
-		
-		//send push to app and log at db
-		for(SenderAndReceiver senderReceiver : receiverAppList) {
-			//send push alarm
 			sendPush(senderReceiver.getReceiverId(), alarmVo);
 			
 			Alarm alarm = new Alarm(alarmType.getId(), homeOutEvent.getId(), numID, senderReceiver.getReceiverId(), homeOutEventVo.getTimestamp());
@@ -378,27 +324,5 @@ public class AlarmController {
 			}
 		}
 	}
-	
-	public List<SenderAndReceiver> getReceiverListByHasAppHasWeb(List<SenderAndReceiver> receiverList, boolean hasWeb, boolean hasApp ){
-		java.util.List<SenderAndReceiver> resultList = new ArrayList<>();
-		if(hasApp && hasWeb) {
-			return null;
-		}
-		if(receiverList.size() != 0) {
-			for (SenderAndReceiver senderAndReceiver : receiverList) {
-				int userId = senderAndReceiver.getReceiverId();
-				ReceiverEnvironment receiverEnvironment = receiverEnvironmentService.findByUserId(userId);
-				if(hasApp && receiverEnvironment.getHasApp()) {
-					resultList.add(senderAndReceiver);
-				}
-				if(hasWeb && receiverEnvironment.getHasWeb()) {
-					resultList.add(senderAndReceiver);
-				}
-				
-			}
-		}
-		return resultList;
-	}
-	
 }
 

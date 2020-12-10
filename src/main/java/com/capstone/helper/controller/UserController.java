@@ -140,7 +140,7 @@ public class UserController {
 		if(receiverEnvironment == null) {
 			receiverEnvironment = createDefaultReceiverEnvironment(numID);
 		}
-		receiverEnvironment.setHasApp(true);
+		receiverEnvironment.setHasApp(isTrue);
 		
 		receiverEnvironmentService.save(receiverEnvironment);
 		
@@ -168,12 +168,12 @@ public class UserController {
 		if(receiverEnvironment == null) {
 			receiverEnvironment = createDefaultReceiverEnvironment(numID);
 		}
-		receiverEnvironment.setHasWeb(true);
+		receiverEnvironment.setHasWeb(isTrue);
 		return receiverEnvironmentService.save(receiverEnvironment);
     }
 	
 	public ReceiverEnvironment createDefaultReceiverEnvironment(int userId) {
-		ReceiverEnvironment receiverEnvironment = new ReceiverEnvironment(userId, false, false);
+		ReceiverEnvironment receiverEnvironment = new ReceiverEnvironment(userId, true, true);
 		return receiverEnvironment;
 	}
 	
