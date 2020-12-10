@@ -31,7 +31,19 @@ public class SenderAndReceiverQueue {
 		this.targetId = targetId;
 		this.alarmTypeId = alarmTypeId;
 	}
-	
+	public SenderAndReceiverQueue(Integer reqId, Integer targetId, Integer alarmTypeId) {
+		super();
+		this.reqId = reqId;
+		this.targetId = targetId;
+		this.alarmTypeId = alarmTypeId;
+	}
+
+
+
+	public SenderAndReceiverQueue() {
+		super();
+	}
+
 
 
 	public Integer getId() {
