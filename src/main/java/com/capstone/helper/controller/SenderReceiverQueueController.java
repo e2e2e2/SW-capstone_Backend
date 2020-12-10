@@ -106,7 +106,7 @@ public class SenderReceiverQueueController {
 		Integer alarmTypeId = srQ.getAlarmTypeId();
 		
 		
-		SenderAndReceiver sr = new SenderAndReceiver(0 , senderId, receiverId, alarmTypeId);
+		SenderAndReceiver sr = new SenderAndReceiver( senderId, receiverId, alarmTypeId);
 		
 		senderReceiverQueueService.delete(SRQueue.getQueueId());
 		senderReceiverService.save(sr);
@@ -131,7 +131,7 @@ public class SenderReceiverQueueController {
 		Integer alarmTypeId = srQ.getAlarmTypeId();
 		
 		
-		SenderAndReceiver sr = new SenderAndReceiver(0 , senderId, receiverId, alarmTypeId);
+		SenderAndReceiver sr = new SenderAndReceiver( senderId, receiverId, alarmTypeId);
 		
 		senderReceiverQueueService.delete(SRQueue.getQueueId());
 		senderReceiverService.save(sr);

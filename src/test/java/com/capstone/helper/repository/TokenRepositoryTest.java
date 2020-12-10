@@ -29,7 +29,7 @@ public class TokenRepositoryTest {
 	
 
 	@Test
-	public void shouldFindUsersByUserID() {
+	public void shouldFindTokensByUserID() {
 		User expectedUser = new User("a","name","pw",0,"111-2222-3333","address");
 		userRepository.save(expectedUser);
 		Assertions.assertNotEquals(null,userRepository.getOne(expectedUser.getId()));
