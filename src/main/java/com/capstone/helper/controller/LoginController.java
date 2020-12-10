@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.capstone.helper.model.User;
 import com.capstone.helper.service.LoginService;
 import com.capstone.helper.service.UserService;
+import com.capstone.helper.vo.LoginVo;
 import com.capstone.helper.vo.UserVo;
 
 
@@ -33,7 +34,8 @@ public class LoginController {
     LoginService loginService;
 
     @RequestMapping(value="/login", method=RequestMethod.POST)
-    public String loginProcess(HttpServletRequest request, @RequestBody UserVo tempuser) {
+    public String loginProcess(HttpServletRequest request, HttpServletResponse response, @RequestBody LoginVo tempuser) {
+				
 		String userID = tempuser.getUserID();
 		String password = tempuser.getPassword();
 		HttpSession session = request.getSession();
