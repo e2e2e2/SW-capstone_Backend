@@ -5,6 +5,7 @@ import java.util.List;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
@@ -12,45 +13,35 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.capstone.helper.model.Token;
 import com.capstone.helper.model.User;
 
 @ActiveProfiles("test")
 @Transactional
 @AutoConfigureTestDatabase(replace=AutoConfigureTestDatabase.Replace.NONE)
 @DataJpaTest
-public class UserRepositoryTest {
+public class TokenRepositoryTest {
 
 	@Autowired
 	UserRepository userRepository;
+	@Autowired
+	TokenRepository tokenRepository;
 	
 
 	@Test
 	public void shouldFindUsersByUserID() {
 		User expectedUser = new User("a","name","pw",0,"111-2222-3333","address");
 		userRepository.save(expectedUser);
-		
 		Assertions.assertNotEquals(null,userRepository.getOne(expectedUser.getId()));
 		
-		User actualUser = userRepository.findByUserID(expectedUser.getUserID()).get(0);
+		Token expectedToken = new Token(expectedUser.getId(),"cklBYJZ4TnalsXkdFYbV1O:APA91bHjPnBWVBIRtez283VIKBVLzPbDmeTBSqd7nU_97nkPYf8XYHvEzwNkCmPmuzqmJfMOWUIiwIvuSf1QjYX1rz32CJftvMZzm6Y0cwSBImZTL5tcVPJscSalRZ33n2WvM-pdhQKP");
+		tokenRepository.save(expectedToken);
+		Assertions.assertNotEquals(null,tokenRepository.getOne(expectedToken.getId()));
 		
-		Assertions.assertEquals(expectedUser, actualUser);
+		Token actualToken = tokenRepository.findByUserId(expectedUser.getId()).get(0);
 		
-	}
-	
-	
-	@Test
-	public void shouldFindUsersByPhoneNumber() {
-		User expectedUser = new User("a","name","pw",0,"111-2222-3333","address");
-		userRepository.save(expectedUser);
+		Assertions.assertEquals(expectedToken, actualToken);
 		
-		Assertions.assertNotEquals(null,userRepository.getOne(expectedUser.getId()));
-		
-		User actualUser = userRepository.findByPhoneNumber(expectedUser.getPhone_number()).get(0);
-		
-		Assertions.assertEquals(expectedUser, actualUser);
-		
-	}
-
-	
+	}	
 	
 }
