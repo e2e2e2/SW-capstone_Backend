@@ -8,7 +8,6 @@ import com.capstone.helper.model.SenderAndReceiverQueue;
 public interface SenderAndReceiverQueueRepository extends JpaRepository<SenderAndReceiverQueue, Integer>{
 	
 	List<SenderAndReceiverQueue> findByTargetId(int targetId);
-	List<SenderAndReceiverQueue> findByReqIdAndAlarmTypeId(int reqId,int alarmTypeId);
 	SenderAndReceiverQueue deleteById(int id);
 }
 

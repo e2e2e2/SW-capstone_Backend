@@ -5,6 +5,7 @@ import java.util.HashSet;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,10 +21,12 @@ import com.capstone.helper.model.SenderAndReceiver;
 import com.capstone.helper.model.SenderAndReceiverQueue;
 import com.capstone.helper.model.User;
 import com.capstone.helper.repository.SenderAndReceiverRepository;
+import com.capstone.helper.service.AlarmTypeService;
 import com.capstone.helper.service.SendersAndReceiversQueueService;
 import com.capstone.helper.service.SendersAndReceiversService;
 import com.capstone.helper.service.UserService;
 import com.capstone.helper.vo.SenderReceiverInfoVo;
+import com.google.gson.JsonObject;
 import com.capstone.helper.vo.SRQueueVo;
 
 
@@ -41,73 +44,88 @@ public class SenderReceiverQueueController {
 	
 	@Autowired
 	UserService userService;
-
-	//연결요청
-	@RequestMapping(value = "/user/queue", method = RequestMethod.POST)
-    public SenderAndReceiverQueue saveSenderReceiver(HttpServletRequest request, @RequestBody SenderReceiverInfoVo Receiver ) {
+	
+	@Autowired
+	AlarmTypeService alarmTypeService;
+	
+	//피보호자가 연결요청
+	@RequestMapping(value = "user/sender/requestSR", method = RequestMethod.POST)
+    public String senderReqSR(HttpServletRequest request, HttpServletResponse response, @RequestBody SenderReceiverInfoVo Receiver ) {
 		HttpSession session = request.getSession();
 		String userID = (String)session.getAttribute("userID");
 		int reqID = userService.findIdByuserID(userID);
-		
-		
 		int targetID = userService.findIdByPhoneNumber(Receiver.getPhone_number());
+		
+		JsonObject jsonObject = new JsonObject();
+
+		
+		if(senderReceiverService.findBySenderIdAndReceiverId(reqID, targetID).size() > 0) {
+        	response.setStatus( HttpServletResponse.SC_BAD_REQUEST);
+        	jsonObject.addProperty("result","connection already exist");
+        	return jsonObject.toString();
+		}
+		
+
+		try {
+			SenderAndReceiverQueue SRQueue1 = new SenderAndReceiverQueue(reqID, targetID);
+			senderReceiverQueueService.save(SRQueue1);
+			
+		}catch(DataAccessException e) {
+        	response.setStatus( HttpServletResponse.SC_BAD_REQUEST);
+        	jsonObject.addProperty("result","queue already exist");
+        	return jsonObject.toString();
+		}
+	
+		
+		
+		
+		
+		
+
+        response.setStatus( HttpServletResponse.SC_OK);
+    	jsonObject.addProperty("result","success");
+    	return jsonObject.toString();
+	}
+	
+
+	//보호자가 연결요청
+	@RequestMapping(value = "user/receiver/requestSR", method = RequestMethod.POST)
+    public String receiverReqSR(HttpServletRequest request, HttpServletResponse response, @RequestBody SenderReceiverInfoVo Receiver ) {
+		HttpSession session = request.getSession();
+		String userID = (String)session.getAttribute("userID");
+		int reqID = userService.findIdByuserID(userID);
+		int targetID = userService.findIdByPhoneNumber(Receiver.getPhone_number());
+		
+		JsonObject jsonObject = new JsonObject();
+		System.out.println("receiverId : " + reqID + "\nsenderId : "+targetID);
+		System.out.println("기존 수 = "+ senderReceiverService.findBySenderIdAndReceiverId(targetID, reqID).size());
+
+		if(senderReceiverService.findBySenderIdAndReceiverId(targetID, reqID).size() > 0) {
+			
+        	response.setStatus( HttpServletResponse.SC_BAD_REQUEST);
+        	jsonObject.addProperty("result","connection already exist");
+        	return jsonObject.toString();
+		}
 
 
 		try {
-			if(Receiver.isFall_down()){
-				SenderAndReceiverQueue SRQueue1 = new SenderAndReceiverQueue(reqID, targetID,434);
-				senderReceiverQueueService.save(SRQueue1);
+			SenderAndReceiverQueue SRQueue1 = new SenderAndReceiverQueue(reqID, targetID);
+			senderReceiverQueueService.save(SRQueue1);
 			
-			}
-		}catch(DataAccessException e) {}
+		}catch(DataAccessException e) {
+
+        	response.setStatus( HttpServletResponse.SC_BAD_REQUEST);
+        	jsonObject.addProperty("result","queue already exist");
+        	return jsonObject.toString();
+		}
 	
 		
-		finally {
-			try {
-
-				if(Receiver.isNon_active())	{
-					SenderAndReceiverQueue SRQueue2 = new SenderAndReceiverQueue(reqID, targetID,435);
-					senderReceiverQueueService.save(SRQueue2);
-					}
-
-			}catch(DataAccessException e) {}
-		
-			
-			finally {
-				
-				if(Receiver.isGps()){
-
-
-					try {
-						SenderAndReceiverQueue SRQueue3 = new SenderAndReceiverQueue(reqID, targetID,436);
-						senderReceiverQueueService.save(SRQueue3);
-					}catch(DataAccessException e) {}
-
-					finally {
-
-						try {
-						SenderAndReceiverQueue SRQueue4 = new SenderAndReceiverQueue(reqID, targetID,437);
-						senderReceiverQueueService.save(SRQueue4);
-						}catch(DataAccessException e) {}
-					}
-					
-				}
-			
-			}
-			
-		}
-		
-		
-		
-		SenderAndReceiverQueue SRQueue = new SenderAndReceiverQueue();
-		SRQueue = new SenderAndReceiverQueue();
-		SRQueue.setTargetId(targetID);
-		SRQueue.setReqId(reqID);
-		
 		
 		
 
-		return SRQueue;
+        response.setStatus( HttpServletResponse.SC_OK);
+    	jsonObject.addProperty("result","success");
+    	return jsonObject.toString();
 	}
 	
 	//요청목록 불러오기
@@ -117,7 +135,7 @@ public class SenderReceiverQueueController {
 		String userID = (String)session.getAttribute("userID");
 		int numID = userService.findIdByuserID(userID);
 		
-		List<SenderAndReceiverQueue> senderAndReceiverQList = senderReceiverQueueService.findByReceiverId(numID);
+		List<SenderAndReceiverQueue> senderAndReceiverQList = senderReceiverQueueService.findByTargetId(numID);
 		List<SRQueueVo> SRQList = new ArrayList<SRQueueVo>();
 		
 		
@@ -131,10 +149,9 @@ public class SenderReceiverQueueController {
 			Integer auth = reqUser.getAuth();
 			String phone_number = reqUser.getPhone_number();
 			String address = reqUser.getAddress();
-			Integer alarmType =senderAndReceiverQ.getAlarmTypeId();
 			
 			
-			SRQList.add(new SRQueueVo(queueId, name,  auth, phone_number, address, alarmType));
+			SRQList.add(new SRQueueVo(queueId, name,  auth, phone_number, address));
 		}
 		
 		HashSet<SRQueueVo> SRQSet = new HashSet<SRQueueVo>(SRQList);
@@ -147,50 +164,90 @@ public class SenderReceiverQueueController {
 	
 	//연결수락
 	@RequestMapping(value = "/user/receiver/acceptSR", method=RequestMethod.POST)
-    public SenderAndReceiver receiverAcceptSR(HttpServletRequest request, @RequestBody SRQueueVo SRQueue ) {
+    public String receiverAcceptSR(HttpServletRequest request, HttpServletResponse response, @RequestBody SRQueueVo SRQueue ) {
 		HttpSession session = request.getSession();
 		String userID = (String)session.getAttribute("userID");
 		int targetID = userService.findIdByuserID(userID);
+		JsonObject jsonObject = new JsonObject();
 		
-		SenderAndReceiverQueue srQ =  senderReceiverQueueService.findById(SRQueue.getQueueId());
+		SenderAndReceiverQueue srQ = senderReceiverQueueService.findById(SRQueue.getQueueId());
 		
-		if(srQ == null) return null;
+		if(srQ == null) {        	
+			response.setStatus( HttpServletResponse.SC_BAD_REQUEST);
+    		jsonObject.addProperty("error","there's no such request");
+    		return jsonObject.toString();
+		}
+		if(srQ.getTargetId() != targetID) {        	
+			response.setStatus( HttpServletResponse.SC_BAD_REQUEST);
+    		jsonObject.addProperty("error","wrong target id");
+    		return jsonObject.toString();
+		}
 		
-		Integer senderId = srQ.getReqId();
-		Integer receiverId = srQ.getTargetId();
-		Integer alarmTypeId = srQ.getAlarmTypeId();
-		
-		
-		SenderAndReceiver sr = new SenderAndReceiver(senderId, receiverId, alarmTypeId);
+		List<Integer> alarmId = alarmTypeService.findAllId();
 
-		senderReceiverService.save(sr);
+		alarmId.forEach((id)->{
+
+			
+			Integer senderId = srQ.getReqId();
+			Integer receiverId = srQ.getTargetId();
+			Integer alarmTypeId = id;
+			SenderAndReceiver sr = new SenderAndReceiver(senderId, receiverId, alarmTypeId);
+			senderReceiverService.save(sr);
+		});
+		
+		
+
 		senderReceiverQueueService.delete(SRQueue.getQueueId());
-		return sr;
+
+
+        response.setStatus( HttpServletResponse.SC_OK);
+    	jsonObject.addProperty("result","success");
+    	return jsonObject.toString();
 	}
 
 
 	
 	//연결수락
 	@RequestMapping(value = "/user/sender/acceptSR", method=RequestMethod.POST)
-    public SenderAndReceiver senderAcceptSR(HttpServletRequest request, @RequestBody SRQueueVo SRQueue ) {
+    public String senderAcceptSR(HttpServletRequest request, HttpServletResponse response, @RequestBody SRQueueVo SRQueue ) {
 		HttpSession session = request.getSession();
 		String userID = (String)session.getAttribute("userID");
 		int targetID = userService.findIdByuserID(userID);
+		JsonObject jsonObject = new JsonObject();
 		
 		SenderAndReceiverQueue srQ =  senderReceiverQueueService.findById(SRQueue.getQueueId());
 		
-		if(srQ == null) return null;
+		
+		if(srQ == null) {        	
+			response.setStatus( HttpServletResponse.SC_BAD_REQUEST);
+    		jsonObject.addProperty("error","there's no such request");
+    		return jsonObject.toString();
+		}
+		if(srQ.getTargetId() != targetID) {        	
+			response.setStatus( HttpServletResponse.SC_BAD_REQUEST);
+    		jsonObject.addProperty("error","wrong target id");
+    		return jsonObject.toString();
+		}
+		
+		List<Integer> alarmId = alarmTypeService.findAllId();
+
+		alarmId.forEach((id)->{
+
+			
+		
 		
 		Integer senderId = srQ.getTargetId();
 		Integer receiverId = srQ.getReqId();
-		Integer alarmTypeId = srQ.getAlarmTypeId();
-		
-		
+		Integer alarmTypeId = id;
 		SenderAndReceiver sr = new SenderAndReceiver(senderId, receiverId, alarmTypeId);
-		
-		senderReceiverQueueService.delete(SRQueue.getQueueId());
 		senderReceiverService.save(sr);
-		return sr;
+	});
+	
+		senderReceiverQueueService.delete(SRQueue.getQueueId());
+
+        response.setStatus( HttpServletResponse.SC_OK);
+    	jsonObject.addProperty("result","success");
+    	return jsonObject.toString();
 	}
 	
 	

@@ -23,14 +23,10 @@ public class SenderAndReceiverQueue {
 	
 	@Column(name="targetId")
 	Integer targetId;
-	
-	@Column(name="alarmTypeId")
-	Integer alarmTypeId;
 
-	public SenderAndReceiverQueue( Integer reqId, Integer targetId, Integer alarmTypeId) {
+	public SenderAndReceiverQueue( Integer reqId, Integer targetId) {
 		this.reqId = reqId;
 		this.targetId = targetId;
-		this.alarmTypeId = alarmTypeId;
 	}
 	
 	public SenderAndReceiverQueue() {
@@ -68,11 +64,4 @@ public class SenderAndReceiverQueue {
 		this.targetId = targetId;
 	}
 
-	public Integer getAlarmTypeId() {
-		return alarmTypeId;
-	}
-
-	public void setAlarmTypeId(Integer alarmTypeId) {
-		this.alarmTypeId = alarmTypeId;
-	}
 }

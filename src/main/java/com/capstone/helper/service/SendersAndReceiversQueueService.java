@@ -18,7 +18,7 @@ public class SendersAndReceiversQueueService {
 	@Autowired
 	private SenderAndReceiverQueueRepository senderReceiverQueueRepository;
 	
-	public List<SenderAndReceiverQueue> findByReceiverId(int targetId) {
+	public List<SenderAndReceiverQueue> findByTargetId(int targetId) {
 		List<SenderAndReceiverQueue> senderReceiversQueue = new ArrayList<>();
 		senderReceiverQueueRepository.findByTargetId(targetId).forEach(e -> senderReceiversQueue.add(e));
 		return senderReceiversQueue;

@@ -10,17 +10,15 @@ public class SRQueueVo{
 	Integer auth;
 	String phone_number;
 	String address;
-	Integer alarmType;
 	
 	
 
-	public SRQueueVo(Integer queueId, String name,  int auth, String phone_number, String address, Integer alarmType) {
+	public SRQueueVo(Integer queueId, String name,  int auth, String phone_number, String address) {
 		this.queueId = queueId;
     	this.auth = auth;
     	this.name = name;
     	this.phone_number = phone_number;
     	this.address = address;
-    	this.alarmType = alarmType;
     }
     
 	public SRQueueVo() {
@@ -71,15 +69,6 @@ public class SRQueueVo{
 	public void setAuth(Integer auth) {
 		if(auth == null) this.auth = -1;
 		else this.auth = auth;
-	}
-	
-
-    public Integer getAlarmType() {
-		return alarmType;
-	}
-
-	public void setAlarmType(Integer alarmType) {
-		this.alarmType = alarmType;
 	}
 }
 

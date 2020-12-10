@@ -27,6 +27,12 @@ public class SendersAndReceiversService {
 		return senderReceivers;
 	}
 	
+	public List<SenderAndReceiver> findBySenderIdAndReceiverId(int senderId,int receiverId) {
+		List<SenderAndReceiver> senderReceivers = new ArrayList<>();
+		senderReceiverRepository.findBySenderIdAndReceiverId(senderId, receiverId).forEach(e -> senderReceivers.add(e));
+		return senderReceivers;
+	}
+	
 	public SenderAndReceiver save(SenderAndReceiver senderReceiver) { 
 		senderReceiverRepository.save(senderReceiver); 
 		 return senderReceiver; 

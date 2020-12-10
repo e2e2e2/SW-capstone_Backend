@@ -53,7 +53,7 @@ public class SenderAndReceiverQueueRepositoryTest {
 		Assertions.assertNotEquals(null,alarmTypeRepository.getOne(expectedAlarmType.getId()));
 		
 		expectedSenderAndReceiverQueue = new SenderAndReceiverQueue(expectedSender.getId(),
-				expectedReceiver.getId(),expectedAlarmType.getId());
+				expectedReceiver.getId());
 		senderAndReceiverQueueRepository.save(expectedSenderAndReceiverQueue);
 		Assertions.assertNotEquals(null,senderAndReceiverQueueRepository.getOne(expectedSenderAndReceiverQueue.getId()));
 	}
@@ -69,14 +69,6 @@ public class SenderAndReceiverQueueRepositoryTest {
 		
 	}	
 	
-	@Test
-	public void shouldFindSenderAndReceiverQueueByReqIdAndAlarmTypeId() {
-		
-		SenderAndReceiverQueue actualSenderAndReceiverQueue = senderAndReceiverQueueRepository.findByReqIdAndAlarmTypeId(expectedSender.getId(),expectedAlarmType.getId()).get(0);
-		
-	
-		Assertions.assertEquals(expectedSenderAndReceiverQueue, actualSenderAndReceiverQueue );
-	}	
 	
 	@Test
 	public void shouldDeleteById() {

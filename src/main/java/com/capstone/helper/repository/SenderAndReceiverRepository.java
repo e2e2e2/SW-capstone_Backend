@@ -8,5 +8,6 @@ import com.capstone.helper.model.SenderAndReceiver;
 public interface SenderAndReceiverRepository extends JpaRepository<SenderAndReceiver, Integer>{
 	List<SenderAndReceiver> findByReceiverId(int receiverId);
 	List<SenderAndReceiver> findBySenderIdAndAlarmTypeId(int senderid,int alarmTypeId);
+	List<SenderAndReceiver> findBySenderIdAndReceiverId(int senderid,int receiverId);
 }
 

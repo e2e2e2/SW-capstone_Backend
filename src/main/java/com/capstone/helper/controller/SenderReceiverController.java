@@ -32,8 +32,17 @@ public class SenderReceiverController {
 	@Autowired
 	UserService userService;
 
-	//*****************************URL 소문자와 - 로 바꾸어야 할 것 같다
-	@RequestMapping(value = "/user/makeConnection", method=RequestMethod.POST)
+	@RequestMapping(value = "/user/deleteSR", method=RequestMethod.POST)
+    public SenderAndReceiver deleteSenderReceiver(HttpServletRequest request, @RequestBody SenderAndReceiver senderReceiver ) {
+		HttpSession session = request.getSession();
+		String userID = (String)session.getAttribute("userID");
+		int numID = userService.findIdByuserID(userID);
+		
+		return senderReceiverService.save(senderReceiver);
+	}
+	
+	
+	@RequestMapping(value = "/user/make-connection", method=RequestMethod.POST)
     public SenderAndReceiver saveSenderReceiver(HttpServletRequest request, @RequestBody SenderAndReceiver senderReceiver ) {
 		HttpSession session = request.getSession();
 		String userID = (String)session.getAttribute("userID");

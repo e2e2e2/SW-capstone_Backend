@@ -18,6 +18,13 @@ public class AlarmTypeService {
 		alarmTypeRepository.findAll().forEach(e -> alarms.add(e));
 		return alarms;
 	}
+
+	public List<Integer> findAllId(){
+		List<Integer> alarmId = new ArrayList<>();
+		alarmTypeRepository.findAll().forEach(e -> alarmId.add(e.getId()));
+		
+		return alarmId;
+	}
 	
 	public AlarmType findByAlarmName(String alarmName) {
 		AlarmType alarmType = new AlarmType();
