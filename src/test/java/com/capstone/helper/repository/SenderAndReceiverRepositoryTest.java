@@ -51,8 +51,35 @@ public class SenderAndReceiverRepositoryTest {
 		SenderAndReceiver actualSenderAndReceiver = senderAndReceiverRepository.findByReceiverId(expectedReceiver.getId()).get(0);
 		
 		
-		System.out.println(expectedSenderAndReceiver.getId());
-		System.out.println(actualSenderAndReceiver.getId());
+		Assertions.assertEquals(expectedSenderAndReceiver, actualSenderAndReceiver );
+		
+		
+	}	
+	
+	@Test
+	public void shouldFindSenderAndReceiverBySenderIdAndAlarmTypeId() {
+		User expectedSender = new User("a","name","pw",0,"111-2222-3333","address");
+		userRepository.save(expectedSender);
+		Assertions.assertNotEquals(null,userRepository.getOne(expectedSender.getId()));
+		
+		User expectedReceiver = new User("b","name1","pw1",0,"111-2222-4444","address1");
+		userRepository.save(expectedReceiver);
+		Assertions.assertNotEquals(null,userRepository.getOne(expectedReceiver.getId()));
+		
+		AlarmType expectedAlarmType = new AlarmType();
+		expectedAlarmType.setAlarmName("fallalarm");
+		alarmTypeRepository.save(expectedAlarmType);
+		Assertions.assertNotEquals(null,alarmTypeRepository.getOne(expectedAlarmType.getId()));
+		
+		SenderAndReceiver expectedSenderAndReceiver = new SenderAndReceiver(expectedSender.getId(),
+				expectedReceiver.getId(),expectedAlarmType.getId());
+		senderAndReceiverRepository.save(expectedSenderAndReceiver);
+		Assertions.assertNotEquals(null,senderAndReceiverRepository.getOne(expectedSenderAndReceiver.getId()));
+		
+		
+		SenderAndReceiver actualSenderAndReceiver = senderAndReceiverRepository.findBySenderIdAndAlarmTypeId(expectedSender.getId(),expectedAlarmType.getId()).get(0);
+		
+		
 		Assertions.assertEquals(expectedSenderAndReceiver, actualSenderAndReceiver );
 		
 		
