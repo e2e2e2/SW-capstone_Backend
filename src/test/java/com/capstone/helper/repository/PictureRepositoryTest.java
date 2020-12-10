@@ -1,5 +1,7 @@
 package com.capstone.helper.repository;
 
+import java.time.LocalDateTime;
+
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -11,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.capstone.helper.model.NonActiveEvent;
 import com.capstone.helper.model.Picture;
+import com.capstone.helper.model.User;
 
 @ActiveProfiles("test")
 @Transactional
@@ -18,6 +21,8 @@ import com.capstone.helper.model.Picture;
 @DataJpaTest
 public class PictureRepositoryTest {
 
+	@Autowired
+	UserRepository userRepository;
 	
 	@Autowired
 	PictureRepository pictureRepository; 
@@ -25,13 +30,19 @@ public class PictureRepositoryTest {
 	@Autowired
 	NonActiveEventRepository nonActiveEventRepository;
 	
+	User expectedUser;
 	Picture expectedPicture;
 	NonActiveEvent expectedNonActiveEvent;
 	
 	@BeforeEach
 	public void setUp() {
 		
-		expectedNonActiveEvent = new NonActiveEvent();
+		expectedUser = new User("a","name","pw",0,"111-2222-3333","address");
+		userRepository.save(expectedUser);
+		Assertions.assertNotEquals(null,userRepository.getOne(expectedUser.getId()));
+		
+		LocalDateTime timestamp = LocalDateTime.now(); 
+		expectedNonActiveEvent = new NonActiveEvent(expectedUser.getId(),(float)127.0,(float)37.0,timestamp);
 		nonActiveEventRepository.save(expectedNonActiveEvent);
 		Assertions.assertNotEquals(null,nonActiveEventRepository.getOne(expectedNonActiveEvent.getId()));
 		
