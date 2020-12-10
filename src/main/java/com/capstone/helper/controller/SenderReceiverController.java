@@ -54,14 +54,14 @@ public class SenderReceiverController {
 		System.out.println("id is " + userID);
 		int receiverID = userService.findIdByPhoneNumber(Receiver.getPhone_number());
 		if(Receiver.isFall_down()) 
-			sr = senderReceiverService.save(new SenderAndReceiver(senderID,receiverID,434));
+			sr = senderReceiverService.save(new SenderAndReceiver(0, senderID,receiverID,434));
 		
 		if(Receiver.isNon_active()) 
-			sr = senderReceiverService.save(new SenderAndReceiver(senderID,receiverID,435));
+			sr = senderReceiverService.save(new SenderAndReceiver(0, senderID,receiverID,435));
 		
 		if(Receiver.isGps()) {
-			sr = senderReceiverService.save(new SenderAndReceiver(senderID,receiverID,436));
-			sr = senderReceiverService.save(new SenderAndReceiver(senderID,receiverID,437));
+			sr = senderReceiverService.save(new SenderAndReceiver(0, senderID,receiverID,436));
+			sr = senderReceiverService.save(new SenderAndReceiver(0, senderID,receiverID,437));
 		}
 		
 
@@ -83,14 +83,14 @@ public class SenderReceiverController {
 		System.out.println("id is " + userID);
 		int senderID = userService.findIdByPhoneNumber(Sender.getPhone_number());
 		if(Sender.isFall_down()) 
-			sr = senderReceiverService.save(new SenderAndReceiver(senderID,receiverID,434));
+			sr = senderReceiverService.save(new SenderAndReceiver(0, senderID,receiverID,434));
 		
 		if(Sender.isNon_active()) 
-			sr = senderReceiverService.save(new SenderAndReceiver(senderID,receiverID,435));
+			sr = senderReceiverService.save(new SenderAndReceiver(0, senderID,receiverID,435));
 		
 		if(Sender.isGps()) {
-			sr = senderReceiverService.save(new SenderAndReceiver(senderID,receiverID,436));
-			sr = senderReceiverService.save(new SenderAndReceiver(senderID,receiverID,437));
+			sr = senderReceiverService.save(new SenderAndReceiver(0, senderID,receiverID,436));
+			sr = senderReceiverService.save(new SenderAndReceiver(0, senderID,receiverID,437));
 		}
 		return sr;
 	}

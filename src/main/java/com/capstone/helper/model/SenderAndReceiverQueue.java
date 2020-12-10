@@ -11,48 +11,47 @@ import javax.persistence.Table;
 @Table(name = "SendersAndReceiversQueue")
 public class SenderAndReceiverQueue {
 	
+
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	Integer id;
+	@Column(name="id")
+	Integer queueId;
 	
 	@Column(name="reqId")
 	Integer reqId;
 	
-
 	@Column(name="targetId")
 	Integer targetId;
 	
 	@Column(name="alarmTypeId")
 	Integer alarmTypeId;
 
-	public SenderAndReceiverQueue(Integer id, Integer reqId, Integer targetId, Integer alarmTypeId) {
-		this.id = id;
+	public SenderAndReceiverQueue( Integer queueId, Integer reqId, Integer targetId, Integer alarmTypeId) {
+		this.queueId = queueId;
 		this.reqId = reqId;
 		this.targetId = targetId;
 		this.alarmTypeId = alarmTypeId;
 	}
-	public SenderAndReceiverQueue(Integer reqId, Integer targetId, Integer alarmTypeId) {
-		super();
-		this.reqId = reqId;
-		this.targetId = targetId;
-		this.alarmTypeId = alarmTypeId;
-	}
-
-
-
+	
 	public SenderAndReceiverQueue() {
-		super();
+		
 	}
-
-
 
 	public Integer getId() {
-		return id;
+		return queueId;
+	}
+	public void setId(int queId) {
+		this.queueId =  queId;
 	}
 
-	public void setId(Integer id) {
-		this.id = id;
+	public Integer getQueueId() {
+		return queueId;
 	}
+	public void setQueueId(int queId) {
+		this.queueId =  queId;
+	}
+	
 
 	public Integer getReqId() {
 		return reqId;

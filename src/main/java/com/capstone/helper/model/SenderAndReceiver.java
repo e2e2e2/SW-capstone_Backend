@@ -23,7 +23,8 @@ public class SenderAndReceiver {
 	@Column(name="alarmTypeId")
 	Integer alarmTypeId;
 
-	public SenderAndReceiver(Integer senderId, Integer receiverId, Integer alarmTypeId) {
+	public SenderAndReceiver(Integer id, Integer senderId, Integer receiverId, Integer alarmTypeId) {
+		this.id = id;
 		this.senderId = senderId;
 		this.receiverId = receiverId;
 		this.alarmTypeId = alarmTypeId;
