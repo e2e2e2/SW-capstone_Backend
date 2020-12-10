@@ -31,12 +31,14 @@ import org.springframework.web.context.request.WebRequest;
 import com.capstone.helper.model.ReceiverEnvironment;
 import com.capstone.helper.model.Token;
 import com.capstone.helper.model.User;
+import com.capstone.helper.repository.TokenRepository;
 import com.capstone.helper.repository.UserRepository;
 import com.capstone.helper.service.ReceiverEnvironmentService;
 import com.capstone.helper.service.TokenService;
 import com.capstone.helper.service.UserService;
 import com.capstone.helper.vo.TokenVo;
 import com.capstone.helper.vo.UserVo;
+import com.google.gson.JsonObject;
 
 
 	
@@ -106,6 +108,28 @@ public class UserController {
     	return 0;
     }
 	
+	@RequestMapping(value="/user/token", method=RequestMethod.DELETE)
+    public String deleteToken(HttpServletRequest request, @RequestBody TokenVo tokenVo) {
+		HttpSession session = request.getSession();
+		String userID = (String)session.getAttribute("userID");
+		int numID = userService.findIdByuserID(userID);
+		
+		JsonObject jsonObject = new JsonObject();
+    	
+		
+		List<Token> tokenList = tokenService.findByUserId(numID);
+		for (Token tempToken : tokenList) {
+			if(tempToken.getToken().equals( tokenVo.getToken())) {
+				//tokenService. delete
+				tokenService.delete(tempToken.getId());
+				jsonObject.addProperty("result","success");
+				return jsonObject.toString();
+			}
+		}
+		jsonObject.addProperty("result","fail");
+    	return jsonObject.toString();
+    }
+	
 	@RequestMapping(value="/user/has-app/{is-true}", method=RequestMethod.POST)
     public Token registerAppWithToken(HttpServletRequest request, @PathVariable("is-true") boolean isTrue, @RequestBody TokenVo tokenVo) {
 		HttpSession session = request.getSession();
@@ -120,6 +144,13 @@ public class UserController {
 		
 		receiverEnvironmentService.save(receiverEnvironment);
 		
+		List<Token> tokenList = tokenService.findByUserId(numID);
+		
+		for (Token tempToken : tokenList) {
+			if(tempToken.getToken().equals( tokenVo.getToken())) {
+				return tempToken;
+			}
+		}
 		
 		Token newToken = new Token(numID, tokenVo.getToken());
 		

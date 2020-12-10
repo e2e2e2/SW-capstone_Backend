@@ -21,4 +21,9 @@ public class TokenService {
 	public Token save(Token token) {
 		return tokenRepository.save(token); 
 	}
+	
+	public int delete(int id) {
+		tokenRepository.deleteById(id);
+		return id;
+	}
 }
