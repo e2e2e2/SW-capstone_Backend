@@ -106,7 +106,7 @@ public class AlarmController {
 		AlarmVo alarmVo = new AlarmVo(numID,"fall",fallEventVo.getTimestamp(),fallEventVo.getLongitude(),fallEventVo.getLatitude(),userService.findOne(numID).getName(),userService.findOne(numID).getPhone_number());
 		
 		//log event at db
-		FallEvent fallEvent = new FallEvent(numID , fallEventVo.getLongitude(), fallEventVo.getLatitude(), fallEventVo.getTimestamp());
+		FallEvent fallEvent = new FallEvent(numID , fallEventVo.getLatitude(),fallEventVo.getLongitude(), fallEventVo.getTimestamp());
 		fallEventService.save(fallEvent);
 		
 		
@@ -147,7 +147,7 @@ public class AlarmController {
 		
 		
 		//log event at db
-		NonActiveEvent nonActiveEvent = new NonActiveEvent(numID , nonActiveEventVo.getLongitude(), nonActiveEventVo.getLatitude(), nonActiveEventVo.getTimestamp());
+		NonActiveEvent nonActiveEvent = new NonActiveEvent(numID ,nonActiveEventVo.getLatitude(), nonActiveEventVo.getLongitude(), nonActiveEventVo.getTimestamp());
 		nonActiveEventService.save(nonActiveEvent);
 		
 	
