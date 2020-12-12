@@ -32,14 +32,28 @@ public class SenderReceiverController {
 	@Autowired
 	UserService userService;
 
-	@RequestMapping(value = "/user/deleteSR", method=RequestMethod.POST)
-    public SenderAndReceiver deleteSenderReceiver(HttpServletRequest request, @RequestBody SenderAndReceiver senderReceiver ) {
+	@RequestMapping(value = "/user/sender/deleteSR", method=RequestMethod.POST)
+    public String senderSeleteSR(HttpServletRequest request, @RequestBody SenderAndReceiver senderReceiver ) {
 		HttpSession session = request.getSession();
 		String userID = (String)session.getAttribute("userID");
-		int numID = userService.findIdByuserID(userID);
-		
-		return senderReceiverService.save(senderReceiver);
+		int senderID = userService.findIdByuserID(userID);
+		int receiverID = senderReceiver.getReceiverId();
+		senderReceiverService.deleteBySenderIdAndReceiverId(senderID, receiverID);
+		return "success";
 	}
+	
+
+	@RequestMapping(value = "/user/receiver/deleteSR", method=RequestMethod.POST)
+    public String receiverDeleteSR(HttpServletRequest request, @RequestBody SenderAndReceiver senderReceiver ) {
+		HttpSession session = request.getSession();
+		String userID = (String)session.getAttribute("userID");
+		int receiverID = userService.findIdByuserID(userID);
+		int senderID = senderReceiver.getSenderId();
+		senderReceiverService.deleteBySenderIdAndReceiverId(senderID, receiverID);
+		
+		return "success";
+	}
+	
 	
 	
 	@RequestMapping(value = "/user/make-connection", method=RequestMethod.POST)
@@ -104,6 +118,7 @@ public class SenderReceiverController {
 		return sr;
 	}
 	
+	
 	@RequestMapping(value = "/user/sender", method=RequestMethod.GET)
 	public ResponseEntity<HashSet<User>> getSenderList(HttpServletRequest request){
 		HttpSession session = request.getSession();
@@ -122,5 +137,26 @@ public class SenderReceiverController {
 		
 		return  new ResponseEntity<HashSet<User>>(userSet,HttpStatus.OK);
 	}
+	
+	
+	@RequestMapping(value = "/user/receiver", method=RequestMethod.GET)
+	public ResponseEntity<HashSet<User>> getReveiverList(HttpServletRequest request){
+		HttpSession session = request.getSession();
+		String userID = (String)session.getAttribute("userID");
+		int numID = userService.findIdByuserID(userID);
+		
+		List<SenderAndReceiver> senderAndReceiverList = senderReceiverService.findBySenderIdAndAlarmTypeId(numID, 434);
+		List<User> userList = new ArrayList<User>();
+		
+		
+		for(SenderAndReceiver senderAndReceiver: senderAndReceiverList) {
+			userList.add(userService.findOne(senderAndReceiver.getReceiverId()));
+		}
+		HashSet<User> userSet = new HashSet<User>(userList);
+		
+		
+		return  new ResponseEntity<HashSet<User>>(userSet,HttpStatus.OK);
+	}
+	
 	
 }

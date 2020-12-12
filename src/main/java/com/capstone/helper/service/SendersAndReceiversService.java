@@ -37,5 +37,10 @@ public class SendersAndReceiversService {
 		senderReceiverRepository.save(senderReceiver); 
 		 return senderReceiver; 
 	 }
+
+	public void deleteBySenderIdAndReceiverId(int senderId, int receiverId) {
+		senderReceiverRepository.findBySenderIdAndReceiverId(senderId, receiverId).forEach(e -> senderReceiverRepository.delete(e));
+		
+	}
 	
 }
