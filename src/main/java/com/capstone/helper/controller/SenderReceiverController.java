@@ -119,8 +119,8 @@ public class SenderReceiverController {
 	}
 	
 	
-	@RequestMapping(value = "/user/sender", method=RequestMethod.GET)
-	public ResponseEntity<HashSet<User>> getSenderList(HttpServletRequest request){
+	@RequestMapping(value = "/user/sender/getSRList", method=RequestMethod.GET)
+	public ResponseEntity<HashSet<User>> senderGetSRList(HttpServletRequest request){
 		HttpSession session = request.getSession();
 		String userID = (String)session.getAttribute("userID");
 		int numID = userService.findIdByuserID(userID);
@@ -139,8 +139,8 @@ public class SenderReceiverController {
 	}
 	
 	
-	@RequestMapping(value = "/user/receiver", method=RequestMethod.GET)
-	public ResponseEntity<HashSet<User>> getReveiverList(HttpServletRequest request){
+	@RequestMapping(value = "/user/receiver/getSRList", method=RequestMethod.GET)
+	public ResponseEntity<HashSet<User>> reveiverGetSRList(HttpServletRequest request){
 		HttpSession session = request.getSession();
 		String userID = (String)session.getAttribute("userID");
 		int numID = userService.findIdByuserID(userID);
