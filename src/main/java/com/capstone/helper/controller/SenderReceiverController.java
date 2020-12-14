@@ -119,8 +119,8 @@ public class SenderReceiverController {
 	}
 	
 	
-	@RequestMapping(value = "/user/sender/getSRList", method=RequestMethod.GET)
-	public ResponseEntity<HashSet<User>> senderGetSRList(HttpServletRequest request){
+	@RequestMapping(value = "/user/receiver/getSRList", method=RequestMethod.GET)
+	public ResponseEntity<HashSet<User>> reveiverGetSRList(HttpServletRequest request){
 		HttpSession session = request.getSession();
 		String userID = (String)session.getAttribute("userID");
 		int numID = userService.findIdByuserID(userID);
@@ -133,14 +133,15 @@ public class SenderReceiverController {
 			userList.add(userService.findOne(senderAndReceiver.getSenderId()));
 		}
 		HashSet<User> userSet = new HashSet<User>(userList);
+		//중복된 유저 걸러줌
 		
 		
 		return  new ResponseEntity<HashSet<User>>(userSet,HttpStatus.OK);
 	}
 	
 	
-	@RequestMapping(value = "/user/receiver/getSRList", method=RequestMethod.GET)
-	public ResponseEntity<HashSet<User>> reveiverGetSRList(HttpServletRequest request){
+	@RequestMapping(value = "/user/sender/getSRList", method=RequestMethod.GET)
+	public ResponseEntity<HashSet<User>> senderGetSRList(HttpServletRequest request){
 		HttpSession session = request.getSession();
 		String userID = (String)session.getAttribute("userID");
 		int numID = userService.findIdByuserID(userID);
@@ -153,6 +154,7 @@ public class SenderReceiverController {
 			userList.add(userService.findOne(senderAndReceiver.getReceiverId()));
 		}
 		HashSet<User> userSet = new HashSet<User>(userList);
+		//중복된 유저 걸러줌
 		
 		
 		return  new ResponseEntity<HashSet<User>>(userSet,HttpStatus.OK);
