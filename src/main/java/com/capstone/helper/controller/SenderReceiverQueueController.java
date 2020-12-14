@@ -84,7 +84,8 @@ public class SenderReceiverQueueController {
 
         response.setStatus( HttpServletResponse.SC_OK);
     	jsonObject.addProperty("result","success");
-    	return jsonObject.toString();
+    	jsonObject.addProperty("name",userService.findNameByID(targetID));
+        return jsonObject.toString();
 	}
 	
 
@@ -125,7 +126,8 @@ public class SenderReceiverQueueController {
 
         response.setStatus( HttpServletResponse.SC_OK);
     	jsonObject.addProperty("result","success");
-    	return jsonObject.toString();
+    	jsonObject.addProperty("name",userService.findNameByID(targetID));
+        return jsonObject.toString();
 	}
 	
 	//요청목록 불러오기
