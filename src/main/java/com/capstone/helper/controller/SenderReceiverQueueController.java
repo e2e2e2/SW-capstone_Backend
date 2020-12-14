@@ -57,6 +57,7 @@ public class SenderReceiverQueueController {
 		int targetID = userService.findIdByPhoneNumber(Receiver.getPhone_number());
 		
 		JsonObject jsonObject = new JsonObject();
+    	jsonObject.addProperty("name",userService.findNameByID(targetID));
 
 		
 		if(senderReceiverService.findBySenderIdAndReceiverId(reqID, targetID).size() > 0) {
@@ -84,7 +85,6 @@ public class SenderReceiverQueueController {
 
         response.setStatus( HttpServletResponse.SC_OK);
     	jsonObject.addProperty("result","success");
-    	jsonObject.addProperty("name",userService.findNameByID(targetID));
         return jsonObject.toString();
 	}
 	
